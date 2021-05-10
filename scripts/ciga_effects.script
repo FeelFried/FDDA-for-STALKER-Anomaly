@@ -1,25 +1,15 @@
 --[[
-script for loading cigarettes smoke effect
+cigarettes smoke effect script
 Author: Feel_Fried
 --]]
-function on_game_start()
-
-end
-
 local anym_timer = nil
 local smoke = nil
-
-
 local function create_smoke()
-    
-
     if not smoke then
 		smoke = particles_object("damage_fx\\smoke")
         smoke:play_at_pos(db.actor:bone_position("jaw_1"))
     end
-	
 	smoke:move_to(db.actor:bone_position("bip01_l_hand"), utils_data.string_to_vector("0.078965, -0.211564, 0.53397"))
-	
 end
 
 local function destroy_smoke()
@@ -30,27 +20,21 @@ local function destroy_smoke()
 end
 
 function update()
-    --printf("ciga update")
-    if anym_timer then
-        local frame_now = time_global() - anym_timer
-
-        if  (frame_now > 11007 and frame_now < 17267) or
-      		(frame_now > 18257 and frame_now < 26627) or
-      		(frame_now > 33550 and frame_now < 38800) then
-			--printf("timer nashel")
-            create_smoke()
-        elseif smoke then
-			--printf("destroyed")
-            destroy_smoke()
-        end
-
-        if frame_now > 38800 then
-            anym_timer, frame_now = nil, nil
-			UnregisterScriptCallback("actor_on_update",update)
-        end
+	local frame_now = time_global() - anym_timer
+    if  (frame_now > 11007 and frame_now < 17267) or
+		(frame_now > 18257 and frame_now < 26627) or
+      	(frame_now > 33550 and frame_now < 38800) then
+        create_smoke()
+    elseif smoke then
+        destroy_smoke()
     end
+    if frame_now > 38800 then
+        anym_timer, frame_now = nil, nil
+		UnregisterScriptCallback("actor_on_update",update)
+	end
 end
 
 function ciga_start()
     anym_timer = time_global()
+	RegisterScriptCallback("actor_on_update", update)
 end

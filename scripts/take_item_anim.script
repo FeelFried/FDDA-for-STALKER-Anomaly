@@ -1,0 +1,28 @@
+--[[
+item pickup animation script
+Author: Feel_Fried
+--]]
+function on_game_start()
+	RegisterScriptCallback("actor_on_first_update",actor_on_first_update)
+end
+
+function actor_on_first_update()
+	RegisterScriptCallback("actor_on_item_take",actor_on_item_take)
+end
+
+function actor_on_item_take(item)
+	local itemv = item:position()
+	local actorv = db.actor:position()
+	local dest = math.sqrt((itemv.x - actorv.x)^2 + (itemv.y - actorv.y)^2 + (itemv.z - actorv.z)^2)
+	if not anim_used and ( dest > 0.12 ) and not enhanced_animations.used_item then
+		db.actor:actor_look_at_point(item:position())
+		game.play_hud_motion(db.actor:active_slot()==0 and 2 or 1, "anm_take_hud", "anm_take", true, 1.4)
+		anim_used = true
+		CreateTimeEvent("anim_delay", "anim_delay", 0.5, anim_delay)
+	end
+end
+
+function anim_delay()
+	anim_used = false
+	return true
+end

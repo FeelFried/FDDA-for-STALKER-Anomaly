@@ -13,29 +13,26 @@ Monkey patches and mask effect switcher implementation: RavenAscendant
 
 Main shitcode critic: Igigog
 
-Addon main page: https://www.moddb.com/mods/stalker-anomaly/addons/food-drug-and-drinks-animations-for-anomaly/
+Addon main page: https://www.moddb.com/mods/stalker-anomaly/addons/food-drug-and-drinks-animations-reuploaded
 
 All your base are belong to us! (⌐■_■) 
-]]--
+]]-- 
 local ini_eff = {}
-local active_slot,anim_section,anim_exist_tm,wpn,item_usage_snd, monster_usage_snd,item, anim_use_time,obj_m 
-used_item,used_monster = false
+local active_slot,anim_section,anim_exist_tm,wpn,item_usage_snd, monster_usage_snd,item, anim_use_time,obj_m
+used_item,used_monster,ea_flag = false,false,false
 
 function on_game_start()
 	RegisterScriptCallback("on_game_load",on_game_load)
 end
 
 function on_game_load()
---< restore hud_fov
 	hud_fov = ui_options.get("video/basic/hud_fov")
 	restore_fov()
--- restore hud_fov >--
 	activate()
 end
 
 --< Addon controll
 function activate()
---printf(prefix.."activated")
 	ini_eff = ini_file("items\\items\\animtions_settings.ltx")
     RegisterScriptCallback("monster_on_actor_use_callback",monster_on_actor_use)
 	RegisterScriptCallback("actor_on_first_update",actor_on_first_update)
@@ -47,29 +44,30 @@ function deactivate()
 -- trash manager >--
     UnregisterScriptCallback("monster_on_actor_use_callback", monster_on_actor_use)
 	UnregisterScriptCallback("actor_on_first_update",actor_on_first_update)
+	UnregisterScriptCallback("actor_on_update", update)
 end
 -- Addon controll >--
 
 --< Animations engine
+function anim_prepare()
+	game.only_allow_movekeys(true)
+	hide_det()
+	active_slot = db.actor:active_slot()
+    anim_exist_tm = nil
+	db.actor:restore_weapon()
+	db.actor:activate_slot(0)
+	game.only_allow_movekeys(true)
+	RegisterScriptCallback("actor_on_update", update)
+end
+
 function use_item(obj)
 	item = obj:section()
 	obj_m = obj
-	hide_det()
 	hide_hud_inventory()
-	RegisterScriptCallback("actor_on_update",update)
-	wpn = db.actor:active_item() --Получаем активное оружие в руках
-	if wpn then
-		wpn = wpn:section()
-		wpn = string.gsub(wpn,"-","_")
-	end
-
-	game.only_allow_movekeys(true)
-	used_item = item --предмет, который будет использован
-	active_slot = db.actor:active_slot() --активный слот до использования предмета
+	used_item = item 
 	anim_section = ini_eff:r_string_ex(item, "anm")
-	anim_exist_tm = nil
 	mask_hud_switcher()
-	db.actor:activate_slot(0)
+	anim_prepare()
 end
 
 function monster_on_actor_use(obj)
@@ -80,77 +78,63 @@ function monster_on_actor_use(obj)
         anim_exist_tm = nil
         return
     end
-	hide_det()
-    wpn = db.actor:active_item() --Получаем активное оружие в руках
-    if wpn then
-        wpn = wpn:section()
-        wpn = string.gsub(wpn, "-", "_")
-    --printf(wpn)
-    end
-
+	wpn = db.actor:active_item()
+	if wpn then
+		wpn = wpn:section()
+		wpn = string.gsub(wpn,"-","_")
+	end
+    item_knife.degradate()
     used_monster = obj
-    active_slot = db.actor:active_slot() --активный слот до использования предмета
-
     anim_section = "anm_harv_wpn_knife"
-    RegisterScriptCallback("actor_on_update", update)
-    anim_exist_tm = nil
-    level.add_cam_effector("itemuse_anm_effects\\harvest_lean_down_main_headbob.anm", 8561, false, "")
-	db.actor:activate_slot(0)
-	game.only_allow_movekeys(true)
+	level.disable_input() 
+	anim_prepare()
+	recalc_actor_campos()
 end
 
 function start_anim(anim_section_hud)
 	UnregisterScriptCallback("actor_on_update", update)
-    --< set default hud_fov
     hud_fov = ui_options.get("video/basic/hud_fov")
     if hud_fov ~= 0.45 then
         exec_console_cmd("hud_fov 0.45")
     end
-    -- set default hud_fov  >--
     game.play_hud_motion(2, anim_section_hud, "anm_show", false, 1) -- run anim visual
-
-    local tmr
-    --Если используется предмет
+    local tmr = 0
+	anim_use_time, anim_exist_tm = 0,0
 	if used_item then
 		--< create anim effects
         item_usage_snd = sound_object(ini_eff:r_string_ex(used_item, "snd"))
         item_usage_snd:play(db.actor, 0, sound_object.s2d)
         level.add_cam_effector(ini_eff:r_string_ex(used_item, "cam"), 8555, false, "")
 		-- create anim effects >--
-        tmr = ini_eff:r_string_ex(used_item, "tm")
+        tmr = ini_eff:r_float_ex(used_item, "tm")
         anim_exist_tm = tmr*0.001
         anim_use_time = anim_exist_tm*0.367
-		CreateTimeEvent(0, "eat_my_obj", anim_use_time, eat_my_obj)
-		CreateTimeEvent(0, "call_my_slot_back", (anim_exist_tm + 0.1), call_my_slot_back)
-		if (anim_exist_tm == 39) then
-        RegisterScriptCallback("actor_on_update", ciga_effects.update)
-        ciga_effects.ciga_start()
-		end
-		alife():create("items_anm_dummy",db.actor:position(),db.actor:level_vertex_id(),db.actor:game_vertex_id(),db.actor:id())
+		CreateTimeEvent("ea_object_eater", "eat_my_obj", anim_use_time, eat_my_obj)
+		CreateTimeEvent("ea_slot_returner", "call_my_slot_back", (anim_exist_tm + 0.1), call_my_slot_back)
+		if (string.sub(used_item,1,4) == 'ciga') then ciga_effects.ciga_start() end
+		alife_create_item("items_anm_dummy",db.actor)
     elseif used_monster then
         if ini_eff:r_string_ex(anim_section, "anim_sound") then --Если существует указатель на звук
             monster_usage_snd = sound_object(ini_eff:r_string_ex(anim_section, "anim_sound"))
             monster_usage_snd:play(db.actor, 0, sound_object.s2d)
             level.add_cam_effector("itemuse_anm_effects\\harvest_skin_use.anm", 8558, false, "")
         end
-
         local checkcrouch = level.actor_moving_state()
 		local TEMP = nil
         if checkcrouch == 0 then
             TEMP = "itemuse_anm_effects\\test.anm" --Запуск анимации приседания для свежевания
         else
-            TEMP = "itemuse_anm_effects\\harvest_lean_down_main.anm"
+            TEMP = "itemuse_anm_effects\\test.anm"
         end
 		level.add_cam_effector(TEMP, 8559, false, "")
         tmr = ini_eff:r_float_ex(anim_section, "anim_length")
         anim_exist_tm = tmr*0.001
-		CreateTimeEvent(0, "call_my_slot_back", (anim_exist_tm + 0.5), call_my_slot_back)
+		CreateTimeEvent("ea_slot_returner", "call_my_slot_back", (anim_exist_tm + 0.5), call_my_slot_back)
     end
-	CreateTimeEvent(0, "stop_my_anim", anim_exist_tm, stop_my_anim)
+	CreateTimeEvent("ea_anim_stoper", "stop_my_anim", anim_exist_tm, stop_my_anim)
 end
 
 function update()
-
 	if db.actor:active_slot() == 0 and not db.actor:active_detector() then
 	local anim_section_hud = nil
 		if used_monster then
@@ -160,23 +144,18 @@ function update()
 		end
 		start_anim(anim_section_hud)
 	end
-
 end
 -- Animations engine >--
 
 --< Monkey patches
 orginalPIF = actor_effects.play_item_fx
-
 function actor_effects.play_item_fx(item)
 	local enable_animations = ui_options.get("video/player/animations")
-	if ini_eff:r_string_ex(item, "snd") and enable_animations then return end
-	if item == "items_anm_dummy" then return end
-	if (item == "mutant_looting_boost_2") or (item == "mutant_looting_boost_1") or (item == "mutant_looting") then return end
+	if ini_eff:r_string_ex(item, "snd") and enable_animations or ini_eff:r_string_ex("skip_items", item) then return end
 	orginalPIF(item)
 end
 
 OriginalAOIBU = itms_manager.actor_on_item_before_use
-
 function itms_manager.actor_on_item_before_use(obj,flags)
 	OriginalAOIBU(obj,flags)
 	local item = obj:section()
@@ -187,12 +166,10 @@ function itms_manager.actor_on_item_before_use(obj,flags)
 		return
 	end
 end
-
-function ui_mutant_loot.UIMutantLoot:Close()
-	if enhanced_animations.used_monster then level.disable_input() end
-	self:SetMutantState()
-	self:HideDialog()	
-	Unregister_UI("UIMutantLoot")
+originalUMLS = ui_mutant_loot.start
+function ui_mutant_loot.start(obj, for_bug1, for_bug2)
+	if not enhanced_animations.ea_flag then return end
+	originalUMLS(obj, for_bug1, for_bug2)
 end
 -- Monkey patches >--
 
@@ -200,9 +177,7 @@ end
 function call_my_slot_back()
 	game.only_allow_movekeys(false)
 	db.actor:activate_slot(active_slot or 0)
-    if det_active then
-		det_active:switch_state(1)
-    end
+    if det_active then det_active:switch_state(1) end
 	return true
 end
 
@@ -213,19 +188,18 @@ function eat_my_obj()
 end
 
 function stop_my_anim()
+	db.actor:hide_weapon()
+	level.enable_input() 
+	restore_fov()
 	if used_item then
-		level.enable_input() --Вернуть управление
-		restore_fov()
-		db.actor:activate_slot(active_slot or 0)
 		mask_hud_switcher()
-		--Очистка переменных
 		used_item = nil
-		--Время существования мутанта
-	elseif used_monster then
-		level.enable_input() --Вернуть управление
-		restore_fov()
-		--Очистка переменных
+	else
+		local fake_monster = used_monster
 		used_monster = nil
+		ea_flag = true
+		ui_mutant_loot.start(fake_monster, fake_monster:id(), fake_monster:section(), fake_monster:clsid())
+		ea_flag = nil
 	end
 	return true
 end
@@ -233,28 +207,40 @@ end
 
 --< Additional animations and effects 
 function mask_hud_switcher()
-	if (ini_eff:r_string_ex(used_item, "helm") == "false") and ui_options.get("video/player/mask_hud") then
+	if (not ini_eff:r_bool_ex(used_item, "helm")) and ui_options.get("video/player/mask_hud") then
 		actor_effects.switch_helm() --raven
 		actor_effects.Update_Mask(db.actor)
 	end
 end
 
 function restore_fov()
-    if hud_fov ~= 0.45 then
-        exec_console_cmd("hud_fov " .. hud_fov)
-    end
+    if hud_fov ~= 0.45 then exec_console_cmd("hud_fov " .. hud_fov) end
 end
 
 function hide_det()
-det_active = db.actor:active_detector() or nil
-    if det_active then
-		det_active:switch_state(2)
-    end
+	det_active = db.actor:active_detector() or nil
+    if det_active then det_active:switch_state(2) end	
 end
 
 function actor_on_first_update()
-	if db.actor:object("items_anm_dummy") then
-		db.actor:eat(db.actor:object("items_anm_dummy"))
+	if db.actor:object("items_anm_dummy") then alife_release(db.actor:object("items_anm_dummy")) end
+end
+
+function recalc_actor_campos()
+	local actornew = used_monster:bone_position('bip01_spine1')
+	local actorv = db.actor:position()
+	local dx = actorv.x - actornew.x
+	local dy = actorv.y - actornew.y
+	local dz = actorv.z - actornew.z
+	local tm = 0.01
+	actorv.x = actorv.x - dx*tm
+	actorv.y = actorv.y - dy*tm
+	actorv.z = actorv.z - dz*tm
+	if actorv:distance_to(actornew) > 1.2 then
+		db.actor:set_actor_position(actorv)
 	end
+	local camdir = used_monster:bone_position('bip01_spine1')
+	camdir.y = camdir.y + 0.8
+	db.actor:actor_look_at_point(camdir)
 end
 -- Additional animations and effects >--

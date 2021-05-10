@@ -1,9 +1,12 @@
-[items_anm_dummy]:booster
+[items_anm_dummy]:identity_immunities
+anim_item                                          = true
+class 											   = S_FOOD
+release_on_first_update 						   = true
 $spawn 						                       = "food and drugs\kolbasa"
 visual						                       = dynamics\devices\dev_kolbasa\dev_kolbasa.ogf
-kind			                               = i_food
+kind			                                   = i_food
 description					                       = "don't spawn, dummy no sound item"
-cost						                       = 874
+cost						                       = 0
 inv_name					                       = "don't spawn, dummy no sound item"
 inv_name_short				                       = "don't spawn, dummy no sound item"
 inv_weight					                       = 0
@@ -11,12 +14,11 @@ inv_grid_width				                       = 1
 inv_grid_height				                       = 1
 inv_grid_x					                       = 2
 inv_grid_y					                       = 63
-attach_angle_offset			                       = 0.440521, 1.378287, -0.644026
-attach_position_offset		                       = 0.104196, -0.010821, 0.076969
-attach_bone_name			                       = bip01_r_hand
-auto_attach					                       = false
-bone_name					                       = bip01_r_hand
-position_offset				                       = 0.0,0.0,0.0 0.117
-angle_offset				                       = 1.570790,1.570790,3.92699
 use_sound					                       = $no_sound
-tier = 3
+eat_health                               = 0
+eat_satiety                              = 0
+eat_power                                = 0
+eat_max_power                            = 0
+eat_radiation                            = 0
+eat_alcohol                              = 0
+wounds_heal_perc                         = 0

@@ -1,4 +1,3 @@
-
 [vodka]
 snd = interface\item_usage\vodka_use
 anm = anm_cmuphob_vodka
@@ -36,13 +35,13 @@ anm = anm_sardinia_conserva
 anm = anm_korn_conserva
 
 [tomato]:tushonka
-anm = anm_olives_conserva
+anm = anm_tomatoes_conserva
 
 [beans]:tushonka
-anm = anm_olives_conserva
+anm = anm_beanz_conserva
 
 [chili]:tushonka
-anm = anm_olives_conserva
+anm = anm_chilibeans_conserva
 
 [meat_dog]
 snd = interface\item_usage\plate_eat
@@ -184,12 +183,13 @@ tm = 7000
 
 [akvatab]
 snd = interface\item_usage\drug_tabletos_use
-anm = anm_drug_tabletos
+anm = anm_drug_akvatab
 cam = itemuse_anm_effects\drug_tabletos_use.anm
 tm = 4350
 helm = false
 
 [yadylin]:akvatab
+anm = anm_drug_yadulin					  
 
 [antirad]
 snd = interface\item_usage\antirad_use
@@ -216,12 +216,29 @@ cam = itemuse_anm_effects\antirad_use.anm
 tm = 7500
 helm = true
 
-[glucose]:morphine
-[glucose_s]:morphine
-[rebirth]:morphine
-[salicidic_acid]:morphine
+
 [analgetic]:morphine
 [tetanus]:morphine
+
+
+[rebirth]
+snd = interface\item_usage\syringe2
+anm = anm_syringe2
+cam = itemuse_anm_effects\antirad.anm
+tm = 3200
+helm = true
+[salicidic_acid]:rebirth
+
+[glucose]
+snd = interface\item_usage\syringe1
+anm = anm_syringe1
+cam = itemuse_anm_effects\antirad.anm
+tm = 7200
+helm = true
+[glucose_s]:glucose
+
+
+
 
 [bandage]
 snd = interface\item_usage\bandage_use
