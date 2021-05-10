@@ -5,36 +5,36 @@ Author: Feel_Fried
 local anym_timer = nil
 local smoke = nil
 local function create_smoke()
-    if not smoke then
+	if not smoke then
 		smoke = particles_object("damage_fx\\smoke")
-        smoke:play_at_pos(db.actor:bone_position("jaw_1"))
-    end
+		smoke:play_at_pos(db.actor:bone_position("jaw_1"))
+	end
 	smoke:move_to(db.actor:bone_position("bip01_l_hand"), utils_data.string_to_vector("0.078965, -0.211564, 0.53397"))
 end
 
 local function destroy_smoke()
-    if smoke then
-        smoke:stop()
-        smoke = nil
-    end
+	if smoke then
+		smoke:stop()
+		smoke = nil
+	end
 end
 
 function update()
 	local frame_now = time_global() - anym_timer
-    if  (frame_now > 11007 and frame_now < 17267) or
+	if  (frame_now > 11007 and frame_now < 17267) or
 		(frame_now > 18257 and frame_now < 26627) or
-      	(frame_now > 33550 and frame_now < 38800) then
-        create_smoke()
-    elseif smoke then
-        destroy_smoke()
-    end
-    if frame_now > 38800 then
-        anym_timer, frame_now = nil, nil
+		(frame_now > 33550 and frame_now < 38800) then
+		create_smoke()
+	elseif smoke then
+		destroy_smoke()
+	end
+	if frame_now > 38800 then
+		anym_timer, frame_now = nil, nil
 		UnregisterScriptCallback("actor_on_update",update)
 	end
 end
 
 function ciga_start()
-    anym_timer = time_global()
+	anym_timer = time_global()
 	RegisterScriptCallback("actor_on_update", update)
 end

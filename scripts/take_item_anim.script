@@ -2,27 +2,82 @@
 item pickup animation script
 Author: Feel_Fried
 --]]
+local skin_anim, enable_animations, harv_usage_snd
 function on_game_start()
 	RegisterScriptCallback("actor_on_first_update",actor_on_first_update)
 end
-
+local bool_to_number={ [true]=1, [false]=0 }
 function actor_on_first_update()
 	RegisterScriptCallback("actor_on_item_take",actor_on_item_take)
+	enable_animations = ui_options.get("video/player/animations")
 end
 
 function actor_on_item_take(item)
 	local itemv = item:position()
 	local actorv = db.actor:position()
-	local dest = math.sqrt((itemv.x - actorv.x)^2 + (itemv.y - actorv.y)^2 + (itemv.z - actorv.z)^2)
-	if not anim_used and ( dest > 0.12 ) and not enhanced_animations.used_item then
-		db.actor:actor_look_at_point(item:position())
-		game.play_hud_motion(db.actor:active_slot()==0 and 2 or 1, "anm_take_hud", "anm_take", true, 1.4)
+	local dist = actorv:distance_to(itemv)
+	--item pickup animation
+	local checkrun = level.actor_moving_state()
+	local check = bool_to_number[not enhanced_animations.used_item] + bool_to_number[not anim_used] + bool_to_number[not enhanced_animations.fake_monster] + bool_to_number[enable_animations] + ((string.sub(item:section(),1,4) == 'anim') and 0 or 1) + ((checkrun >= 2000) and 0 or 1)
+	if ( dist > 0.12 ) and check == 6 then
+		game.play_hud_motion(db.actor:active_slot()==0 and 2 or 1, "item_ea_take_hud", "anm_ea_take", true, 1.4)
 		anim_used = true
 		CreateTimeEvent("anim_delay", "anim_delay", 0.5, anim_delay)
+	end
+	--mutant loot bag animation
+	if enhanced_animations.fake_monster then
+		hud_fov = ui_options.get("video/basic/hud_fov")
+		if hud_fov ~= 0.45 then
+			exec_console_cmd("hud_fov 0.45")
+		end
+		local camdir = enhanced_animations.fake_monster:bone_position('bip01_spine1')
+		camdir.y = camdir.y + 0.6
+		db.actor:actor_look_at_point(camdir)
+		enhanced_animations.fake_monster = nil
+		level.disable_input()
+		local anim_section_name = "item_ea_harv_meat_"..math.random(14).."_hud"
+		harv_usage_snd = sound_object("interface\\item_usage\\harvest_use_success")
+		harv_usage_snd:play(db.actor, 0, sound_object.s2d)
+		game.play_hud_motion(2, anim_section_name, "anm_ea_show", true, 0.75)
+		CreateTimeEvent("restore_knife", "restor_knife", 1.8, restore_knife)
+		skin_anim = true
 	end
 end
 
 function anim_delay()
 	anim_used = false
 	return true
+end
+
+--patching mutant loot dialog close call
+
+function ui_mutant_loot.UIMutantLoot:Close()
+	--deleting fake mutant object to prevent bag animation if mutant was empty
+	CreateTimeEvent("delete_fake", "delete_fake", 0.2, take_item_anim.delete_fake)
+	self:SetMutantState()
+	self:HideDialog()
+	Unregister_UI("UIMutantLoot")
+end
+
+function delete_fake()
+	enhanced_animations.fake_monster = nil
+	--draw knife if mutant was empty or player just closed dialog without looting anything
+	if not skin_anim then
+		return_slots()
+	end
+	return true
+end
+
+function restore_knife()
+	return_slots()
+	skin_anim = nil
+	level.enable_input()
+	return true
+end
+
+function return_slots()
+	enhanced_animations.restore_fov()
+	db.actor:activate_slot(1)
+	local device = enhanced_animations.det_active
+	if device then device:switch_state(1) end
 end
