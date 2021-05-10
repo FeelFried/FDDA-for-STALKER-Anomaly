@@ -139,7 +139,9 @@ function on_game_start()
 				bio_bandage = {snd = "interface\\item_usage\\bandage_use", anm = "anm_bio_bandage",cam = "itemuse_anm_effects\\bint_use.anm",tm = 3300,helm = true},
 				
 				mineral_water = {snd = "interface\\item_usage\\vodka_use", anm = "anm_mineral_water",cam = "itemuse_anm_effects\\vodka_use.anm",tm = 4300,helm = false},
-				vodka_quality = {snd = "interface\\item_usage\\drink_flask4", anm = "anm_flask",cam = "itemuse_anm_effects\\drink_flask.anm",tm = 6900,helm = false},
+				vodka_quality = {snd = "interface\\item_usage\\drink_flask3", anm = "anm_flask2",cam = "itemuse_anm_effects\\drink_flask.anm",tm = 6900,helm = false},
+				flask = {snd = "interface\\item_usage\\drink_flask4", anm = "anm_flask",cam = "itemuse_anm_effects\\drink_flask.anm",tm = 6900,helm = false},
+				bottle_metal = {snd = "interface\\item_usage\\water_flask", anm = "anm_water_flask",cam = "itemuse_anm_effects\\water_flask.anm",tm = 10000,helm = false},
     }
 end
 
