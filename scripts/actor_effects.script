@@ -1369,7 +1369,17 @@ end
 -- Utilities
 --------------------------------------------------------------
 function play_item_fx(name)
- 
+--------------------------------------------------------------
+--FOOD,DRUG AND DRINKS ANIMATIONS start
+--------------------------------------------------------------
+ 	if (name == "mutant_looting_boost_2")  or (name == "mutant_looting_boost_1") or (name == "mutant_looting" ) and (enhanced_animations.anim_exist_tm ~= nil) then
+	level.disable_input()
+	printf("enh anim check")
+	return 
+	end
+--------------------------------------------------------------
+--FOOD,DRUG AND DRINKS ANIMATIONS end
+--------------------------------------------------------------	
 	if (not opt.enable_animations) then
 		return
 	end

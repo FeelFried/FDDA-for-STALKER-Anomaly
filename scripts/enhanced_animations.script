@@ -127,12 +127,12 @@ function on_game_start()
 				stimpack_army = {snd = "interface\\item_usage\\antirad_use", anm = "anm_stimpack_army",cam = "itemuse_anm_effects\\antirad_use.anm",tm = 4600,helm = true},
 				stimpack_scientic = {snd = "interface\\item_usage\\antirad_use", anm = "anm_stimpack_scientic",cam = "itemuse_anm_effects\\antirad_use.anm",tm = 4600,helm = true},
 		
-				morphine = {snd = "interface\\item_usage\\injector_using", anm = "anm_morphine",cam = "itemuse_anm_effects\\antirad_use.anm",tm = 6600,helm = true},
-				glucose = {snd = "interface\\item_usage\\injector_using", anm = "anm_morphine",cam = "itemuse_anm_effects\\antirad_use.anm",tm = 6600,helm = true},
-				glucose_s = {snd = "interface\\item_usage\\injector_using", anm = "anm_morphine",cam = "itemuse_anm_effects\\antirad_use.anm",tm = 6600,helm = true},
-				rebirth = {snd = "interface\\item_usage\\injector_using", anm = "anm_morphine",cam = "itemuse_anm_effects\\antirad_use.anm",tm = 6600,helm = true},
-				salicidic_acid = {snd = "interface\\item_usage\\injector_using", anm = "anm_morphine",cam = "itemuse_anm_effects\\antirad_use.anm",tm = 6600,helm = true},
-				analgetic = {snd = "interface\\item_usage\\injector_using", anm = "anm_morphine",cam = "itemuse_anm_effects\\antirad_use.anm",tm = 6600,helm = true},
+				morphine = {snd = "interface\\item_usage\\injector_using", anm = "anm_morphine",cam = "itemuse_anm_effects\\antirad_use.anm",tm = 7500,helm = true},
+				glucose = {snd = "interface\\item_usage\\injector_using", anm = "anm_morphine",cam = "itemuse_anm_effects\\antirad_use.anm",tm = 7500,helm = true},
+				glucose_s = {snd = "interface\\item_usage\\injector_using", anm = "anm_morphine",cam = "itemuse_anm_effects\\antirad_use.anm",tm = 7500,helm = true},
+				rebirth = {snd = "interface\\item_usage\\injector_using", anm = "anm_morphine",cam = "itemuse_anm_effects\\antirad_use.anm",tm = 7500,helm = true},
+				salicidic_acid = {snd = "interface\\item_usage\\injector_using", anm = "anm_morphine",cam = "itemuse_anm_effects\\antirad_use.anm",tm = 7500,helm = true},
+				analgetic = {snd = "interface\\item_usage\\injector_using", anm = "anm_morphine",cam = "itemuse_anm_effects\\antirad_use.anm",tm = 7500,helm = true},
 		
                 bandage = {snd = "interface\\item_usage\\bandage_use", anm = "anm_bandage",cam = "itemuse_anm_effects\\bint_use.anm",tm = 3700,helm = true},
 				bandage_israeli = {snd = "interface\\item_usage\\bandage_use", anm = "anm_bandage_israeli",cam = "itemuse_anm_effects\\bint_use.anm",tm = 3300,helm = true},
@@ -142,6 +142,7 @@ function on_game_start()
 				vodka_quality = {snd = "interface\\item_usage\\drink_flask3", anm = "anm_flask2",cam = "itemuse_anm_effects\\drink_flask.anm",tm = 8000,helm = false},
 				flask = {snd = "interface\\item_usage\\drink_flask4", anm = "anm_flask",cam = "itemuse_anm_effects\\drink_flask.anm",tm = 8000,helm = false},
 				bottle_metal = {snd = "interface\\item_usage\\water_flask", anm = "anm_water_flask",cam = "itemuse_anm_effects\\water_flask.anm",tm = 10700,helm = false},
+				at_baloon_lead_box = {snd = "interface\\item_usage\\water_flask", anm = "anm_water_flask",cam = "itemuse_anm_effects\\water_flask.anm",tm = 10700,helm = false},
     }
 end
 
@@ -399,7 +400,7 @@ end
 
 
 
-level.disable_input() --Отключить инпуты
+--level.disable_input() --Отключить инпуты
 anim_section = harvest[cls]
 -- keep_helm = true
 -- item_animations.use_helmet(1) --Надеть шлем
@@ -434,6 +435,7 @@ end
 end
 --Если завершилось выполнение МУТАНТА
 if monster_finished then
+printf("end finish")
 monster_finished = nil
 	--Если в процессе свежевания было найдено мясо, собрать мясо
 	if #skinned_items_tbl > 0 then
@@ -455,6 +457,11 @@ if active_slot then db.actor:activate_slot(active_slot) else db.actor:activate_s
 active_slot = nil
 end
 
+if not used_monster and type(anim_section) == 'table' then
+deactivate()
+activate()
+end
+
 if not anim_section then return end --Выйти если нету активной секции под анимации
 if not used_item and not used_monster and not used_meat then return end --Выйти если
 local tg = time_global()
@@ -468,18 +475,19 @@ db.actor:activate_slot(0)
 
 
 
-local anim_section_hud = nil
-
-if used_monster then
-	anim_section_hud = "anm_harv_" .. wpn .. "_hud"
-	elseif not used_monster then
-	anim_section_hud = anim_section .. "_hud"
-end
 
 printf("test 1")
 
 --Задать время существования после того как предмет был взят
 if not anim_exist_tm then
+local anim_section_hud = nil
+
+if used_monster then
+	anim_section_hud = "anm_harv_" .. wpn .. "_hud"
+	elseif not used_monster and  type(anim_section) ~= 'table' then
+	anim_section_hud = anim_section .. "_hud"
+end
+
 	if db.actor:active_slot() == 0 then
 	if det_active then
 	det_active:switch_state(3)
@@ -568,6 +576,7 @@ if anim_exist_tm then
 		
 		--Время существования мутанта
 		if used_monster then
+		printf("finish end")
 		db.actor:hide_weapon() --Возможность менять оружие
 		level.enable_input() --Вернуть управление
 		
@@ -584,6 +593,7 @@ if anim_exist_tm then
 		
 		--Время существования сбора мяса
 		if used_meat then
+		printf("ONO BLIYAT")
 		db.actor:hide_weapon() --Возможность менять оружие
 		level.enable_input() --Вернуть управление
 		
