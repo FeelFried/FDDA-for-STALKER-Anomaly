@@ -15,6 +15,7 @@ local show_log = false
 local wpn
 local active_slot,anim_section,anim_exist_tm,time_to_relax,keep_helm,ini
 local item_usage_snd, monster_usage_snd, meat_usage_snd
+local ini_eff = ini_file("items\\items\\animtions_settings.ltx")
 used_item = nil
 used_monster = nil
 used_meat = nil
@@ -364,17 +365,16 @@ if not (cls and harvest[cls]) then
 	return
 end
 
+
+
 --Завершить выполнение если отключен мод на лут мутантов
-local m_ini = ini_file("plugins\\itms_manager.ltx")
-if not (m_ini:r_bool_ex("mutant_loot_mod","enable",true)) then
+local m_ini = ini_eff:r_bool("anim_settings","mutant_loot_mod")
+if not m_ini then
 	return
 end
 
 --Завершить выполнение если... тело стало непригодным для свежевания?
-local st = db.storage[obj:id()]
-if st and st.death_time and game.get_game_time():diffSec(st.death_time) > (m_ini:r_float_ex("mutant_loot_mod","decay_time") or 7200) then
-	return
-end
+
 
 
 level.disable_input() --Отключить инпуты
