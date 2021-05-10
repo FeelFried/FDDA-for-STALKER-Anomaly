@@ -1,0 +1,221 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;НАПИТКИ;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;ГЕРКУЛЕС
+[anm_booster_weight]:anm_base
+hud							= anm_booster_weight_hud
+visual						= dynamics\weapons\wpn_eat\world_models\drinks\wpn_drug_booster.ogf
+
+description                 = enc_equipment_weight_booster
+inv_name                    = weight_booster
+inv_name_short              = weight_booster
+
+inv_grid_x                  = 20
+inv_grid_y                  = 21
+
+use_time  					= 4.3
+
+snd_draw                    = interface\item_usage\vodka_use
+
+[anm_booster_weight_hud]:anm_base_hud
+hands_position              = -0.0055,-0.07, 0.32
+hands_position_16x9         = -0.0055,-0.07, 0.32
+
+item_visual             	= dynamics\weapons\wpn_eat\drinks\wpn_drug_booster_hud.ogf
+anm_show					= vodka_hands_eat_invtrans, vodka_wpn_eat
+
+
+
+;ВОДА
+[anm_mineral_water]:anm_base
+hud							= anm_water_hud
+visual						= dynamics\weapons\wpn_eat\world_models\drinks\wpn_voda.ogf
+
+inv_name                    = enc_mineral_water
+inv_name_short              = enc_mineral_water
+description                 = enc_mineral_water_descr
+
+inv_grid_x        		    = 20
+inv_grid_y        		    = 22
+
+use_time  					= 4.3
+
+snd_draw                    = interface\item_usage\vodka_use
+
+[anm_mineral_water_hud]:anm_base_hud
+hands_position              = -0.0055,-0.07, 0.32
+hands_position_16x9         = -0.0055,-0.07, 0.32
+
+item_visual             	= dynamics\weapons\wpn_eat\drinks\wpn_voda_hud.ogf
+anm_show					= vodka_hands_eat_invtrans, vodka_wpn_eat
+
+
+
+;ЭНЕРГЕТИК НОНСТОП
+[anm_energy_drink_nonstop]:anm_base
+hud							= anm_energy_drink_nonstop_hud
+visual						= dynamics\weapons\wpn_eat\world_models\banki\banka_nonstop_world.ogf
+
+inv_name                    = enc_energy_drink
+inv_name_short              = enc_energy_drink
+description                 = enc_nonstop_energy_drink_descr
+
+inv_grid_x       		    = 17
+inv_grid_y       		    = 21
+
+use_time  			 		= 3.1
+
+snd_draw                    = interface\item_usage\drink_soda_use
+
+[anm_energy_drink_nonstop_hud]:anm_base_hud
+hands_position              = -0.0055,-0.06, 0.33
+hands_position_16x9         = -0.0055,-0.06, 0.33
+
+item_visual             	= dynamics\weapons\wpn_eat\banki\wpn_banka_nonstop_hud.ogf
+anm_show					= banka_1_hands_eat_invtrans, banka_1_wpn_eat
+
+
+
+;ЭНЕРГЕТИК
+[anm_energy_drink]:anm_base
+hud							= anm_energy_drink_hud
+visual						= dynamics\weapons\wpn_eat\world_models\banki\banka_energy_world.ogf
+
+inv_name                    = enc_energy_drink
+inv_name_short              = enc_energy_drink
+description                 = enc_equipment_energydrink
+
+inv_grid_x        		    = 16
+inv_grid_y       		    = 21
+
+use_time  					= 3.1
+
+snd_draw                    = interface\item_usage\drink_soda_use
+
+[anm_energy_drink_hud]:anm_energy_drink_nonstop_hud
+item_visual             	= dynamics\weapons\wpn_eat\banki\wpn_banka_energy_hud.ogf
+
+
+
+;ПИВО ХМЕЛЬНИЦКОЕ
+[anm_chmielnitskoe_beer]:anm_base
+hud							= anm_chmielnitskoe_beer_hud
+visual						= dynamics\weapons\wpn_eat\world_models\banki\banka_chmielnitskoe_world.ogf
+
+inv_name                    = beer_name
+inv_name_short              = beer_name
+description                 = enc_equipment_beer_chmielnitskoe
+
+inv_grid_x       		    = 19
+inv_grid_y        		    = 21
+
+use_time  					= 3.1
+
+snd_draw                    = interface\item_usage\drink_soda_use
+
+[anm_chmielnitskoe_beer_hud]:anm_energy_drink_nonstop_hud
+item_visual             	= dynamics\weapons\wpn_eat\banki\wpn_banka_chmielnitskoe_hud.ogf
+
+
+
+
+
+
+;ВОДКА НЕМИРОФ
+[anm_hemupob_vodka]:anm_base
+hud							= anm_vodka_hemupob_hud
+visual						= dynamics\weapons\wpn_eat\world_models\vodki\vodka_hemupob.ogf
+
+inv_name                    = Vodka_name
+inv_name_short              = Vodka_name
+description                 = enc_vodka_hemupob_descr
+
+inv_grid_x      		    = 17
+inv_grid_y      		    = 22
+
+use_time  					= 4.3
+
+snd_draw                    = interface\item_usage\vodka_use
+
+[anm_hemupob_vodka_hud]:anm_base_hud
+hands_position              = -0.0055,-0.07, 0.32
+hands_position_16x9         = -0.0055,-0.07, 0.32
+
+item_visual             	= dynamics\weapons\wpn_eat\vodki\wpn_vodka_hemupob_hud.ogf
+anm_show					= vodka_hands_eat_invtrans, vodka_wpn_eat
+
+
+
+;ВОДКА СМИРНОВ
+[anm_cmuphob_vodka]:anm_base
+hud							= anm_vodka_cmuphob_hud
+visual						= dynamics\weapons\wpn_eat\world_models\vodki\vodka_cmuphob.ogf
+
+inv_name                    = Vodka_name
+inv_name_short              = Vodka_name
+description                 = enc_vodka_cmuphob_descr
+
+inv_grid_x     			    = 19
+inv_grid_y      		    = 22
+
+use_time  					= 4.3
+
+snd_draw                    = interface\item_usage\vodka_use
+
+[anm_cmuphob_vodka_hud]:anm_base_hud
+hands_position              = -0.0055,-0.07, 0.32
+hands_position_16x9         = -0.0055,-0.07, 0.32
+
+item_visual             	= dynamics\weapons\wpn_eat\vodki\wpn_vodka_cmuphob_hud.ogf
+anm_show					= vodka_hands_eat_invtrans, vodka_wpn_eat
+
+
+
+;ВИНО
+[anm_wine]:anm_base
+hud							= anm_vodka_wine_hud
+visual						= dynamics\weapons\wpn_eat\world_models\vodki\vodka_wine.ogf
+
+inv_name                    = wine_name
+inv_name_short              = wine_name
+description                 = enc_wine_descr
+
+inv_grid_x        		    = 18
+inv_grid_y        		    = 22
+
+use_time  					= 4.3
+
+snd_draw            	    = interface\item_usage\vodka_use
+
+[anm_vodka_wine_hud]:anm_base_hud
+hands_position              = -0.0055,-0.07, 0.32
+hands_position_16x9         = -0.0055,-0.07, 0.32
+
+item_visual             	= dynamics\weapons\wpn_eat\vodki\wpn_vodka_wine_hud.ogf
+anm_show					= vodka_hands_eat_invtrans, vodka_wpn_eat
+
+
+
+;ПИВО ПРИПЯТЬ
+[anm_pripiat_beer]:anm_base
+hud							= anm_pripiat_beer_hud
+visual						= dynamics\weapons\wpn_eat\world_models\butilki_steklo\butilka_steklo_pripiat_world.ogf
+
+inv_name                    = beer_name
+inv_name_short              = beer_name
+description                 = enc_equipment_pripiat_beer
+
+inv_grid_x       		    = 18
+inv_grid_y        		    = 21
+
+use_time  					= 3.8
+
+snd_draw                    = interface\item_usage\drink_beer_use
+
+[anm_pripiat_beer_hud]:anm_base_hud
+hands_position              = -0.0055,-0.06, 0.34
+hands_position_16x9         = -0.0055,-0.06, 0.34
+
+item_visual             	= dynamics\weapons\wpn_eat\butilki_steklo\wpn_butilka_steklo_pripiat_hud.ogf
+anm_show					= butilka_steklo_1_hands_eat_alt_1_invtrans, butilka_steklo_1_wpn_eat_alt_1

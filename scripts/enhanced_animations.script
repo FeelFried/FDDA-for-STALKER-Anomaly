@@ -1,0 +1,563 @@
+--[[
+Script_2(item_animations):
+\\File			:	item_animations.script
+\\Author		:	thales100
+
+Script_3(enhanced_animations):
+\\File			:	enhanced_animations.script
+\\Author		:	thales100
+
+Author: LilGABE
+Вся необходимая информация указана в скрипте item_animations.script.
+]]--
+local prefix = "[ANIMS_ENH]"
+local show_log = false
+local wpn
+local active_slot,anim_section,anim_exist_tm,time_to_relax,keep_helm,ini
+local item_usage_snd, monster_usage_snd, meat_usage_snd
+used_item = nil
+used_monster = nil
+used_meat = nil
+item_is_being_used = nil
+monster_is_being_skinned = nil
+meat_is_being_collected = nil
+local item_finished, monster_finished, meat_finished
+local skinned_items_tbl
+
+local item_no_anim_is_being_used, item_no_anim_sound
+
+
+item_activation_snd = nil
+item_tbl = {}
+feature_is_active = nil
+
+function on_game_start()
+	RegisterScriptCallback("on_game_load",on_game_load)
+    item_tbl = {vodka2 = {snd = "interface\\item_usage\\vodka_use", anm = "anm_hemupob_vodka",cam = "itemuse_anm_effects\\vodka_use.anm",tm = 4300,helm = false},
+				vodka = {snd = "interface\\item_usage\\vodka_use", anm = "anm_cmuphob_vodka",cam = "itemuse_anm_effects\\vodka_use.anm",tm = 4300,helm = false},
+				drug_booster = {snd = "interface\\item_usage\\vodka_use", anm = "anm_booster_weight",cam = "itemuse_anm_effects\\vodka_use.anm",tm = 4300,helm = false},
+				
+				sausage = {snd = "interface\\item_usage\\food_use", anm = "anm_kolbasa",cam = "itemuse_anm_effects\\eat_kolbasa_d_use_h.anm",tm = 7000,helm = false},
+				bread = {snd = "interface\\item_usage\\food_use", anm = "anm_bread",cam = "itemuse_anm_effects\\eat_kolbasa_d_use_h.anm",tm = 7000,helm = false},
+				
+				tushonka = {snd = "interface\\item_usage\\conserva_use", anm = "anm_conserva",cam = "itemuse_anm_effects\\eat_tushonka_d_use_h.anm",tm = 4500,helm = false},
+				conserva = {snd = "interface\\item_usage\\conserva_use", anm = "anm_sardinia_conserva",cam = "itemuse_anm_effects\\eat_tushonka_d_use_h.anm",tm = 4500,helm = false},
+				corn = {snd = "interface\\item_usage\\conserva_use", anm = "anm_korn_conserva",cam = "itemuse_anm_effects\\eat_tushonka_d_use_h.anm",tm = 4500,helm = false},
+				tomato = {snd = "interface\\item_usage\\conserva_use", anm = "anm_olives_conserva",cam = "itemuse_anm_effects\\eat_tushonka_d_use_h.anm",tm = 4500,helm = false},
+				beans = {snd = "interface\\item_usage\\conserva_use", anm = "anm_olives_conserva",cam = "itemuse_anm_effects\\eat_tushonka_d_use_h.anm",tm = 4500,helm = false},
+				chili = {snd = "interface\\item_usage\\conserva_use", anm = "anm_olives_conserva",cam = "itemuse_anm_effects\\eat_tushonka_d_use_h.anm",tm = 4500,helm = false},
+				
+				meat_dog = {snd = "interface\\item_usage\\plate_eat", anm = "anm_meat_dog",cam = "itemuse_anm_effects\\eat_tushonka_d_use_h.anm",tm = 7200,helm = false},
+				meat_dog_a = {snd = "interface\\item_usage\\plate_eat", anm = "anm_meat_dog",cam = "itemuse_anm_effects\\eat_tushonka_d_use_h.anm",tm = 7200,helm = false},
+				meat_dog_b = {snd = "interface\\item_usage\\plate_eat", anm = "anm_meat_dog",cam = "itemuse_anm_effects\\eat_tushonka_d_use_h.anm",tm = 7200,helm = false},
+				
+				meat_flesh = {snd = "interface\\item_usage\\plate_eat", anm = "anm_meat_psdog",cam = "itemuse_anm_effects\\eat_tushonka_d_use_h.anm",tm = 7200,helm = false},
+				meat_flesh_a = {snd = "interface\\item_usage\\plate_eat", anm = "anm_meat_psdog",cam = "itemuse_anm_effects\\eat_tushonka_d_use_h.anm",tm = 7200,helm = false},
+				meat_flesh_b = {snd = "interface\\item_usage\\plate_eat", anm = "anm_meat_psdog",cam = "itemuse_anm_effects\\eat_tushonka_d_use_h.anm",tm = 7200,helm = false},
+				
+				meat_boar = {snd = "interface\\item_usage\\plate_eat", anm = "anm_meat_psdog",cam = "itemuse_anm_effects\\eat_tushonka_d_use_h.anm",tm = 7200,helm = false},
+				meat_boar_a = {snd = "interface\\item_usage\\plate_eat", anm = "anm_meat_psdog",cam = "itemuse_anm_effects\\eat_tushonka_d_use_h.anm",tm = 7200,helm = false},
+				meat_boar_b = {snd = "interface\\item_usage\\plate_eat", anm = "anm_meat_psdog",cam = "itemuse_anm_effects\\eat_tushonka_d_use_h.anm",tm = 7200,helm = false},
+				
+				meat_pseudodog = {snd = "interface\\item_usage\\plate_eat", anm = "anm_meat_psdog",cam = "itemuse_anm_effects\\eat_tushonka_d_use_h.anm",tm = 7200,helm = false},
+				meat_pseudodog_a = {snd = "interface\\item_usage\\plate_eat", anm = "anm_meat_psdog",cam = "itemuse_anm_effects\\eat_tushonka_d_use_h.anm",tm = 7200,helm = false},
+				meat_pseudodog_b = {snd = "interface\\item_usage\\plate_eat", anm = "anm_meat_psdog",cam = "itemuse_anm_effects\\eat_tushonka_d_use_h.anm",tm = 7200,helm = false},
+				
+				meat_lurker = {snd = "interface\\item_usage\\plate_eat", anm = "anm_meat_psdog",cam = "itemuse_anm_effects\\eat_tushonka_d_use_h.anm",tm = 7200,helm = false},
+				meat_lurker_a = {snd = "interface\\item_usage\\plate_eat", anm = "anm_meat_psdog",cam = "itemuse_anm_effects\\eat_tushonka_d_use_h.anm",tm = 7200,helm = false},
+				meat_lurker_b = {snd = "interface\\item_usage\\plate_eat", anm = "anm_meat_psdog",cam = "itemuse_anm_effects\\eat_tushonka_d_use_h.anm",tm = 7200,helm = false},
+				
+				meat_psysucker = {snd = "interface\\item_usage\\plate_eat", anm = "anm_meat_psdog",cam = "itemuse_anm_effects\\eat_tushonka_d_use_h.anm",tm = 7200,helm = false},
+				meat_psysucker_a = {snd = "interface\\item_usage\\plate_eat", anm = "anm_meat_psdog",cam = "itemuse_anm_effects\\eat_tushonka_d_use_h.anm",tm = 7200,helm = false},
+				meat_psysucker_b = {snd = "interface\\item_usage\\plate_eat", anm = "anm_meat_psdog",cam = "itemuse_anm_effects\\eat_tushonka_d_use_h.anm",tm = 7200,helm = false},
+				
+				meat_snork = {snd = "interface\\item_usage\\plate_eat", anm = "anm_meat_bloodsucker",cam = "itemuse_anm_effects\\eat_tushonka_d_use_h.anm",tm = 7200,helm = false},
+				meat_snork_a = {snd = "interface\\item_usage\\plate_eat", anm = "anm_meat_bloodsucker",cam = "itemuse_anm_effects\\eat_tushonka_d_use_h.anm",tm = 7200,helm = false},
+				meat_snork_b = {snd = "interface\\item_usage\\plate_eat", anm = "anm_meat_bloodsucker",cam = "itemuse_anm_effects\\eat_tushonka_d_use_h.anm",tm = 7200,helm = false},
+				
+				meat_chimera = {snd = "interface\\item_usage\\plate_eat", anm = "anm_meat_chimera",cam = "itemuse_anm_effects\\eat_tushonka_d_use_h.anm",tm = 7200,helm = false},
+				meat_chimera_a = {snd = "interface\\item_usage\\plate_eat", anm = "anm_meat_chimera",cam = "itemuse_anm_effects\\eat_tushonka_d_use_h.anm",tm = 7200,helm = false},
+				meat_chimera_b = {snd = "interface\\item_usage\\plate_eat", anm = "anm_meat_chimera",cam = "itemuse_anm_effects\\eat_tushonka_d_use_h.anm",tm = 7200,helm = false},
+				
+				meat_tushkano = {snd = "interface\\item_usage\\plate_eat", anm = "anm_meat_chimera",cam = "itemuse_anm_effects\\eat_tushonka_d_use_h.anm",tm = 7200,helm = false},
+				meat_tushkano_a = {snd = "interface\\item_usage\\plate_eat", anm = "anm_meat_chimera",cam = "itemuse_anm_effects\\eat_tushonka_d_use_h.anm",tm = 7200,helm = false},
+				meat_tushkano_b = {snd = "interface\\item_usage\\plate_eat", anm = "anm_meat_chimera",cam = "itemuse_anm_effects\\eat_tushonka_d_use_h.anm",tm = 7200,helm = false},
+				
+				meat_bloodsucker = {snd = "interface\\item_usage\\plate_eat", anm = "anm_meat_bloodsucker",cam = "itemuse_anm_effects\\eat_tushonka_d_use_h.anm",tm = 7200,helm = false},
+				meat_bloodsucker_a = {snd = "interface\\item_usage\\plate_eat", anm = "anm_meat_bloodsucker",cam = "itemuse_anm_effects\\eat_tushonka_d_use_h.anm",tm = 7200,helm = false},
+				meat_bloodsucker_b = {snd = "interface\\item_usage\\plate_eat", anm = "anm_meat_bloodsucker",cam = "itemuse_anm_effects\\eat_tushonka_d_use_h.anm",tm = 7200,helm = false},
+				
+				meat_dog = {snd = "interface\\item_usage\\plate_eat", anm = "anm_meat_dog",cam = "itemuse_anm_effects\\eat_tushonka_d_use_h.anm",tm = 7200,helm = false},
+				meat_dog_a = {snd = "interface\\item_usage\\plate_eat", anm = "anm_meat_dog",cam = "itemuse_anm_effects\\eat_tushonka_d_use_h.anm",tm = 7200,helm = false},
+				meat_dog_b = {snd = "interface\\item_usage\\plate_eat", anm = "anm_meat_dog",cam = "itemuse_anm_effects\\eat_tushonka_d_use_h.anm",tm = 7200,helm = false},
+				
+				energy_drink = {snd = "interface\\item_usage\\drink_soda_use", anm = "anm_energy_drink_nonstop",cam = "itemuse_anm_effects\\banka_use.anm",tm = 3300,helm = false},
+				water_drink = {snd = "interface\\item_usage\\inv_drink_water", anm = "anm_water_can_1",cam = "itemuse_anm_effects\\banka_use.anm",tm = 3300,helm = false},
+				beer_can_2 = {snd = "interface\\item_usage\\drink_soda_use", anm = "anm_beer_can_2",cam = "itemuse_anm_effects\\banka_use.anm",tm = 3300,helm = false},
+
+				cocacola = {snd = "interface\\item_usage\\drink_cola_use", anm = "anm_cocacola",cam = "itemuse_anm_effects\\butilka_steklo_use.anm",tm = 3700,helm = false},
+				beer = {snd = "interface\\item_usage\\drink_beer_use", anm = "anm_beer_2",cam = "itemuse_anm_effects\\butilka_steklo_1_hands_eat_alt_1_invtrans.anm",tm = 3700,helm = false},
+				beer_2 = {snd = "interface\\item_usage\\drink_beer_use", anm = "anm_beer_2",cam = "itemuse_anm_effects\\butilka_steklo_use.anm",tm = 3700,helm = false},
+
+                drug_coagulant = {snd = "interface\\item_usage\\pills_use", anm = "anm_drug_coagulant",cam = "itemuse_anm_effects\\tabletki_use.anm",tm = 3700,helm = false},
+				drug_sleepingpills = {snd = "interface\\item_usage\\pills_use", anm = "anm_drug_sleepingpills",cam = "itemuse_anm_effects\\tabletki_use.anm",tm = 3700,helm = false},
+				drug_psy_blockade = {snd = "interface\\item_usage\\pills_use", anm = "anm_drug_psy_blocade",cam = "itemuse_anm_effects\\tabletki_use.anm",tm = 3700,helm = false},
+				antiemetic = {snd = "interface\\item_usage\\pills_use", anm = "anm_antiemetic",cam = "itemuse_anm_effects\\tabletki_use.anm",tm = 3700,helm = false},
+				caffeine = {snd = "interface\\item_usage\\pills_use", anm = "anm_caffeine",cam = "itemuse_anm_effects\\tabletki_use.anm",tm = 3700,helm = false},
+				antirad_kalium = {snd = "interface\\item_usage\\pills_use", anm = "anm_antirad_kalium",cam = "itemuse_anm_effects\\tabletki_use.anm",tm = 3700,helm = false},
+				
+				
+				
+				drug_antidot = {snd = "interface\\item_usage\\pills_use", anm = "anm_drug_antidot",cam = "itemuse_anm_effects\\tabletki_use.anm",tm = 3700,helm = false},
+				antibio_sulfad = {snd = "interface\\item_usage\\pills_use", anm = "anm_antibio_sulfad",cam = "itemuse_anm_effects\\tabletki_use.anm",tm = 3700,helm = false},
+				
+				
+				drug_radioprotector = {snd = "interface\\item_usage\\pills_use", anm = "anm_drug_radioprotector",cam = "itemuse_anm_effects\\tabletki_use.anm",tm = 3700,helm = false},
+				
+                medkit = {snd = "interface\\item_usage\\medkit_use", anm = "anm_medkit",cam = "itemuse_anm_effects\\aptechka_use.anm",tm = 6950,helm = true},
+				medkit_army = {snd = "interface\\item_usage\\medkit_use", anm = "anm_medkit_army",cam = "itemuse_anm_effects\\aptechka_use.anm",tm = 6950,helm = true},
+				medkit_scientic = {snd = "interface\\item_usage\\medkit_use", anm = "anm_medkit_scientic",cam = "itemuse_anm_effects\\aptechka_use.anm",tm = 6950,helm = true},
+				medkit_elite = {snd = "interface\\item_usage\\medkit_use", anm = "anm_medkit_elite",cam = "itemuse_anm_effects\\aptechka_use.anm",tm = 7000,helm = true},
+				
+				akvatab = {snd = "interface\\item_usage\\drug_tabletos_use", anm = "anm_drug_tabletos",cam = "itemuse_anm_effects\\drug_tabletos_use.anm",tm = 4350,helm = true},
+				yadylin = {snd = "interface\\item_usage\\drug_tabletos_use", anm = "anm_drug_tabletos",cam = "itemuse_anm_effects\\drug_tabletos_use.anm",tm = 4350,helm = true},
+				
+				
+                antirad = {snd = "interface\\item_usage\\antirad_use", anm = "anm_antirad",cam = "itemuse_anm_effects\\antirad_use.anm",tm = 4600,helm = true},
+				antirad_cystamine = {snd = "interface\\item_usage\\antirad_use", anm = "anm_antirad",cam = "itemuse_anm_effects\\antirad_use.anm",tm = 4600,helm = true},
+				
+				stimpack = {snd = "interface\\item_usage\\antirad_use", anm = "anm_stimpack",cam = "itemuse_anm_effects\\antirad_use.anm",tm = 4600,helm = true},
+				stimpack_army = {snd = "interface\\item_usage\\antirad_use", anm = "anm_stimpack_army",cam = "itemuse_anm_effects\\antirad_use.anm",tm = 4600,helm = true},
+				stimpack_scientic = {snd = "interface\\item_usage\\antirad_use", anm = "anm_stimpack_scientic",cam = "itemuse_anm_effects\\antirad_use.anm",tm = 4600,helm = true},
+		
+				morphine = {snd = "interface\\item_usage\\injector_using", anm = "anm_morphine",cam = "itemuse_anm_effects\\antirad_use.anm",tm = 4600,helm = true},
+				glucose = {snd = "interface\\item_usage\\injector_using", anm = "anm_morphine",cam = "itemuse_anm_effects\\antirad_use.anm",tm = 4600,helm = true},
+				glucose_s = {snd = "interface\\item_usage\\injector_using", anm = "anm_morphine",cam = "itemuse_anm_effects\\antirad_use.anm",tm = 4600,helm = true},
+				rebirth = {snd = "interface\\item_usage\\injector_using", anm = "anm_morphine",cam = "itemuse_anm_effects\\antirad_use.anm",tm = 4600,helm = true},
+				salicidic_acid = {snd = "interface\\item_usage\\injector_using", anm = "anm_morphine",cam = "itemuse_anm_effects\\antirad_use.anm",tm = 4600,helm = true},
+				analgetic = {snd = "interface\\item_usage\\injector_using", anm = "anm_morphine",cam = "itemuse_anm_effects\\antirad_use.anm",tm = 4600,helm = true},
+		
+                bandage = {snd = "interface\\item_usage\\bandage_use", anm = "anm_bandage",cam = "itemuse_anm_effects\\bint_use.anm",tm = 3700,helm = true},
+				bandage_israeli = {snd = "interface\\item_usage\\bandage_use", anm = "anm_bandage_israeli",cam = "itemuse_anm_effects\\bint_use.anm",tm = 3300,helm = true},
+				bio_bandage = {snd = "interface\\item_usage\\bandage_use", anm = "anm_bio_bandage",cam = "itemuse_anm_effects\\bint_use.anm",tm = 3300,helm = true},
+				
+				mineral_water = {snd = "interface\\item_usage\\vodka_use", anm = "anm_mineral_water",cam = "itemuse_anm_effects\\vodka_use.anm",tm = 4300,helm = false},
+    }
+end
+
+function on_game_load()
+activate()
+end
+
+function activate()
+printf(prefix.."activated")
+	restore_actor()
+	
+	
+
+    feature_is_active = true
+
+	skinned_items_tbl = {}
+
+    ini = system_ini()
+    RegisterScriptCallback("actor_on_update",update)
+    RegisterScriptCallback("actor_on_item_use",use_item)
+    RegisterScriptCallback("monster_on_actor_use_callback",monster_on_actor_use)
+	RegisterScriptCallback("actor_on_item_take",actor_on_item_take)
+
+	--Переменные состояний использования предмета и свежевания существ
+	item_is_being_used = nil
+	monster_is_being_skinned = nil
+	meat_is_being_collected = nil
+	item_finished = nil
+	monster_finished = nil
+	meat_finished = nil
+end
+
+function restore_actor()
+	if db.actor then
+		printf(prefix.."actor_restored")
+		--smart_delete_phantom_item() --Удалить предметы с анимациями
+		level.enable_input() --Вернуть управление
+		level.remove_cam_effector(8555)
+		level.remove_pp_effector(8556)
+		if item_usage_snd then
+		item_usage_snd:stop()
+		end
+		if meat_usage_snd then
+		meat_usage_snd:stop()
+		end
+	end
+end
+
+function deactivate()
+printf(prefix.."deactivated")
+if item_is_being_used or monster_is_being_skinned or meat_is_being_collected then
+db.actor:hide_weapon()
+	if active_slot then
+	db.actor:activate_slot(active_slot)
+	end
+end
+    feature_is_active = false
+    -- item_tbl = nil
+    anim_section = nil
+    active_slot = nil
+    anim_exist_tm = nil
+    time_to_relax = nil
+    keep_helm = nil
+    ini = nil
+		
+	item_activation_snd = nil
+	item_usage_snd = nil
+	monster_usage_snd = nil
+	meat_usage_snd = nil
+	used_item = nil
+	used_monster = nil
+	used_meat = nil
+	item_is_being_used = nil
+	monster_is_being_skinned = nil
+	meat_is_being_collected = nil
+	skinned_items_tbl = nil
+	item_finished = nil
+	monster_finished = nil
+	meat_finished = nil
+	
+	item_no_anim_is_being_used = nil
+	item_no_anim_sound = nil
+	
+    UnregisterScriptCallback("actor_on_update",update)
+    UnregisterScriptCallback("actor_on_item_use",use_item)
+    UnregisterScriptCallback("monster_on_actor_use_callback",monster_on_actor_use)
+	UnregisterScriptCallback("actor_on_item_take",actor_on_item_take)
+end
+
+function actor_on_item_take(item)
+if not used_monster then return end --Выйти если не идёт свежевание
+
+local temp = item:section()
+temp = string.sub(temp,0,8)
+if temp ~= "anm_harv" then
+table.insert(skinned_items_tbl,item:section())
+-- printf(item:section() .. "-" .. #skinned_items_tbl)
+end
+end
+
+function use_item(obj,item)
+local enable_animations = ui_options.get("video/player/animations")
+if (not enable_animations) then
+		return
+	end
+hide_hud_inventory()
+-- printf("2")
+--Если у предмета нету анимации, проиграть simple или none
+--local actor = db.actor
+--ui_options.set("video/player/animations", false)
+--ui_options.set("video/player/mask_hud", false)
+--actor_effects.Update_Mask(actor)
+if not item_tbl[item] then
+	return
+end
+
+	if show_log then
+	printf("----")
+	printf(prefix.."item: "..tostring(item))
+	printf(prefix.."timer_wpn_hide: "..tostring(item_tbl[item].tm).."ms")
+	printf(prefix.."sound: "..tostring(item_tbl[item].snd))
+	end
+--Выход из функции если для предмета была назначена несуществующая секция
+if not ini:line_exist(item_tbl[item].anm,"inv_name") then return end
+
+--Выход из функции если какой-либо предмет используется
+if used_item or item_is_being_used then
+return
+end
+
+--Выход из функции если идёт скининг монстра
+if used_monster or monster_is_being_skinned then
+return
+end
+
+--Выход из функции если какой-либо предмет используется
+if used_meat or meat_is_being_collected then
+return
+end
+
+--Получаем активное оружие в руках
+local wpn = db.actor:active_item()
+if wpn then
+wpn = wpn:section()
+wpn = string.gsub(wpn,"-","_")
+end
+
+used_item = item --предмет, который будет использован
+active_slot = db.actor:active_slot() --активный слот до использования предмета
+
+if item_tbl[item].UIinput then level.disable_input() end --Отключить инпуты игрока если
+keep_helm = item_tbl[item].helm or false
+anim_section = item_tbl[item].anm
+--alife():create(anim_section,db.actor:position(),db.actor:level_vertex_id(),db.actor:game_vertex_id(),db.actor:id())
+anim_exist_tm = nil
+end
+
+function monster_on_actor_use(obj,who)
+--Выход из функции если какой-либо предмет используется
+if used_item or item_is_being_used then
+return
+end
+
+--Выход из функции если идёт скининг монстра
+if used_monster or monster_is_being_skinned then
+return
+end
+
+--Выход из функции если какой-либо предмет используется
+if used_meat or meat_is_being_collected then
+return
+end
+
+--Получаем активное оружие в руках
+wpn = db.actor:active_item()
+if wpn then
+wpn = wpn:section()
+wpn = string.gsub(wpn,"-","_")
+printf(wpn)
+end
+
+used_monster = obj
+active_slot = db.actor:active_slot() --активный слот до использования предмета
+
+--Определение того, какое оружие будет использовано при свежевании
+local wpn_slot = db.actor:active_slot()
+local anm_melee_wpn_section
+if wpn_slot == 1 then --Если выбрано оружие не ближнего боя, то использовать стандартный нож
+anm_melee_wpn_section = "anm_harv_" .. wpn
+else
+anm_melee_wpn_section = "anm_harv_wpn_knife"
+end
+
+--Подстановка стандартного значения, если оружие в руках неопределено
+if not ini:line_exist(anm_melee_wpn_section,"line_indicator_dont_delete") then
+anm_melee_wpn_section = "anm_harv_wpn_knife"
+end
+
+--Таблица под каждого мутанта - 1)секция с анимаией свежевания с оруэием 2)секция с анимацией сбора мяса в мешок
+local harvest = {
+	[clsid.bloodsucker_s]   = {anm_melee_wpn_section, "anm_harv_meat_1"},
+	[clsid.boar_s]          = {anm_melee_wpn_section, "anm_harv_meat_1"},
+	[clsid.chimera_s]       = {anm_melee_wpn_section, "anm_harv_meat_1"},
+	[clsid.dog_s]           = {anm_melee_wpn_section, "anm_harv_meat_1"},
+	[clsid.flesh_s]         = {anm_melee_wpn_section, "anm_harv_meat_1"},
+	[clsid.psy_dog_s]       = {anm_melee_wpn_section, "anm_harv_meat_1"},
+	[clsid.pseudodog_s]     = {anm_melee_wpn_section, "anm_harv_meat_1"},
+	[clsid.tushkano_s]      = {anm_melee_wpn_section, "anm_harv_meat_1"},
+
+	[clsid.burer_s]         = {anm_melee_wpn_section, "anm_harv_meat_1"},
+	[clsid.gigant_s]        = {anm_melee_wpn_section, "anm_harv_meat_1"},
+	[clsid.controller_s]    = {anm_melee_wpn_section, "anm_harv_meat_1"},
+	[clsid.snork_s]         = {anm_melee_wpn_section, "anm_harv_meat_1"},
+	[clsid.fracture_s]      = {anm_melee_wpn_section, "anm_harv_meat_1"},
+	[clsid.cat_s]           = {anm_melee_wpn_section, "anm_harv_meat_1"},
+	[clsid.zombie_s]        = {anm_melee_wpn_section, "anm_harv_meat_1"},
+	[clsid.rat_s]           = {anm_melee_wpn_section, "anm_harv_meat_1"}
+}
+
+--Завершить выполнение если... неизвестный мутант?
+local cls = obj and obj:clsid()
+if not (cls and harvest[cls]) then
+	return
+end
+
+--Завершить выполнение если отключен мод на лут мутантов
+local m_ini = ini_file("plugins\\itms_manager.ltx")
+if not (m_ini:r_bool_ex("mutant_loot_mod","enable",true)) then
+	return
+end
+
+--Завершить выполнение если... тело стало непригодным для свежевания?
+local st = db.storage[obj:id()]
+if st and st.death_time and game.get_game_time():diffSec(st.death_time) > (m_ini:r_float_ex("mutant_loot_mod","decay_time") or 7200) then
+	return
+end
+
+
+level.disable_input() --Отключить инпуты
+anim_section = harvest[cls]
+-- keep_helm = true
+-- item_animations.use_helmet(1) --Надеть шлем
+--alife():create(anim_section[1],db.actor:position(),db.actor:level_vertex_id(),db.actor:game_vertex_id(),db.actor:id())
+anim_exist_tm = nil
+--Кивок головой если в руках есть любое оружие
+if db.actor:active_slot() ~= 0 then
+level.add_cam_effector("itemuse_anm_effects\\harvest_lean_down_main_headbob.anm",8561,false,"")
+end
+end
+
+
+
+
+
+function update()
+--Если завершилось выполнение ПРЕДМЕТА
+if item_finished then
+item_finished = nil
+--ui_options.set("video/player/animations", true)
+
+if active_slot then db.actor:activate_slot(active_slot) else db.actor:activate_slot(0) end --Вернуть исходное оружие иначе без оружия
+active_slot = nil
+end
+--Если завершилось выполнение МУТАНТА
+if monster_finished then
+monster_finished = nil
+	--Если в процессе свежевания было найдено мясо, собрать мясо
+	if #skinned_items_tbl > 0 then
+	--alife():create(anim_section[2],db.actor:position(),db.actor:level_vertex_id(),db.actor:game_vertex_id(),db.actor:id())
+	
+	used_meat = anim_section[2]
+	end
+	if #skinned_items_tbl == 0 then
+	if active_slot then db.actor:activate_slot(active_slot) else db.actor:activate_slot(0) end --Вернуть исходное оружие иначе без оружия
+	active_slot = nil
+	anim_section = nil
+	skinned_items_tbl = {}
+	end
+end
+--Если завершилось выполнение МЯСА
+if meat_finished then
+meat_finished = nil
+if active_slot then db.actor:activate_slot(active_slot) else db.actor:activate_slot(0) end --Вернуть исходное оружие иначе без оружия
+active_slot = nil
+end
+
+if not anim_section then return end --Выйти если нету активной секции под анимации
+if not used_item and not used_monster and not used_meat then return end --Выйти если
+local tg = time_global()
+
+--Активировать слот, с предметом
+hide_hud_inventory()
+
+db.actor:activate_slot(0)
+
+local anim_section_hud = nil
+
+if used_monster then
+	anim_section_hud = "anm_harv_" .. wpn .. "_hud"
+	elseif not used_monster then
+	anim_section_hud = anim_section .. "_hud"
+end
+
+printf("test 1")
+
+--Задать время существования после того как предмет был взят
+if not anim_exist_tm then
+	if db.actor:active_slot() == 0 then
+	
+	game.play_hud_motion(2, anim_section_hud, "anm_show", false, 1)
+	
+	
+	printf(anim_section_hud)
+	db.actor:restore_weapon() --Убрать возможность менять оружие
+	printf("test 2")
+	--Если предмет был ВЗЯТ в руки
+	local tmr
+		--Если используется предмет
+		if used_item and not item_is_being_used then
+		item_is_being_used = true
+		if item_tbl[used_item].snd then --Если в таблице существует указатель на звук
+		item_usage_snd = sound_object(item_tbl[used_item].snd)
+		item_usage_snd:play(db.actor, 0, sound_object.s2d)
+		end
+		if item_tbl[used_item].cam then --Если в таблице существует указатель на камеру
+		level.add_cam_effector(item_tbl[used_item].cam,8555,false,"")
+		end
+		if item_tbl[used_item].ppe then --Если в таблице существует указатель на пост-процесс
+		level.add_pp_effector(item_tbl[used_item].ppe, 8556, false)
+		end
+		tmr = item_tbl[used_item].tm
+		anim_exist_tm = tg + tmr
+		end
+		
+		--Если делается скининг монстра
+		if used_monster and not monster_is_being_skinned then
+		monster_is_being_skinned = true
+		if ini:r_string_ex(anim_section[1],"anim_sound") then --Если существует указатель на звук
+		monster_usage_snd = sound_object(ini:r_string_ex(anim_section[1],"anim_sound"))
+		monster_usage_snd:play(db.actor, 0, sound_object.s2d)
+		level.add_cam_effector("itemuse_anm_effects\\harvest_skin_use.anm",8558,false,"")
+		end
+		
+		level.add_cam_effector("itemuse_anm_effects\\harvest_lean_down_main.anm",8559,false,"") --Запуск анимации приседания для свежевания
+		
+		tmr = ini:r_float_ex(anim_section[1],"anim_length")
+		anim_exist_tm = tg + tmr
+		end
+		
+		--Если идёт сбор мяса
+		if used_meat and not meat_is_being_collected then
+		meat_is_being_collected = true
+		if ini:r_string_ex(anim_section[2],"anim_sound") then --Если существует указатель на звук
+		meat_usage_snd = sound_object(ini:r_string_ex(anim_section[2],"anim_sound"))
+		meat_usage_snd:play(db.actor, 0, sound_object.s2d)	
+		end
+		level.add_cam_effector("itemuse_anm_effects\\harvest_gather_meat_use.anm",8560,false,"") --Запуск анимации камеры подбора мяса
+		tmr = ini:r_float_ex(anim_section[2],"anim_length")
+		anim_exist_tm = tg + tmr
+		end
+	end
+end
+--Если задано время существования
+if anim_exist_tm then
+	--Если время существования вышло
+	if anim_exist_tm <= tg then
+		--Время существования предмета
+		if used_item then
+		db.actor:hide_weapon() --Возможность менять оружие
+		level.enable_input() --Вернуть управление
+		
+		--remove_item(anim_section)--Удалить "фантомный" предмет из инвентаря
+		item_finished = true --ЗАВЕРШЕНА АНИМАЦИЯ ПРЕДМЕТА
+		
+		--Очистка переменных
+		used_item = nil
+		item_is_being_used = nil
+		keep_helm = nil
+		anim_section = nil
+		anim_exist_tm = nil
+		end
+		
+		--Время существования мутанта
+		if used_monster then
+		db.actor:hide_weapon() --Возможность менять оружие
+		level.enable_input() --Вернуть управление
+		
+		--remove_item(anim_section[1])--Удалить "фантомный" предмет из инвентаря
+		monster_finished = true --ЗАВЕРШЕНА АНИМАЦИЯ СВЕЖЕВАНИЯ МУТАНТА
+		
+		--Очистка переменных
+		used_monster = nil
+		monster_is_being_skinned = nil
+		
+		keep_helm = nil
+		anim_exist_tm = nil
+		end
+		
+		--Время существования сбора мяса
+		if used_meat then
+		db.actor:hide_weapon() --Возможность менять оружие
+		level.enable_input() --Вернуть управление
+		
+		--remove_item(anim_section[2])--Удалить "фантомный" предмет из инвентаря
+		meat_finished = true --ЗАВЕРШЕНА АНИМАЦИЯ СВЕЖЕВАНИЯ МУТАНТА
+		
+		--Очистка переменных
+		used_meat = nil
+		meat_is_being_collected = nil
+		skinned_items_tbl = {}
+		
+		keep_helm = nil
+		anim_section = nil
+		anim_exist_tm = nil
+		end
+	end
+	
+end
+end

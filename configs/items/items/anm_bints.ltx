@@ -1,0 +1,52 @@
+;Базовый бинт
+[anm_bandage]:anm_base
+hud							= anm_bandage_hud
+visual						= dynamics\weapons\wpn_eat\world_models\bints\bint_basic_world
+description					= st_bandage_descr
+inv_name		 			= st_bandage
+inv_name_short				= st_bandage
+inv_grid_width     = 1
+inv_grid_height    = 1
+inv_grid_x         = 3
+inv_grid_y         = 70
+
+[anm_bandage_hud]:anm_base_hud
+hands_position                           = -0.0055,-0.05, 0.35
+hands_position_16x9                      = -0.0055,-0.05, 0.35
+item_visual             	= dynamics\weapons\wpn_eat\bints\wpn_bint_basic_hud
+
+anm_show				= bint_hands_eat_alt_1_invtrans, bint_wpn_eat
+
+
+;Израильский бинт
+[anm_bandage_israeli]:anm_base
+hud							= anm_bandage_israeli_hud
+visual						= dynamics\weapons\wpn_eat\world_models\bints\bint_israeli_world
+description					= st_bandage_israeli_descr
+inv_name		 			= st_bandage_israeli
+inv_name_short				= st_bandage_israeli
+inv_grid_width     = 1
+inv_grid_height    = 1
+inv_grid_x         = 4
+inv_grid_y         = 70
+
+[anm_bandage_israeli_hud]:anm_bandage_hud
+item_visual             	= dynamics\weapons\wpn_eat\bints\wpn_bint_israeli_hud
+
+
+;Био бинт
+[anm_bio_bandage]:anm_base
+hud							= anm_bio_bandage_hud
+visual						= dynamics\weapons\wpn_eat\world_models\bints\bint_bio_world
+description					= st_bio_bandage_descr
+inv_name		 			= st_bio_bandage
+inv_name_short				= st_bio_bandage
+inv_grid_width     = 1
+inv_grid_height    = 1
+inv_grid_x         = 5
+inv_grid_y         = 70
+
+[anm_bio_bandage_hud]:anm_bandage_hud
+item_visual             	= dynamics\weapons\wpn_eat\bints\wpn_bint_bio_hud
+
+

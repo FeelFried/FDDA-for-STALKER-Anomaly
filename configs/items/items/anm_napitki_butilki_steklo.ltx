@@ -1,0 +1,52 @@
+;0 Кока Кола
+[anm_cocacola]:anm_base
+$spawn						= "weapons\anm_energy_drink"
+hud							= anm_cocacola_hud
+visual						= dynamics\weapons\wpn_eat\world_models\butilki_steklo\butilka_steklo_cocacola_world
+description					= st_cocacola_descr
+inv_name					= st_cocacola
+inv_name_short				= st_cocacola
+
+inv_grid_width     = 1
+inv_grid_height    = 1
+inv_grid_x         = 7
+inv_grid_y         = 69
+
+[anm_cocacola_hud]:anm_base_hud
+hands_position                           = -0.0055,-0.06, 0.34
+hands_position_16x9                      = -0.0055,-0.06, 0.34
+item_visual             	= dynamics\weapons\wpn_eat\butilki_steklo\wpn_butilka_steklo_cocacola_hud
+
+anm_show					= butilka_steklo_1_hands_eat_alt_1_invtrans, butilka_steklo_1_wpn_eat_alt_1
+
+;1 Балтика 3
+[anm_beer_1]:anm_base
+hud							= anm_beer_1_hud
+visual						= dynamics\weapons\wpn_eat\world_models\butilki_steklo\butilka_steklo_baltika3_world
+description					= st_beer_1_descr
+inv_name					= st_beer_1
+inv_name_short				= st_beer_1
+
+inv_grid_width     = 1
+inv_grid_height    = 1
+inv_grid_x         = 7
+inv_grid_y         = 71
+
+[anm_beer_1_hud]:anm_cocacola_hud
+item_visual             	= dynamics\weapons\wpn_eat\butilki_steklo\wpn_butilka_steklo_baltika3_hud
+
+;2 Славутич
+[anm_beer_2]:anm_base
+hud							= anm_beer_2_hud
+visual						= dynamics\weapons\wpn_eat\world_models\butilki_steklo\butilka_steklo_slavutich_world
+description					= st_beer_2_descr
+inv_name					= st_beer_2
+inv_name_short				= st_beer_2
+
+inv_grid_width     = 1
+inv_grid_height    = 1
+inv_grid_x         = 7
+inv_grid_y         = 70
+
+[anm_beer_2_hud]:anm_cocacola_hud
+item_visual             	= dynamics\weapons\wpn_eat\butilki_steklo\wpn_butilka_steklo_slavutich_hud
