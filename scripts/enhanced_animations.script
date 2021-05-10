@@ -87,10 +87,6 @@ function on_game_start()
 				meat_bloodsucker_a = {snd = "interface\\item_usage\\plate_eat", anm = "anm_meat_bloodsucker",cam = "itemuse_anm_effects\\eat_tushonka_d_use_h.anm",tm = 7200,helm = false},
 				meat_bloodsucker_b = {snd = "interface\\item_usage\\plate_eat", anm = "anm_meat_bloodsucker",cam = "itemuse_anm_effects\\eat_tushonka_d_use_h.anm",tm = 7200,helm = false},
 				
-				meat_dog = {snd = "interface\\item_usage\\plate_eat", anm = "anm_meat_dog",cam = "itemuse_anm_effects\\eat_tushonka_d_use_h.anm",tm = 7200,helm = false},
-				meat_dog_a = {snd = "interface\\item_usage\\plate_eat", anm = "anm_meat_dog",cam = "itemuse_anm_effects\\eat_tushonka_d_use_h.anm",tm = 7200,helm = false},
-				meat_dog_b = {snd = "interface\\item_usage\\plate_eat", anm = "anm_meat_dog",cam = "itemuse_anm_effects\\eat_tushonka_d_use_h.anm",tm = 7200,helm = false},
-				
 				energy_drink = {snd = "interface\\item_usage\\drink_soda_use", anm = "anm_energy_drink_nonstop",cam = "itemuse_anm_effects\\banka_use.anm",tm = 3300,helm = false},
 				water_drink = {snd = "interface\\item_usage\\inv_drink_water", anm = "anm_water_can_1",cam = "itemuse_anm_effects\\banka_use.anm",tm = 3300,helm = false},
 				beer_can_2 = {snd = "interface\\item_usage\\drink_soda_use", anm = "anm_beer_can_2",cam = "itemuse_anm_effects\\banka_use.anm",tm = 3300,helm = false},
@@ -142,6 +138,7 @@ function on_game_start()
 				bio_bandage = {snd = "interface\\item_usage\\bandage_use", anm = "anm_bio_bandage",cam = "itemuse_anm_effects\\bint_use.anm",tm = 3300,helm = true},
 				
 				mineral_water = {snd = "interface\\item_usage\\vodka_use", anm = "anm_mineral_water",cam = "itemuse_anm_effects\\vodka_use.anm",tm = 4300,helm = false},
+				vodka_quality = {snd = "interface\\item_usage\\drink_flask4", anm = "anm_flask",cam = "itemuse_anm_effects\\drink_flask.anm",tm = 6900,helm = false},
     }
 end
 
