@@ -19,7 +19,7 @@ All your base are belong to us! (⌐■_■)
 ]]-- 
 local ini_eff = {}
 local active_slot,anim_section,anim_exist_tm,wpn,item_usage_snd,monster_usage_snd,item,anim_use_time,obj_m,used_monster = nil
-used_item,ea_flag,fake_monster,det_active,used_monster = false,false,false,false
+used_item,ea_flag,fake_monster,det_active,used_monster = nil
 
 function on_game_start()
 	RegisterScriptCallback("on_game_load",on_game_load)
