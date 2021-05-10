@@ -41,12 +41,12 @@ function on_game_start()
 				sausage = {snd = "interface\\item_usage\\food_use", anm = "anm_kolbasa",cam = "itemuse_anm_effects\\eat_kolbasa_d_use_h.anm",tm = 7000,helm = false},
 				bread = {snd = "interface\\item_usage\\food_use", anm = "anm_bread",cam = "itemuse_anm_effects\\eat_kolbasa_d_use_h.anm",tm = 7000,helm = false},
 				
-				tushonka = {snd = "interface\\item_usage\\conserva_use", anm = "anm_conserva",cam = "itemuse_anm_effects\\eat_tushonka_d_use_h.anm",tm = 4500,helm = false},
-				conserva = {snd = "interface\\item_usage\\conserva_use", anm = "anm_sardinia_conserva",cam = "itemuse_anm_effects\\eat_tushonka_d_use_h.anm",tm = 4500,helm = false},
-				corn = {snd = "interface\\item_usage\\conserva_use", anm = "anm_korn_conserva",cam = "itemuse_anm_effects\\eat_tushonka_d_use_h.anm",tm = 4500,helm = false},
-				tomato = {snd = "interface\\item_usage\\conserva_use", anm = "anm_olives_conserva",cam = "itemuse_anm_effects\\eat_tushonka_d_use_h.anm",tm = 4500,helm = false},
-				beans = {snd = "interface\\item_usage\\conserva_use", anm = "anm_olives_conserva",cam = "itemuse_anm_effects\\eat_tushonka_d_use_h.anm",tm = 4500,helm = false},
-				chili = {snd = "interface\\item_usage\\conserva_use", anm = "anm_olives_conserva",cam = "itemuse_anm_effects\\eat_tushonka_d_use_h.anm",tm = 4500,helm = false},
+				tushonka = {snd = "interface\\item_usage\\conserva_use", anm = "anm_conserva",cam = "itemuse_anm_effects\\eat_tushonka_d_use_h.anm",tm = 9000,helm = false},
+				conserva = {snd = "interface\\item_usage\\conserva_use", anm = "anm_sardinia_conserva",cam = "itemuse_anm_effects\\eat_tushonka_d_use_h.anm",tm = 9000,helm = false},
+				corn = {snd = "interface\\item_usage\\conserva_use", anm = "anm_korn_conserva",cam = "itemuse_anm_effects\\eat_tushonka_d_use_h.anm",tm = 9000,helm = false},
+				tomato = {snd = "interface\\item_usage\\conserva_use", anm = "anm_olives_conserva",cam = "itemuse_anm_effects\\eat_tushonka_d_use_h.anm",tm = 9000,helm = false},
+				beans = {snd = "interface\\item_usage\\conserva_use", anm = "anm_olives_conserva",cam = "itemuse_anm_effects\\eat_tushonka_d_use_h.anm",tm = 9000,helm = false},
+				chili = {snd = "interface\\item_usage\\conserva_use", anm = "anm_olives_conserva",cam = "itemuse_anm_effects\\eat_tushonka_d_use_h.anm",tm = 9000,helm = false},
 				
 				meat_dog = {snd = "interface\\item_usage\\plate_eat", anm = "anm_meat_dog",cam = "itemuse_anm_effects\\eat_tushonka_d_use_h.anm",tm = 7200,helm = false},
 				meat_dog_a = {snd = "interface\\item_usage\\plate_eat", anm = "anm_meat_dog",cam = "itemuse_anm_effects\\eat_tushonka_d_use_h.anm",tm = 7200,helm = false},
@@ -116,12 +116,12 @@ function on_game_start()
 				medkit_scientic = {snd = "interface\\item_usage\\medkit_use", anm = "anm_medkit_scientic",cam = "itemuse_anm_effects\\aptechka_use.anm",tm = 6950,helm = true},
 				medkit_elite = {snd = "interface\\item_usage\\medkit_use", anm = "anm_medkit_elite",cam = "itemuse_anm_effects\\aptechka_use.anm",tm = 7000,helm = true},
 				
-				akvatab = {snd = "interface\\item_usage\\drug_tabletos_use", anm = "anm_drug_tabletos",cam = "itemuse_anm_effects\\drug_tabletos_use.anm",tm = 4350,helm = true},
-				yadylin = {snd = "interface\\item_usage\\drug_tabletos_use", anm = "anm_drug_tabletos",cam = "itemuse_anm_effects\\drug_tabletos_use.anm",tm = 4350,helm = true},
+				akvatab = {snd = "interface\\item_usage\\drug_tabletos_use", anm = "anm_drug_tabletos",cam = "itemuse_anm_effects\\drug_tabletos_use.anm",tm = 4350,helm = false},
+				yadylin = {snd = "interface\\item_usage\\drug_tabletos_use", anm = "anm_drug_tabletos",cam = "itemuse_anm_effects\\drug_tabletos_use.anm",tm = 4350,helm = false},
 				
 				
-                antirad = {snd = "interface\\item_usage\\antirad_use", anm = "anm_antirad",cam = "itemuse_anm_effects\\antirad_use.anm",tm = 4600,helm = true},
-				antirad_cystamine = {snd = "interface\\item_usage\\antirad_use", anm = "anm_antirad",cam = "itemuse_anm_effects\\antirad_use.anm",tm = 4600,helm = true},
+                antirad = {snd = "interface\\item_usage\\antirad_use", anm = "anm_antirad",cam = "itemuse_anm_effects\\antirad_use.anm",tm = 4600,helm = false},
+				antirad_cystamine = {snd = "interface\\item_usage\\antirad_use", anm = "anm_antirad",cam = "itemuse_anm_effects\\antirad_use.anm",tm = 4600,helm = false},
 				
 				stimpack = {snd = "interface\\item_usage\\antirad_use", anm = "anm_stimpack",cam = "itemuse_anm_effects\\antirad_use.anm",tm = 4600,helm = true},
 				stimpack_army = {snd = "interface\\item_usage\\antirad_use", anm = "anm_stimpack_army",cam = "itemuse_anm_effects\\antirad_use.anm",tm = 4600,helm = true},
@@ -139,9 +139,9 @@ function on_game_start()
 				bio_bandage = {snd = "interface\\item_usage\\bandage_use", anm = "anm_bio_bandage",cam = "itemuse_anm_effects\\bint_use.anm",tm = 3300,helm = true},
 				
 				mineral_water = {snd = "interface\\item_usage\\vodka_use", anm = "anm_mineral_water",cam = "itemuse_anm_effects\\vodka_use.anm",tm = 4300,helm = false},
-				vodka_quality = {snd = "interface\\item_usage\\drink_flask3", anm = "anm_flask2",cam = "itemuse_anm_effects\\drink_flask.anm",tm = 6900,helm = false},
-				flask = {snd = "interface\\item_usage\\drink_flask4", anm = "anm_flask",cam = "itemuse_anm_effects\\drink_flask.anm",tm = 6900,helm = false},
-				bottle_metal = {snd = "interface\\item_usage\\water_flask", anm = "anm_water_flask",cam = "itemuse_anm_effects\\water_flask.anm",tm = 10000,helm = false},
+				vodka_quality = {snd = "interface\\item_usage\\drink_flask3", anm = "anm_flask2",cam = "itemuse_anm_effects\\drink_flask.anm",tm = 8000,helm = false},
+				flask = {snd = "interface\\item_usage\\drink_flask4", anm = "anm_flask",cam = "itemuse_anm_effects\\drink_flask.anm",tm = 8000,helm = false},
+				bottle_metal = {snd = "interface\\item_usage\\water_flask", anm = "anm_water_flask",cam = "itemuse_anm_effects\\water_flask.anm",tm = 10700,helm = false},
     }
 end
 
@@ -243,6 +243,14 @@ end
 end
 
 function use_item(obj,item)
+det_active = db.actor:active_detector() or nil
+	if det_active and (db.actor:active_slot() ~= (0 or 2)) then
+	game.play_hud_anm("script\\lower.anm", 1, 1.41, 1, false)
+	end
+	if det_active and (db.actor:active_slot() == 2) then
+	game.play_hud_anm("script\\lower.anm", 1, 2, 1, false)
+	end
+
 local enable_animations = ui_options.get("video/player/animations")
 if (not enable_animations) then
 		return
@@ -291,7 +299,7 @@ end
 
 used_item = item --предмет, который будет использован
 active_slot = db.actor:active_slot() --активный слот до использования предмета
-det_active = db.actor:active_detector() or nil
+
 --if not used_monster and (active_slot ~=0) then
 --db.actor:activate_slot(8)
 --end
@@ -377,6 +385,11 @@ end
 --Завершить выполнение если отключен мод на лут мутантов
 local m_ini = ini_eff:r_bool("anim_settings","mutant_loot_mod")
 if not m_ini then
+		used_monster = nil
+		monster_is_being_skinned = nil
+		
+		keep_helm = nil
+		anim_exist_tm = nil
 	return
 end
 
@@ -411,6 +424,11 @@ active_slot = nil
 if det_active then
 db.actor:show_detector()
 end
+
+if ui_options.get("video/player/mask_hud") then
+actor_effects.get_mask_back()
+end
+
 end
 --Если завершилось выполнение МУТАНТА
 if monster_finished then
