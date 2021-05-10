@@ -870,9 +870,15 @@ function Update_Mask(actor)
 		helm_fx_old[4] = helm_fx[4]
 		exec_console_cmd("r2_mask_control " .. tostring(helm_fx[1]) .. "," .. tostring(helm_fx[2]) .. "," .. tostring(helm_fx[3]) .. "," .. tostring(helm_fx[4]))
 	end
-	   if mask_effect then
+--------------------------------------------------------------
+	--FOOD,DRUG AND DRINKS ANIMATIONS start
+--------------------------------------------------------------
+	 if mask_effect then
         exec_console_cmd("r2_mask_control " .. tostring(helm_fx[1]) .. "," .. tostring(helm_fx[2]) .. "," .. tostring(helm_fx[3]) .. "," .. tostring(helm_fx[4]))
     end
+--------------------------------------------------------------
+	--FOOD,DRUG AND DRINKS ANIMATIONS end
+--------------------------------------------------------------
 end
 
 
@@ -1363,7 +1369,7 @@ end
 -- Utilities
 --------------------------------------------------------------
 function play_item_fx(name)
-	
+ 
 	if (not opt.enable_animations) then
 		return
 	end
@@ -1671,6 +1677,9 @@ local function actor_on_update()
 	Update_HealthHUD(actor)
 	Update_StaminaHUD(actor)
 end
+--------------------------------------------------------------
+--FOOD,DRUG AND DRINKS ANIMATIONS start
+--------------------------------------------------------------
 function get_mask_back()
             printf('turning on')
 			actor = db.actor
@@ -1679,6 +1688,9 @@ function get_mask_back()
             Update_Mask(actor)
             return
 end
+--------------------------------------------------------------
+--FOOD,DRUG AND DRINKS ANIMATIONS end
+--------------------------------------------------------------
 local function on_key_release(key)
 	animation_start = true
 	local bind = dik_to_bind(key)
@@ -1790,18 +1802,25 @@ local function actor_item_to_slot(obj)
 		end
 	end
 end
-
+--------------------------------------------------------------
+--FOOD,DRUG AND DRINKS ANIMATIONS start
+--------------------------------------------------------------
 local function actor_on_item_use(obj,item)
-	if  enhanced_animations.item_tbl[item] then
+local enable_animations = ui_options.get("video/player/animations")
+
+	if  enhanced_animations.item_tbl[item] and enable_animations  then
 		if not enhanced_animations.item_tbl[item].helm then
 	    printf('turning off')
-		actor = db.actor
+	local actor = db.actor
         opt.enable_mask_hud = false
         mask_effect = false
         Update_Mask(actor)
 		end
 	return
 	end
+--------------------------------------------------------------
+--FOOD,DRUG AND DRINKS ANIMATIONS end
+--------------------------------------------------------------
 	play_item_fx(obj:section())
 end
 

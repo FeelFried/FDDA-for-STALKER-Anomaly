@@ -243,7 +243,13 @@ end
 end
 
 function use_item(obj,item)
+local enable_animations = ui_options.get("video/player/animations")
+if (not enable_animations) then
+		return
+	end
+	
 det_active = db.actor:active_detector() or nil
+
 	if det_active and (db.actor:active_slot() ~= (0 or 2)) then
 	game.play_hud_anm("script\\lower.anm", 1, 1.41, 1, false)
 	end
@@ -251,10 +257,6 @@ det_active = db.actor:active_detector() or nil
 	game.play_hud_anm("script\\lower.anm", 1, 2, 1, false)
 	end
 
-local enable_animations = ui_options.get("video/player/animations")
-if (not enable_animations) then
-		return
-	end
 hide_hud_inventory()
 -- printf("2")
 --Если у предмета нету анимации, проиграть simple или none
