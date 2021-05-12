@@ -248,15 +248,20 @@ function recalc_actor_campos()
 	local pm = used_monster:bone_position('bip01_spine1')
 	local pp = db.actor:position()
 	local dist = pp:distance_to(pm)
-	local step = 0.2
-	while dist > 1.2 do
+	local step = 0.02
+	local lim = 0
+	while dist > 1.2 and lim ~= 60 do
 		pp.x = pp.x + ((pp.x > pm.x) and (-1)*step or step)
+		pp.y = pp.y + ((pp.y > pm.y) and (-1)*step or step)
 		pp.z = pp.z + ((pp.z > pm.z) and (-1)*step or step)
 		dist = pp:distance_to(pm)
+		lim = lim + 1
 	end
-	while dist < 0.8 do
+	while dist < 0.8 and lim ~= 60 do
 		pp.x = pp.x - ((pp.x > pm.x) and (-1)*step or step)
+		pp.y = pp.y - ((pp.y > pm.y) and (-1)*step or step)
 		pp.z = pp.z - ((pp.z > pm.z) and (-1)*step or step)
+		lim = lim + 1
 		dist = pp:distance_to(pm)
 	end
 	local pp2 = db.actor:position()
