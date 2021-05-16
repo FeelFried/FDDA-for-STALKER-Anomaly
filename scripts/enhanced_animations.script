@@ -26,8 +26,6 @@ function on_game_start()
 end
 
 function on_game_load()
-	hud_fov = ui_options.get("video/basic/hud_fov")
-	restore_fov()
 	activate()
 end
 
@@ -93,10 +91,7 @@ end
 
 function start_anim(anim_section_hud)
 	UnregisterScriptCallback("actor_on_update", actor_on_update)
-	hud_fov = ui_options.get("video/basic/hud_fov")
-	if hud_fov ~= 0.45 then
-		exec_console_cmd("hud_fov 0.45")
-	end
+	fov_anim_manager.change_fov(0.45)
 	game.play_hud_motion(2, anim_section_hud, "anm_ea_show", false, 1)
 	if used_item then
 		item_usage_snd = sound_object(ini_eff:r_string_ex(used_item, "snd"))
@@ -201,7 +196,7 @@ end
 
 function stop_my_anim()
 	db.actor:hide_weapon()
-	restore_fov()
+	fov_anim_manager.restore_fov()
 	level.enable_input()
 	if used_item then
 		mask_hud_switcher()
@@ -227,10 +222,6 @@ function mask_hud_switcher()
 		actor_effects.switch_helm() --raven
 		actor_effects.Update_Mask(db.actor)
 	end
-end
-
-function restore_fov()
-	if hud_fov ~= 0.45 then exec_console_cmd("hud_fov " .. hud_fov) end
 end
 
 --holster item in device slot

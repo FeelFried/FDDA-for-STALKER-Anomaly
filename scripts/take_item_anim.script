@@ -26,10 +26,7 @@ function actor_on_item_take(item)
 	end
 	--mutant loot bag animation
 	if enhanced_animations.fake_monster then
-		hud_fov = ui_options.get("video/basic/hud_fov")
-		if hud_fov ~= 0.45 then
-			exec_console_cmd("hud_fov 0.45")
-		end
+		fov_anim_manager.change_fov(0.45)
 		local camdir = enhanced_animations.fake_monster:bone_position('bip01_spine1')
 		camdir.y = camdir.y + 0.6
 		db.actor:actor_look_at_point(camdir)
@@ -76,7 +73,7 @@ function restore_knife()
 end
 
 function return_slots()
-	enhanced_animations.restore_fov()
+	fov_anim_manager.restore_fov()
 	db.actor:activate_slot(1)
 	local device = enhanced_animations.det_active
 	if device then device:switch_state(1) end
