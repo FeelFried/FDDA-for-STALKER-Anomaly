@@ -3,7 +3,7 @@ Author: Tronex
 --]]
 local fov_prev
 
--- axr_main.ltx will handle saving fov changes during animation, if something breaks during it, it will restore previous cached FOV
+-- axr_options.ltx will handle saving fov changes during animation, if something breaks during it, it will restore previous cached FOV
 function on_game_start()
 	local function actor_on_first_update()
 		local fov_changed = axr_main.config:r_value("temp", "fov_changed", 1)
@@ -16,7 +16,6 @@ function on_game_start()
 	RegisterScriptCallback("actor_on_first_update",actor_on_first_update)
 end
 
--- Call this before starting animation
 function change_fov(value) -- change_fov(0.45)
 	local fov = get_console_cmd(2, "hud_fov")
 	if (fov ~= value) then
@@ -27,7 +26,6 @@ function change_fov(value) -- change_fov(0.45)
     end
 end
 
--- Call this after animation end
 function restore_fov()
 	if fov_prev then
 		exec_console_cmd("hud_fov " .. fov_prev)

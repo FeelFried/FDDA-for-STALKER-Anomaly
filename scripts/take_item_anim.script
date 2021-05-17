@@ -3,10 +3,12 @@ item pickup animation script
 Author: Feel_Fried
 --]]
 local skin_anim, enable_animations, harv_usage_snd
+local bool_to_number={ [true]=1, [false]=0 }
+
 function on_game_start()
 	RegisterScriptCallback("actor_on_first_update",actor_on_first_update)
 end
-local bool_to_number={ [true]=1, [false]=0 }
+
 function actor_on_first_update()
 	RegisterScriptCallback("actor_on_item_take",actor_on_item_take)
 	enable_animations = ui_options.get("video/player/animations")
@@ -47,7 +49,6 @@ function anim_delay()
 end
 
 --patching mutant loot dialog close call
-
 function ui_mutant_loot.UIMutantLoot:Close()
 	--deleting fake mutant object to prevent bag animation if mutant was empty
 	CreateTimeEvent("delete_fake", "delete_fake", 0.2, take_item_anim.delete_fake)

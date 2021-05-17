@@ -107,19 +107,10 @@ function start_anim(anim_section_hud)
 		end
 		alife_create_item("items_anm_dummy",db.actor)
 	elseif used_monster then
-		if ini_eff:r_string_ex(anim_section, "anim_sound") then
-			monster_usage_snd = sound_object(ini_eff:r_string_ex(anim_section, "anim_sound"))
-			monster_usage_snd:play(db.actor, 0, sound_object.s2d)
-			level.add_cam_effector("itemuse_anm_effects\\harvest_skin_use.anm", 8558, false, "")
-		end
-		local checkcrouch = level.actor_moving_state()
-		local TEMP = nil
-		if checkcrouch == 0 then
-			TEMP = "itemuse_anm_effects\\test.anm"
-		else
-			TEMP = "itemuse_anm_effects\\test.anm"
-		end
-		level.add_cam_effector(TEMP, 8559, false, "")
+		monster_usage_snd = sound_object(ini_eff:r_string_ex(anim_section, "anim_sound"))
+		monster_usage_snd:play(db.actor, 0, sound_object.s2d)
+		level.add_cam_effector("itemuse_anm_effects\\harvest_skin_use.anm", 8558, false, "")
+		level.add_cam_effector("itemuse_anm_effects\\test.anm", 8559, false, "")
 		tmr = ini_eff:r_float_ex(anim_section, "anim_length")
 		anim_exist_tm = tmr*0.001
 		CreateTimeEvent("ea_slot_returner", "call_my_slot_back", (anim_exist_tm + 0.5), call_my_slot_back)
@@ -237,28 +228,6 @@ end
 --addaptive camera for mutant skinning
 function recalc_actor_campos()
 	local pm = used_monster:bone_position('bip01_spine1')
-	local pp = db.actor:position()
-	local dist = pp:distance_to(pm)
-	local step = 0.02
-	local lim = 0
-	while dist > 1.2 and lim ~= 60 do
-		pp.x = pp.x + ((pp.x > pm.x) and (-1)*step or step)
-		pp.y = pp.y + ((pp.y > pm.y) and (-1)*step or step)
-		pp.z = pp.z + ((pp.z > pm.z) and (-1)*step or step)
-		dist = pp:distance_to(pm)
-		lim = lim + 1
-	end
-	while dist < 0.8 and lim ~= 60 do
-		pp.x = pp.x - ((pp.x > pm.x) and (-1)*step or step)
-		pp.y = pp.y - ((pp.y > pm.y) and (-1)*step or step)
-		pp.z = pp.z - ((pp.z > pm.z) and (-1)*step or step)
-		lim = lim + 1
-		dist = pp:distance_to(pm)
-	end
-	local pp2 = db.actor:position()
-	if utils_data.vector_to_string(pp) ~= utils_data.vector_to_string(pp2)  then
-		db.actor:set_actor_position(pp)
-	end
 	pm.y = pm.y + 0.8
 	db.actor:actor_look_at_point(pm)
 end
