@@ -16,7 +16,7 @@ Main shitcode critic: Igigog
 Addon main page: https://www.moddb.com/mods/stalker-anomaly/addons/food-drug-and-drinks-animations-reuploaded
 
 All your base are belong to us! (⌐■_■)
-]]-- 
+]]--
 local ini_eff = {}
 local active_slot,anim_section,anim_exist_tm,wpn,item_usage_snd,monster_usage_snd,item,anim_use_time,obj_m,used_monster = nil
 used_item,ea_flag,fake_monster,det_active,used_monster = nil
@@ -133,11 +133,11 @@ end
 
 --< Monkey patches
 --preventing default Anomaly anims
-local orginalPIF = actor_effects.play_item_fx
+local originalPIF = actor_effects.play_item_fx
 function actor_effects.play_item_fx(item)
 	local enable_animations = ui_options.get("video/player/animations")
 	if ini_eff:r_string_ex(item, "snd") and enable_animations or ini_eff:r_string_ex("skip_items", item) then return end
-	orginalPIF(item)
+	originalPIF(item)
 end
 
 --delaying item use
@@ -207,7 +207,7 @@ function stop_my_anim()
 end
 -- Time Events >--
 
---< Additional animations and effects 
+--< Additional animations and effects
 function mask_hud_switcher()
 	if (not ini_eff:r_bool_ex(used_item, "helm")) and ui_options.get("video/player/mask_hud") then
 		actor_effects.switch_helm() --raven
@@ -218,7 +218,7 @@ end
 --holster item in device slot
 function hide_det()
 	det_active = db.actor:active_detector() or nil
-	if det_active then det_active:switch_state(2) end	
+	if det_active then det_active:switch_state(2) end
 end
 
 function actor_on_first_update()
