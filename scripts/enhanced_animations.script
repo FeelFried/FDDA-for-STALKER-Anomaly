@@ -1,10 +1,14 @@
 --[[
 IF YOU ARE POSTING THIS SCRIPT ON A THIRD PARTY RESOURCES PLEASE DO NOT DELETE THIS SECTION
+================================================================================
 Script(enhanced_animations) original:
 \\Author		:	thales100
+================================================================================
 
-Animations author: LilGABE (as far as I understend author of most of animations from LADC pack)
+Animations authors: LilGABE,denis2000,ValeroK,STRIFER,Feel_Fried
 
+================================================================================
+Script(enhanced_animations) reworked:
 Adaptation and crooked rework for Anomaly =): Feel_Fried
 
 Engine functions consultants: Amomawy devs - Lucy, tdef, Tronex
@@ -12,8 +16,11 @@ Engine functions consultants: Amomawy devs - Lucy, tdef, Tronex
 Monkey patches and mask effect switcher implementation: RavenAscendant
 
 Main shitcode critic: Igigog
+================================================================================
 
 Addon main page: https://www.moddb.com/mods/stalker-anomaly/addons/food-drug-and-drinks-animations-reuploaded
+
+================================================================================
 
 All your base are belong to us! (⌐■_■)
 ]]--
