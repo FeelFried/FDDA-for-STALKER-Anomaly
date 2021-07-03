@@ -47,7 +47,7 @@ end
 
 function deactivate()
 --< trash manager
-	active_slot,anim_section,anim_exist_tm,wpn,item_usage_snd,monster_usage_snd,item,anim_use_time,obj_m,used_monster,used_item,used_monster,ini_eff = nil
+	active_slot,anim_section,anim_exist_tm,wpn,item_usage_snd,monster_usage_snd,item,anim_use_time,obj_m,used_item,used_monster,ini_eff = nil
 -- trash manager >--
 	UnregisterScriptCallback("monster_on_actor_use_callback", monster_on_actor_use)
 	UnregisterScriptCallback("actor_on_first_update",actor_on_first_update)
