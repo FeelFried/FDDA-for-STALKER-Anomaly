@@ -210,6 +210,7 @@ function stop_my_anim()
 			fake_monster = nil
 		end
 	end
+	used_monster = nil
 	return true
 end
 -- Time Events >--
