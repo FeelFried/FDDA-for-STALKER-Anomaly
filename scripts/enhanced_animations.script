@@ -200,7 +200,7 @@ function stop_my_anim()
 		mask_hud_switcher()
 		used_item = nil
 		obj_m = nil
-	else
+	elseif used_monster:id() ~= 65535 then
 		fake_monster = used_monster
 		used_monster = nil
 		ea_flag = true
