@@ -1,4 +1,5 @@
 --[[
+Fov animation manager script
 Author: Tronex
 --]]
 local fov_prev
