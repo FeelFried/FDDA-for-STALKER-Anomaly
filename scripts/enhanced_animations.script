@@ -165,14 +165,17 @@ end
 --delaying item use
 local originalAOIBU = itms_manager.actor_on_item_before_use
 function itms_manager.actor_on_item_before_use(obj,flags)
-	originalAOIBU(obj,flags)
-	local item = obj:section()
-	local enable_animations = ui_options.get("video/player/animations")
-	if ini_eff:r_string_ex(item, "snd") and enable_animations and flags.ret_value and default_not_in_use then
-		use_item(obj)
-		flags.ret_value = false
-		return
+	if default_not_in_use then
+		originalAOIBU(obj,flags)
+		local item = obj:section()
+		local enable_animations = ui_options.get("video/player/animations")
+		if ini_eff:r_string_ex(item, "snd") and enable_animations and flags.ret_value then
+			use_item(obj)
+			flags.ret_value = false
+			return
+		end
 	end
+	return
 end
 
 --delaying mutant loot dialog
