@@ -28,6 +28,7 @@ All your base are belong to us! (⌐■_■)
 ]]--
 local ini_eff = {}
 local active_slot,anim_section,anim_exist_tm,wpn,item_usage_snd,monster_usage_snd,item,anim_use_time,obj_m,used_monster = nil
+local default_not_in_use = true
 used_item,ea_flag,fake_monster,det_active = nil
 
 function on_game_start()
@@ -149,13 +150,25 @@ function actor_effects.play_item_fx(item)
 	originalPIF(item)
 end
 
+local originalUW = actor_effects.use_weapon
+function actor_effects.use_weapon(f)
+	if f == 1 then
+		CreateTimeEvent("ea_def_flag", "def_flag_true", 0.5, def_flag_true)
+ 	end
+	if f == 0 then
+		 default_not_in_use = false
+		 printf("in use")
+	end
+	originalUW(f)
+end
+
 --delaying item use
 local originalAOIBU = itms_manager.actor_on_item_before_use
 function itms_manager.actor_on_item_before_use(obj,flags)
 	originalAOIBU(obj,flags)
 	local item = obj:section()
 	local enable_animations = ui_options.get("video/player/animations")
-	if ini_eff:r_string_ex(item, "snd") and enable_animations and flags.ret_value then
+	if ini_eff:r_string_ex(item, "snd") and enable_animations and flags.ret_value and default_not_in_use then
 		use_item(obj)
 		flags.ret_value = false
 		return
@@ -213,6 +226,12 @@ function stop_my_anim()
 		end
 	end
 	used_monster = nil
+	return true
+end
+
+function def_flag_true()
+	default_not_in_use = true
+	printf("not in use")
 	return true
 end
 -- Time Events >--
