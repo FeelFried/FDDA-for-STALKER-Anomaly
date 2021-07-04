@@ -157,6 +157,7 @@ function actor_effects.use_weapon(f)
  	end
 	if f == 0 then
 		 default_not_in_use = false
+		 game.only_allow_movekeys(true)
 	end
 	originalUW(f)
 end
@@ -230,6 +231,7 @@ end
 
 function def_flag_true()
 	default_not_in_use = true
+	game.only_allow_movekeys(false)
 	return true
 end
 -- Time Events >--
