@@ -157,7 +157,6 @@ function actor_effects.use_weapon(f)
  	end
 	if f == 0 then
 		 default_not_in_use = false
-		 printf("in use")
 	end
 	originalUW(f)
 end
@@ -231,7 +230,6 @@ end
 
 function def_flag_true()
 	default_not_in_use = true
-	printf("not in use")
 	return true
 end
 -- Time Events >--
