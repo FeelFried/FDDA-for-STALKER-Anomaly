@@ -122,6 +122,7 @@ function UISleep:TestAndShow(force)
 		-- If all is no, dont sleep
 		if (not actor_hide) then
 			actor_menu.set_msg(1, game.translate_string("st_cant_sleep_find_shelter_mlr"),4)
+			disable_info("sleep_active")
 			return
 		end
 	end
