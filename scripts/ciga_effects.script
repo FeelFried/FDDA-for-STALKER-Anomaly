@@ -2,14 +2,24 @@
 cigarettes smoke effect script
 Author: Feel_Fried
 --]]
-local anym_timer = nil
 local smoke = nil
+local t = {}
+local ltx = ini_file("items\\items\\anims_cigga_smoke.ltx")
 local function create_smoke()
 	if not smoke then
 		smoke = particles_object("damage_fx\\smoke")
 		smoke:play_at_pos(db.actor:bone_position("jaw_1"))
 	end
-	smoke:move_to(db.actor:bone_position("bip01_l_hand"), utils_data.string_to_vector("0.078965, -0.211564, 0.53397"))
+	return true
+end
+
+local function move_smoke()
+	if smoke then
+		smoke:move_to(db.actor:bone_position("bip01_l_hand"), utils_data.string_to_vector("0.078965, -0.211564, 0.53397"))
+		return false
+	else
+		return true
+	end
 end
 
 local function destroy_smoke()
@@ -17,24 +27,28 @@ local function destroy_smoke()
 		smoke:stop()
 		smoke = nil
 	end
+	return true
 end
 
-function update()
-	local frame_now = time_global() - anym_timer
-	if  (frame_now > 11007 and frame_now < 17267) or
-		(frame_now > 18257 and frame_now < 26627) or
-		(frame_now > 33550 and frame_now < 38800) then
-		create_smoke()
-	elseif smoke then
-		destroy_smoke()
+function ciga_start(used_item)
+	if ltx:section_exist(used_item) then
+		local variable, value, lines = "", "", ltx:line_count(used_item)
+		if lines % 2 == 0 then
+			for current_line = 0, lines - 1 do
+				result, variable, value = ltx:r_line(used_item, current_line, "", "")
+				t[current_line+1] = value
+				if (current_line+1) % 2 == 0 then
+					CreateTimeEvent("ea_s_c".. current_line, "ea_s_c" .. current_line, t[current_line], create_smoke)
+					CreateTimeEvent("ea_s_m".. current_line, "ea_s_m".. current_line, t[current_line] + 0.050, move_smoke)
+					CreateTimeEvent("ea_s_d".. current_line, "ea_s_d".. current_line, t[current_line+1], destroy_smoke)
+					printf("prev = "..t[current_line] or 0)
+				end
+			end
+		else
+			return
+		end
+	else
+		return
 	end
-	if frame_now > 38800 then
-		anym_timer, frame_now = nil, nil
-		UnregisterScriptCallback("actor_on_update",update)
-	end
-end
-
-function ciga_start()
-	anym_timer = time_global()
-	RegisterScriptCallback("actor_on_update", update)
+	t = {}
 end

@@ -113,7 +113,7 @@ function start_anim(anim_section_hud)
 		CreateTimeEvent("ea_object_eater", "eat_my_obj", anim_use_time, eat_my_obj)
 		CreateTimeEvent("ea_slot_returner", "call_my_slot_back", (anim_exist_tm + 0.1), call_my_slot_back)
 		if ciga_effects then
-			if (string.sub(used_item,1,4) == 'ciga') then ciga_effects.ciga_start() end
+			if (string.sub(used_item,1,4) == 'ciga') then ciga_effects.ciga_start(used_item) end
 		end
 		alife_create_item("items_anm_dummy",db.actor)
 	elseif used_monster then
