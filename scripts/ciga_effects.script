@@ -35,12 +35,13 @@ function ciga_start(used_item)
 	local variable, value, lines = "", "", ltx:line_count(used_item)
 	if lines % 2 ~= 0 then return end
 	for current_line = 0, lines - 1 do
+		local i = current_line+1
 		result, variable, value = ltx:r_line(used_item, current_line, "", "")
-		t[current_line+1] = value
-		if (current_line+1) % 2 == 0 then
-			CreateTimeEvent("ea_s_c".. current_line, "ea_s_c" .. current_line, t[current_line], create_smoke)
-			CreateTimeEvent("ea_s_m".. current_line, "ea_s_m".. current_line, t[current_line] + 0.050, move_smoke)
-			CreateTimeEvent("ea_s_d".. current_line, "ea_s_d".. current_line, t[current_line+1], destroy_smoke)
+		t[i] = value
+		if i % 2 == 0 then
+			CreateTimeEvent("ea_s_c".. i, "ea_s_c" .. i, t[current_line], create_smoke)
+			CreateTimeEvent("ea_s_m".. i, "ea_s_m".. i, t[current_line] + 0.050, move_smoke)
+			CreateTimeEvent("ea_s_d".. i, "ea_s_d".. i, t[i], destroy_smoke)
 		end
 	end
 end
