@@ -32,7 +32,7 @@ end
 function ciga_start(used_item)
 	local t = {}
 	if not ltx:section_exist(used_item) then return end
-	local variable, value, lines = "", "", ltx:line_count(used_item)
+	local variable, value, result, lines = "", "", "", ltx:line_count(used_item)
 	if lines % 2 ~= 0 then return end
 	for current_line = 0, lines - 1 do
 		local i = current_line+1
