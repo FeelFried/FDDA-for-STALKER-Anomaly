@@ -27,6 +27,7 @@ function actor_on_item_take(item)
 		anim_used = true
 		CreateTimeEvent("anim_delay", "anim_delay", 0.5, anim_delay)
 	end
+	checkrun ,check ,itemv ,actorv ,dist = nil
 	--mutant loot bag animation
 	if enhanced_animations.fake_monster then
 		fov_anim_manager.change_fov(0.45)
@@ -42,6 +43,7 @@ function actor_on_item_take(item)
 		level.add_cam_effector("itemuse_anm_effects\\harvest_loot.anm", 8560, false, "")
 		CreateTimeEvent("restore_knife", "restor_knife", 1.8 , restore_knife)
 		skin_anim = true
+		item_sect_index ,anim_section_name ,sect = nil
 	end
 end
 
@@ -80,4 +82,5 @@ function return_slots()
 	db.actor:activate_slot(1)
 	local device = enhanced_animations.det_active
 	if device then device:switch_state(1) end
+	device = nil
 end
