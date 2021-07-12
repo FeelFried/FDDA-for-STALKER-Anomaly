@@ -35,6 +35,7 @@ function actor_on_item_take(item)
 		harv_usage_snd = sound_object("interface\\item_usage\\harvest_use_success")
 		harv_usage_snd:play(db.actor, 0, sound_object.s2d)
 		game.play_hud_motion(2, anim_section_name, "anm_ea_show", true, 0.75)
+		level.add_cam_effector("itemuse_anm_effects\\harvest_loot.anm", 8560, false, "")
 		CreateTimeEvent("restore_knife", "restor_knife", 1.8 , restore_knife)
 		skin_anim = true
 	end
