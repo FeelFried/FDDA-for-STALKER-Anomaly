@@ -29,16 +29,13 @@ function actor_on_item_take(item)
 	--mutant loot bag animation
 	if enhanced_animations.fake_monster then
 		fov_anim_manager.change_fov(0.45)
-		local camdir = enhanced_animations.fake_monster:bone_position('bip01_spine1')
-		camdir.y = camdir.y + 0.6
-		db.actor:actor_look_at_point(camdir)
 		enhanced_animations.fake_monster = nil
 		level.disable_input()
 		local anim_section_name = "item_ea_harv_meat_"..math.random(14).."_hud"
 		harv_usage_snd = sound_object("interface\\item_usage\\harvest_use_success")
 		harv_usage_snd:play(db.actor, 0, sound_object.s2d)
 		game.play_hud_motion(2, anim_section_name, "anm_ea_show", true, 0.75)
-		CreateTimeEvent("restore_knife", "restor_knife", 1.8, restore_knife)
+		CreateTimeEvent("restore_knife", "restor_knife", 1.8 , restore_knife)
 		skin_anim = true
 	end
 end
