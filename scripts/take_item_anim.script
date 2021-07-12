@@ -4,6 +4,7 @@ Author: Feel_Fried
 --]]
 local skin_anim, enable_animations, harv_usage_snd
 local bool_to_number={ [true]=1, [false]=0 }
+local ltx = ini_file("items\\items\\anims_loot_list.ltx")
 
 function on_game_start()
 	RegisterScriptCallback("actor_on_first_update",actor_on_first_update)
@@ -31,7 +32,10 @@ function actor_on_item_take(item)
 		fov_anim_manager.change_fov(0.45)
 		enhanced_animations.fake_monster = nil
 		level.disable_input()
-		local anim_section_name = "item_ea_harv_meat_"..math.random(14).."_hud"
+		local sect = item:section()
+		local item_sect_index = ltx:section_exist(sect) and ltx:r_string_ex(sect, "indx"):match("(.+),(.+)") or math.random(14)
+		printf(item_sect_index)
+		local anim_section_name = "item_ea_harv_meat_"..item_sect_index.."_hud"
 		harv_usage_snd = sound_object("interface\\item_usage\\harvest_use_success")
 		harv_usage_snd:play(db.actor, 0, sound_object.s2d)
 		game.play_hud_motion(2, anim_section_name, "anm_ea_show", true, 0.75)
