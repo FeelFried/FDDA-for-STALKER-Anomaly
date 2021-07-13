@@ -4,7 +4,6 @@ Author: Feel_Fried
 --]]
 local smoke = false
 local ltx = ini_file("items\\items\\anims_cigga_smoke.ltx")
-local i = 0.5
 local function create_smoke()
 	if not smoke then
 		smoke = particles_object("damage_fx\\smoke")
@@ -15,18 +14,9 @@ end
 
 local function move_smoke()
 	if smoke then
-		local pos = device().cam_pos
-		local dir = device().cam_dir
-		i = i + 0.003
-		pos.y = pos.y - 0.8
-		pos.x = pos.x + i*dir.x
-		pos.z = pos.z + i*dir.z
-		smoke:move_to(pos, dir)
+		smoke:move_to(db.actor:bone_position("bip01_l_hand"), utils_data.string_to_vector("0.078965, -0.211564, 0.53397"))
 		return false
 	else
-		i = 0.5
-		pos = nil
-		dir = nil
 		return true
 	end
 end
