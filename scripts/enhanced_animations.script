@@ -146,7 +146,8 @@ end
 local originalPIF = actor_effects.play_item_fx
 function actor_effects.play_item_fx(item)
 	local enable_animations = ui_options.get("video/player/animations")
-	if ini_eff:r_string_ex(item, "snd") and enable_animations or ini_eff:r_string_ex("skip_items", item) then return end
+	if ini_eff:r_string_ex(item, "snd") and enable_animations or ini_eff:r_bool_ex("skip_items", item) then return end
+	if skip_functor(item) then return end
 	originalPIF(item)
 end
 
@@ -262,5 +263,9 @@ function recalc_actor_campos()
 	local pm = used_monster:bone_position('bip01_spine1')
 	pm.y = pm.y + 0.8
 	db.actor:actor_look_at_point(pm)
+end
+
+function skip_functor(item)
+	return ini_eff:r_bool("anim_settings", "mutant_loot_mod") and ini_eff:r_bool_ex("skip_mutant", item)
 end
 -- Additional animations and effects >--

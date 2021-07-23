@@ -35,7 +35,6 @@ function actor_on_item_take(item)
 		level.disable_input()
 		local sect = item:section()
 		local item_sect_index = ltx:section_exist(sect) and ltx:r_string_ex(sect, "indx"):match("(.+),(.+)") or math.random(14)
-		printf(item_sect_index)
 		local anim_section_name = "item_ea_harv_meat_"..item_sect_index.."_hud"
 		harv_usage_snd = sound_object("interface\\item_usage\\harvest_use_success")
 		harv_usage_snd:play(db.actor, 0, sound_object.s2d)
