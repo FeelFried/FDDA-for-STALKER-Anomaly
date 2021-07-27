@@ -28,7 +28,6 @@ All your base are belong to us! (⌐■_■)
 ]]--
 local ini_eff = {}
 local active_slot,anim_section,anim_exist_tm,wpn,item_usage_snd,monster_usage_snd,item,anim_use_time,obj_m,used_monster = nil
-local default_not_in_use = true
 used_item,ea_flag,fake_monster,det_active = nil
 
 function on_game_start()
@@ -154,10 +153,10 @@ end
 local originalUW = actor_effects.use_weapon
 function actor_effects.use_weapon(f)
 	if f == 1 then
-		CreateTimeEvent("ea_def_flag", "def_flag_true", 0.5, def_flag_true)
+		CreateTimeEvent("ea_def_use", "def_use_end", 0.5, def_use_end)
  	end
 	if f == 0 then
-		 default_not_in_use = false
+		 hide_hud_inventory()
 		 game.only_allow_movekeys(true)
 	end
 	originalUW(f)
@@ -166,15 +165,13 @@ end
 --delaying item use
 local originalAOIBU = itms_manager.actor_on_item_before_use
 function itms_manager.actor_on_item_before_use(obj,flags)
-	if default_not_in_use then
-		originalAOIBU(obj,flags)
-		local item = obj:section()
-		local enable_animations = ui_options.get("video/player/animations")
-		if ini_eff:r_string_ex(item, "snd") and enable_animations and flags.ret_value then
-			use_item(obj)
-			flags.ret_value = false
-			return
-		end
+	originalAOIBU(obj,flags)
+	local item = obj:section()
+	local enable_animations = ui_options.get("video/player/animations")
+	if ini_eff:r_string_ex(item, "snd") and enable_animations and flags.ret_value then
+		use_item(obj)
+		flags.ret_value = false
+		return
 	end
 	return
 end
@@ -233,8 +230,7 @@ function stop_my_anim()
 	return true
 end
 
-function def_flag_true()
-	default_not_in_use = true
+function def_use_end()
 	game.only_allow_movekeys(false)
 	return true
 end
