@@ -261,6 +261,7 @@ function recalc_actor_campos()
 	db.actor:actor_look_at_point(pm)
 end
 
+-- mutant loot options check
 function skip_functor(item)
 	return ini_eff:r_bool("anim_settings", "mutant_loot_mod") and ini_eff:r_bool_ex("skip_mutant", item)
 end
