@@ -87,7 +87,7 @@ function monster_on_actor_use(obj)
 	end
 	wpn = db.actor:active_item()
 	if wpn then
-		wpn = wpn:section()
+		wpn = wpn:clsid() == 168 and wpn:section() or "wpn_knife5"
 		wpn = string.gsub(wpn,"-","_")
 	end
 	item_knife.degradate()
