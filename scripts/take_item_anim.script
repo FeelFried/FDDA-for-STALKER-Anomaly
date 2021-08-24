@@ -2,17 +2,26 @@
 item pickup animation script
 Author: Feel_Fried
 --]]
-local skin_anim, enable_animations, harv_usage_snd
+local skin_anim, harv_usage_snd
 local bool_to_number={ [true]=1, [false]=0 }
 local ltx = ini_file("items\\items\\anims_loot_list.ltx")
 
 function on_game_start()
 	RegisterScriptCallback("actor_on_first_update",actor_on_first_update)
+	RegisterScriptCallback("on_option_change", loadsettings)
 end
 
 function actor_on_first_update()
 	RegisterScriptCallback("actor_on_item_take",actor_on_item_take)
-	enable_animations = ui_options.get("video/player/animations")
+	loadsettings()
+end
+
+function loadsettings()
+	if ui_mcm then
+		enable_animations = ui_mcm.get("EA_settings/enable_animations")
+	else
+		enable_animations = ui_options.get("video/player/animations")
+	end
 end
 
 function actor_on_item_take(item)

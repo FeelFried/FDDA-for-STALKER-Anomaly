@@ -27,11 +27,18 @@ https://www.moddb.com/mods/stalker-anomaly/addons/food-drug-and-drinks-animation
 All your base are belong to us! (⌐■_■)
 ]]--
 local ini_eff = {}
+enable_animations = true
+mutant_loot_mod = true
+ini_eff = ini_file("items\\items\\animations_settings.ltx")
 local active_slot,anim_section,anim_exist_tm,wpn,item_usage_snd,monster_usage_snd,item,anim_use_time,obj_m,used_monster = nil
 used_item,ea_flag,fake_monster,det_active = nil
 
 function on_game_start()
 	RegisterScriptCallback("on_game_load",on_game_load)
+	RegisterScriptCallback("on_option_change", loadsettings)
+	if not ui_mcm then
+		RegisterScriptCallback("on_key_release", on_key_release)
+	end
 end
 
 function on_game_load()
@@ -39,6 +46,28 @@ function on_game_load()
 end
 
 --< Addon control
+function on_key_release(key)
+	local bind = dik_to_bind(key)
+	if (bind == key_bindings.kCAM_ZOOM_OUT) then
+		enable_animations = not enable_animations
+	end
+end
+
+function loadsettings()
+	if ui_mcm then -- here we test to make sure ui_mcm exists before trying to call it's get function.
+		enable_animations = ui_mcm.get("EA_settings/enable_animations")
+		mutant_loot_mod = ui_mcm.get("EA_settings/mutant_loot")
+		if enable_animations == false then
+			mutant_loot_mod = false
+			ui_mcm.set("EA_settings/mutant_loot", false)
+		end
+	else
+		mutant_loot_mod = ini_eff:r_bool_ex("anim_settings", "mutant_loot_mod")
+		enable_animations = ui_options.get("video/player/animations")
+	end
+end
+
+
 function activate()
 	ini_eff = ini_file("items\\items\\animations_settings.ltx")
 	RegisterScriptCallback("monster_on_actor_use_callback",monster_on_actor_use)
@@ -78,9 +107,7 @@ function use_item(obj)
 end
 
 function monster_on_actor_use(obj)
-	local enable_animations = ui_options.get("video/player/animations")
-	local mutant_ini = ini_eff:r_bool("anim_settings", "mutant_loot_mod")
-	if (not mutant_ini) or (not enable_animations) then
+	if (not mutant_loot_mod) or (not enable_animations) then
 		used_monster = nil
 		anim_exist_tm = nil
 		return
@@ -144,7 +171,6 @@ end
 --preventing default Anomaly anims
 local originalPIF = actor_effects.play_item_fx
 function actor_effects.play_item_fx(item)
-	local enable_animations = ui_options.get("video/player/animations")
 	if ini_eff:r_string_ex(item, "snd") and enable_animations or ini_eff:r_bool_ex("skip_items", item) then return end
 	if skip_functor(item) then return end
 	originalPIF(item)
@@ -167,7 +193,6 @@ local originalAOIBU = itms_manager.actor_on_item_before_use
 function itms_manager.actor_on_item_before_use(obj,flags)
 	originalAOIBU(obj,flags)
 	local item = obj:section()
-	local enable_animations = ui_options.get("video/player/animations")
 	if ini_eff:r_string_ex(item, "snd") and enable_animations and flags.ret_value then
 		use_item(obj)
 		flags.ret_value = false
@@ -179,9 +204,7 @@ end
 --delaying mutant loot dialog
 local originalUMLS = ui_mutant_loot.start
 function ui_mutant_loot.start(obj, for_bug1, for_bug2)
-	local enable_animations = ui_options.get("video/player/animations")
-	local mutant_ini = ini_eff:r_bool("anim_settings", "mutant_loot_mod")
-	if not ea_flag and enable_animations and mutant_ini then return end
+	if not ea_flag and enable_animations and mutant_loot_mod then return end
 	originalUMLS(obj, for_bug1, for_bug2)
 end
 -- Monkey patches >--
@@ -252,6 +275,7 @@ end
 
 function actor_on_first_update()
 	if db.actor:object("items_anm_dummy") then alife_release(db.actor:object("items_anm_dummy")) end
+	loadsettings()
 end
 
 --addaptive camera for mutant skinning
@@ -263,6 +287,6 @@ end
 
 -- mutant loot options check
 function skip_functor(item)
-	return ini_eff:r_bool("anim_settings", "mutant_loot_mod") and ini_eff:r_bool_ex("skip_mutant", item)
+	return mutant_loot_mod and ini_eff:r_bool_ex("skip_mutant", item)
 end
 -- Additional animations and effects >--

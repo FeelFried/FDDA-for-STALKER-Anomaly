@@ -1,0 +1,11 @@
+
+function on_mcm_load()
+		op = { id= "EA_settings"      	 	,sh=true ,gr={
+				{ id= "friendlyfire"				 ,type= "slide"	  ,link= "ui_options_slider_disguise"	 ,text= "FDDA"		,size= {512,50}		,spacing= 20 },
+				{id = "enable_animations", type = "check", val = 1, def = true},
+				{id = "mutant_loot", type = "check", val = 1, def = true},
+				}
+			}
+
+		return op
+end

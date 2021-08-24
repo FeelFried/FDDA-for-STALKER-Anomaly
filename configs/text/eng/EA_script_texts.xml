@@ -1,0 +1,19 @@
+	<string id="ui_mcm_menu_EA_settings">
+		<text>FDDA Settings</text>
+	</string>
+	
+	<string id="ui_mcm_EA_settings_enable_animations">
+		<text>Enable FDDA animations</text>
+	</string>
+	
+	<string id="ui_mcm_EA_settings_mutant_loot">
+		<text>Enable mutant loot animations</text>
+	</string>	
+	
+		
+	<string id="ui_mcm_EA_settings_mutant_loot_desc">
+		<text>note: it automatically turns off \n
+		\n if FDDA animations are off</text>
+	</string>	
+	
+	

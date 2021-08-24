@@ -1,0 +1,18 @@
+	<string id="ui_mcm_menu_EA_settings">
+		<text>FDDA Настройки</text>
+	</string>
+	
+	<string id="ui_mcm_EA_settings_enable_animations">
+		<text>Включить анимации FDDA</text>
+	</string>
+	
+	<string id="ui_mcm_EA_settings_mutant_loot">
+		<text>Включить анимации свежевания</text>
+	</string>	
+	
+	<string id="ui_mcm_EA_settings_mutant_loot_desc">
+		<text>АХТУНГ!: этот пункт автоматически отключится \n
+		\n если анимации FDDA отключены</text>
+	</string>	
+
+	
