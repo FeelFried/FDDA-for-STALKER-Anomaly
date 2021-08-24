@@ -16,4 +16,12 @@
 		\n if FDDA animations are off</text>
 	</string>	
 	
+	<string id="ui_mcm_EA_settings_take_dist">
+		<text>Pickup animations distance</text>
+	</string>	
+	
+	<string id="ui_mcm_EA_settings_take_dist_desc">
+		<text>Default - 0.12, recommended value to fix \n
+		 \n magazines addon bug - 0.3-0.5</text>
+	</string>
 	
