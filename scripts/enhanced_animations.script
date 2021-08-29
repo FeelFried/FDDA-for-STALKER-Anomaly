@@ -92,7 +92,6 @@ function anim_prepare()
 	anim_exist_tm = nil
 	db.actor:restore_weapon()
 	db.actor:activate_slot(0)
-	game.only_allow_movekeys(true)
 	RegisterScriptCallback("actor_on_update", actor_on_update)
 end
 
