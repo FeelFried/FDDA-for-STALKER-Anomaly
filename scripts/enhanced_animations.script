@@ -108,7 +108,6 @@ function monster_on_actor_use(obj)
 	end
 	item_knife.degradate()
 	used_monster = obj
-	anim_section = "item_ea_harv_wpn_knife"
 	level.disable_input()
 	anim_prepare()
 	recalc_actor_campos()
@@ -136,12 +135,12 @@ function anim_manager_item(anim_section_hud)
 	CreateTimeEvent("ea_anim_stoper", "stop_my_item_anim", anim_exist_tm, stop_my_item_anim)
 end
 
-function anim_manager_monster(anim_section_hud)
-	monster_usage_snd = sound_object(ini_eff:r_string_ex(anim_section, "anim_sound"))
+function anim_manager_monster()
+	monster_usage_snd = sound_object(ini_eff:r_string_ex("item_ea_harv_wpn_knife", "anim_sound"))
 	monster_usage_snd:play(db.actor, 0, sound_object.s2d)
 	level.add_cam_effector("itemuse_anm_effects\\harvest_skin_use.anm", 8558, false, "")
 	level.add_cam_effector("itemuse_anm_effects\\test.anm", 8559, false, "")
-	tmr = ini_eff:r_float_ex(anim_section, "anim_length")
+	tmr = ini_eff:r_float_ex("item_ea_harv_wpn_knife", "anim_length")
 	anim_exist_tm = tmr*0.001
 	CreateTimeEvent("ea_slot_returner", "call_my_slot_back", (anim_exist_tm + 0.5), call_my_slot_back)
 	CreateTimeEvent("ea_anim_stoper", "stop_my_monster_anim", anim_exist_tm, stop_my_monster_anim)
@@ -156,10 +155,11 @@ function actor_on_update()
 	if used_monster then
 		anim_section_hud = "item_ea_harv_" .. ( wpn or "wpn_knife5" ) .. "_hud"
 		start_anim(anim_section_hud)
-		anim_manager_monster(anim_section_hud)
+		anim_manager_monster()
 		return
 	end
 	anim_section_hud = anim_section .. "_hud"
+	anim_section = nil
 	start_anim(anim_section_hud)
 	anim_manager_item(anim_section_hud)
 end
