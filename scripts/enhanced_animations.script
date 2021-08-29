@@ -225,9 +225,7 @@ function eat_my_obj()
 end
 
 function stop_my_item_anim()
-	db.actor:hide_weapon()
-	fov_anim_manager.restore_fov()
-	level.enable_input()
+	ea_restore_actor()
 	mask_hud_switcher()
 	used_item = nil
 	obj_m = nil
@@ -235,9 +233,7 @@ function stop_my_item_anim()
 end
 
 function stop_my_monster_anim()
-	db.actor:hide_weapon()
-	fov_anim_manager.restore_fov()
-	level.enable_input()
+	ea_restore_actor()
 	if used_monster:id() == 65535 or ( not take_item_anim ) then
 		used_monster = nil
 		return true
@@ -265,6 +261,12 @@ function mask_hud_switcher()
 		actor_effects.switch_helm() --raven
 		actor_effects.Update_Mask(db.actor)
 	end
+end
+
+function ea_restore_actor()
+	db.actor:hide_weapon()
+	fov_anim_manager.restore_fov()
+	level.enable_input()
 end
 
 --holster item in device slot
