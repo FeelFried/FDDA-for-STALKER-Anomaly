@@ -67,20 +67,10 @@ function loadsettings()
 	end
 end
 
-
 function activate()
 	ini_eff = ini_file("items\\items\\animations_settings.ltx")
 	RegisterScriptCallback("monster_on_actor_use_callback",monster_on_actor_use)
 	RegisterScriptCallback("actor_on_first_update",actor_on_first_update)
-end
-
-function deactivate()
---< trash manager
-	active_slot,anim_section,anim_exist_tm,wpn,item_usage_snd,monster_usage_snd,item,anim_use_time,obj_m,used_item,used_monster,ini_eff = nil
--- trash manager >--
-	UnregisterScriptCallback("monster_on_actor_use_callback", monster_on_actor_use)
-	UnregisterScriptCallback("actor_on_first_update",actor_on_first_update)
-	UnregisterScriptCallback("actor_on_update", actor_on_update)
 end
 -- Addon control >--
 
