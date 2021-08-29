@@ -147,7 +147,6 @@ function anim_manager_monster()
 end
 
 function actor_on_update()
-	printf("Update")
 	if db.actor:active_slot() ~= 0 or db.actor:active_detector() then
 		return
 	end
