@@ -129,41 +129,50 @@ function start_anim(anim_section_hud)
 	UnregisterScriptCallback("actor_on_update", actor_on_update)
 	fov_anim_manager.change_fov(0.45)
 	game.play_hud_motion(2, anim_section_hud, "anm_ea_show", false, 1)
-	if used_item then
-		item_usage_snd = sound_object(ini_eff:r_string_ex(used_item, "snd"))
-		item_usage_snd:play(db.actor, 0, sound_object.s2d)
-		level.add_cam_effector(ini_eff:r_string_ex(used_item, "cam"), 8555, false, "")
-		tmr = ini_eff:r_float_ex(used_item, "tm")
-		anim_exist_tm = tmr*0.001
-		anim_use_time = anim_exist_tm*0.367
-		CreateTimeEvent("ea_object_eater", "eat_my_obj", anim_use_time, eat_my_obj)
-		CreateTimeEvent("ea_slot_returner", "call_my_slot_back", (anim_exist_tm + 0.1), call_my_slot_back)
-		if ciga_effects then
-			if ini_eff:line_exist(used_item, "smoke") then ciga_effects.ciga_start(used_item) end
-		end
-		alife_create_item("items_anm_dummy",db.actor)
-	elseif used_monster then
-		monster_usage_snd = sound_object(ini_eff:r_string_ex(anim_section, "anim_sound"))
-		monster_usage_snd:play(db.actor, 0, sound_object.s2d)
-		level.add_cam_effector("itemuse_anm_effects\\harvest_skin_use.anm", 8558, false, "")
-		level.add_cam_effector("itemuse_anm_effects\\test.anm", 8559, false, "")
-		tmr = ini_eff:r_float_ex(anim_section, "anim_length")
-		anim_exist_tm = tmr*0.001
-		CreateTimeEvent("ea_slot_returner", "call_my_slot_back", (anim_exist_tm + 0.5), call_my_slot_back)
+end
+
+function anim_manager_item(anim_section_hud)
+	item_usage_snd = sound_object(ini_eff:r_string_ex(used_item, "snd"))
+	item_usage_snd:play(db.actor, 0, sound_object.s2d)
+	level.add_cam_effector(ini_eff:r_string_ex(used_item, "cam"), 8555, false, "")
+	tmr = ini_eff:r_float_ex(used_item, "tm")
+	anim_exist_tm = tmr*0.001
+	anim_use_time = anim_exist_tm*0.367
+	CreateTimeEvent("ea_object_eater", "eat_my_obj", anim_use_time, eat_my_obj)
+	CreateTimeEvent("ea_slot_returner", "call_my_slot_back", (anim_exist_tm + 0.1), call_my_slot_back)
+	if ciga_effects then
+		if ini_eff:line_exist(used_item, "smoke") then ciga_effects.ciga_start(used_item) end
 	end
-	CreateTimeEvent("ea_anim_stoper", "stop_my_anim", anim_exist_tm, stop_my_anim)
+	alife_create_item("items_anm_dummy",db.actor)
+	CreateTimeEvent("ea_anim_stoper", "stop_my_item_anim", anim_exist_tm, stop_my_item_anim)
+end
+
+function anim_manager_monster(anim_section_hud)
+	monster_usage_snd = sound_object(ini_eff:r_string_ex(anim_section, "anim_sound"))
+	monster_usage_snd:play(db.actor, 0, sound_object.s2d)
+	level.add_cam_effector("itemuse_anm_effects\\harvest_skin_use.anm", 8558, false, "")
+	level.add_cam_effector("itemuse_anm_effects\\test.anm", 8559, false, "")
+	tmr = ini_eff:r_float_ex(anim_section, "anim_length")
+	anim_exist_tm = tmr*0.001
+	CreateTimeEvent("ea_slot_returner", "call_my_slot_back", (anim_exist_tm + 0.5), call_my_slot_back)
+	CreateTimeEvent("ea_anim_stoper", "stop_my_monster_anim", anim_exist_tm, stop_my_monster_anim)
 end
 
 function actor_on_update()
-	if db.actor:active_slot() == 0 and not db.actor:active_detector() then
-	local anim_section_hud = nil
-		if used_monster then
-			anim_section_hud = "item_ea_harv_" .. ( wpn or "wpn_knife5" ) .. "_hud"
-		else
-			anim_section_hud = anim_section .. "_hud"
-		end
-		start_anim(anim_section_hud)
+	printf("Update")
+	if db.actor:active_slot() ~= 0 or db.actor:active_detector() then
+		return
 	end
+	local anim_section_hud = nil
+	if used_monster then
+		anim_section_hud = "item_ea_harv_" .. ( wpn or "wpn_knife5" ) .. "_hud"
+		start_anim(anim_section_hud)
+		anim_manager_monster(anim_section_hud)
+		return
+	end
+	anim_section_hud = anim_section .. "_hud"
+	start_anim(anim_section_hud)
+	anim_manager_item(anim_section_hud)
 end
 -- Animations engine >--
 
@@ -212,15 +221,11 @@ end
 --< Time Events
 function call_my_slot_back()
 	game.only_allow_movekeys(false)
-	if take_item_anim then
-		if not fake_monster then
-			db.actor:activate_slot(active_slot or 0)
-			if det_active then det_active:switch_state(1) end
-		end
-	else
-		db.actor:activate_slot(active_slot or 0)
-		if det_active then det_active:switch_state(1) end
+	if take_item_anim and fake_monster then
+		return true
 	end
+	db.actor:activate_slot(active_slot or 0)
+	if det_active then det_active:switch_state(1) end
 	return true
 end
 
@@ -231,25 +236,32 @@ function eat_my_obj()
 	return true
 end
 
-function stop_my_anim()
+function stop_my_item_anim()
 	db.actor:hide_weapon()
 	fov_anim_manager.restore_fov()
 	level.enable_input()
-	if used_item then
-		mask_hud_switcher()
-		used_item = nil
-		obj_m = nil
-	elseif used_monster:id() ~= 65535 then
-		fake_monster = used_monster
+	mask_hud_switcher()
+	used_item = nil
+	obj_m = nil
+	return true
+end
+
+function stop_my_monster_anim()
+	db.actor:hide_weapon()
+	fov_anim_manager.restore_fov()
+	level.enable_input()
+	if used_monster:id() == 65535 or ( not take_item_anim ) then
 		used_monster = nil
-		ea_flag = true
-		ui_mutant_loot.start(fake_monster, fake_monster:id(), fake_monster:section(), fake_monster:clsid())
-		ea_flag = nil
-		if not ui_mutant_loot.GUI:Reset(fake_monster, fake_monster:id(), fake_monster:section(), fake_monster:clsid()) then
-			fake_monster = nil
-		end
+		return true
 	end
+	fake_monster = used_monster
 	used_monster = nil
+	ea_flag = true
+	ui_mutant_loot.start(fake_monster, fake_monster:id(), fake_monster:section(), fake_monster:clsid())
+	ea_flag = nil
+	if not ui_mutant_loot.GUI:Reset(fake_monster, fake_monster:id(), fake_monster:section(), fake_monster:clsid()) then
+		fake_monster = nil
+	end
 	return true
 end
 
