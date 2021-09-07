@@ -143,6 +143,10 @@ function anim_manager_monster()
 	tmr = ini_eff:r_float_ex("item_ea_harv_wpn_knife", "anim_length")
 	anim_exist_tm = tmr*0.001
 	CreateTimeEvent("ea_slot_returner", "call_my_slot_back", (anim_exist_tm + 0.5), call_my_slot_back)
+	CreateTimeEvent("ea_blood_fx", "blood_fx", (1), blood_fx)
+	CreateTimeEvent("ea_blood_fx2", "blood_fx2", (1.6), blood_fx)
+	CreateTimeEvent("ea_blood_fx3", "blood_fx3", (2.1), blood_fx)
+	CreateTimeEvent("ea_blood_fx4", "blood_fx4", (2.2), blood_fx)
 	CreateTimeEvent("ea_anim_stoper", "stop_my_monster_anim", anim_exist_tm, stop_my_monster_anim)
 end
 
@@ -214,6 +218,33 @@ function call_my_slot_back()
 	end
 	db.actor:activate_slot(active_slot or 0)
 	if det_active then det_active:switch_state(1) end
+	return true
+end
+
+local bone_list  = {
+	[1] = "bip01_spine1",
+	[2] = "bip01_spine2",
+	[3] = "bip01_spine",
+	[4] = "bip01_pelvis",
+	[5] = "bip01_head",
+}
+function blood_fx()
+	if used_monster:id() == 65535  then return true end
+	local fx_pos = used_monster:bone_position(bone_list[math.random(1,5)])
+	fx_pos.y = fx_pos.y + 0.1
+	local dir2 = device().cam_pos
+	local blood_trace = used_monster:bone_position(bone_list[math.random(1,5)])
+	blood_trace.x = 0
+	blood_trace.y = -1
+	blood_trace.z = 0
+	wallmarks_manager():place_skeleton(used_monster, "bloody_marks", fx_pos, blood_trace, 0.2,-1)
+	wallmarks_manager():place(blood_trace, fx_pos, 15, 0.3, "bloody_marks", used_monster,-1)
+	local hit_fx = particles_object("hit_fx\\hit_flesh_01")
+	hit_fx:play_at_pos(fx_pos)
+	local hit_fx2 = particles_object("hit_fx\\hit_flesh_02a")
+	hit_fx2:play_at_pos(fx_pos)
+	local hit_fx3 = particles_object("hit_fx\\hit_knife_flesh_00")
+	hit_fx3:play_at_pos(fx_pos)
 	return true
 end
 
