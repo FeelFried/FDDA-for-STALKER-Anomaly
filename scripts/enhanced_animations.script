@@ -248,7 +248,7 @@ function blood_fx()
 	return true
 end
 
---eating fake item to stop default items sound and delayed item using.
+--eating fake item to stop default items sound and delayed item using
 function eat_my_obj()
 	db.actor:eat(obj_m)
 	db.actor:eat(db.actor:object("items_anm_dummy"))
