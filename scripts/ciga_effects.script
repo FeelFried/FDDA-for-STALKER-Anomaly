@@ -17,11 +17,12 @@ end
 local function move_smoke()
 	if smoke then
 		local dir2 = device().cam_dir
-		smoke:set_direction(dir2)
 		local pos = device().cam_pos
-		pos.y = pos.y - 0.28
+		pos.y = pos.y - 0.35 + 0.3*dir2.y
 		pos.x = pos.x + 0.3*dir2.x
 		pos.z = pos.z + 0.3*dir2.z
+		dir2.y = -dir2.y
+		smoke:set_direction(dir2)
 		smoke:move_to(pos, dir2)
 		return false
 	else
@@ -38,6 +39,8 @@ local function destroy_smoke()
 end
 
 function ciga_start(used_item)
+	CreateTimeEvent("ea_cig_light","ea_cig_light",6,ea_light.light1_on)
+	CreateTimeEvent("ea_cig_light2","ea_cig_light2",6.5,ea_light.light2_on)
 	local t = {}
 	if not ltx:section_exist(used_item) then return end
 	local lines = ltx:line_count(used_item)
