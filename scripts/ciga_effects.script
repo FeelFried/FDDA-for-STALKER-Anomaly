@@ -39,8 +39,8 @@ local function destroy_smoke()
 end
 
 function ciga_start(used_item)
-	CreateTimeEvent("ea_cig_light","ea_cig_light",6,ea_light.light1_on)
-	CreateTimeEvent("ea_cig_light2","ea_cig_light2",6.5,ea_light.light2_on)
+	CreateTimeEvent("ea_cig_light","ea_cig_light",6,ea_light.light_on,1,0.9,0.2,1,0.1,0.15,0.25,0.2)
+	CreateTimeEvent("ea_cig_light2","ea_cig_light2",6.5,ea_light.light_on,0.8,0.5,0,3,0.5,1.3,0.7,0.1)
 	local t = {}
 	if not ltx:section_exist(used_item) then return end
 	local lines = ltx:line_count(used_item)

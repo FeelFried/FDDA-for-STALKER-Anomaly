@@ -1,124 +1,71 @@
---[[ for light testing
+--[[ for light test
 function on_game_start()
 	RegisterScriptCallback("on_key_press",on_key_press)
 end
 
 local keybind = 47
 function on_key_press(key)
-	if (key == keybind) then 
+	if (key == keybind) then
 		hit_key()
 	end
 end
 function hit_key()
-	CreateTimeEvent("ea_s_l", "ea_s_l", 0, light1_on)
-	CreateTimeEvent("ea_s_2", "ea_s_2", 0.5, light2_on)
+	CreateTimeEvent("ea_cig_light","ea_cig_light",0,ea_light.light_on,1,0.9,0.2,1,0.1,0.15,0.25,0.2)
+	CreateTimeEvent("ea_cig_light2","ea_cig_light2",0.5,ea_light.light_on,0.8,0.5,0,3,0.5,1.3,0.7,0.1)
 end
 --]]
-local light1,light2,light1_flag,light1_bright,light1_range,light2_flag,light2_bright,light2_range = nil
-function light1_on()
-	light1 = script_light() -- Create a light source
-	light1.type = 1 -- 1 = Point ; 2 = Spot
-	light1.range = 1
-	light1_bright = 0.1
-	light1_range = 1
-	light1.lanim = "koster_01_electra"
-	light1.lanim_brightness = 0.025
-	light1.hud_mode = false
-	light1.shadow = true -- Turn on/off
-	light1.volumetric = false
-	light1.enabled = true
+local light,light_flag,light_bright,light_range = nil
+function light_on(r,g,b,range,bright,time,y_pos,dirmult)
+	--printf("light call "..r.." "..g.." "..b.." "..range.." "..bright.." "..time.." ")
+	light = script_light() -- Create a light source
+	light.type = 1 -- 1 = Point ; 2 = Spot
+	light.range = range --1
+	light_bright = bright --0.1
+	light_range = range --1
+	light.lanim = "koster_01_electra"
+	light.lanim_brightness = 0.025
+	light.hud_mode = false
+	light.shadow = true -- Turn on/off
+	light.volumetric = false
+	light.enabled = true
 	-- Pos/Rot
-	light1.color = fcolor():set(1,0.9,0.2,0.05)
+	light.color = fcolor():set(r,g,b,bright)
+	--light.color = fcolor():set(1,0.9,0.2,0.05)
 	local dir = device().cam_dir
 	local pos = device().cam_pos
-	pos = pos:add(dir:mul(0.2))
-	pos.y = pos.y - 0.2
-	light1:set_position(pos)
-	light1:set_direction(dir)
-	light1:update()
-	CreateTimeEvent("ea_s_l1", "ea_s_l1", 0.15, light1_off)
-	CreateTimeEvent("ea_s_l_2move", "ea_l_2move", 0, light1_move)
-	light1_flag = true
+	pos = pos:add(dir:mul(dirmult)) --0.2
+	pos.y = pos.y - y_pos--0.2
+	light:set_position(pos)
+	light:set_direction(dir)
+	light:update()
+	CreateTimeEvent("ea_s_l1", "ea_s_l1", time, light_off)
+	CreateTimeEvent("ea_s_l_2move", "ea_l_2move", 0, light_move,r,g,b,y_pos,dirmult)
+	light_flag = true
 	return true
 end
 
-function light1_move()
-	light1_bright = light1_bright - 0.02
-	light1_range = light1_range - 0.05
-	light1.range = light1_range
-	light1.color = fcolor():set(1,0.9,0.2,light1_bright)
+function light_move(r,g,b,y_pos,dirmult)
+	light_bright = light_bright - 0.02
+	light_range = light_range - 0.06
+	light.range = light_range
+	light.color = fcolor():set(r,g,b,light_bright)
 	local dir = device().cam_dir
 	local pos = device().cam_pos
-	pos = pos:add(dir:mul(0.2))
-	pos.y = pos.y - 0.25
-	light1:set_position(pos)
-	light1:set_direction(dir)
-	light1:update()
-	if light1_flag then
+	pos = pos:add(dir:mul(dirmult))
+	pos.y = pos.y - y_pos
+	light:set_position(pos)
+	light:set_direction(dir)
+	light:update()
+	if light_flag then
 		return false
-	else 
+	else
 		return true
 	end
 end
 
-
-function light1_off()
-	light1.enabled = false
-	light1:update()
-	light1_flag = false
-	return true
-end
-
-
-function light2_on()
-	light2 = script_light() -- Create a light source
-	light2.type = 1 -- 1 = Point ; 2 = Spot
-	light2.range = 1.5
-	light2_range = 3
-	light2_bright = 0.5
-	light2.lanim = "koster_01_electra"
-	light2.lanim_brightness = 0.025
-	light2.hud_mode = false
-	light2.shadow = true -- Turn on/off
-	light2.volumetric = false
-	light2.enabled = true
-	-- Pos/Rot
-	light2.color = fcolor():set(0.8,0.5,0,light2_bright)
-	local dir = device().cam_dir
-	local pos = device().cam_pos
-	pos = pos:add(dir:mul(0.3))
-	pos.y = pos.y - 0.3
-	light2:set_position(pos)
-	light2:set_direction(dir)
-	light2:update()
-	CreateTimeEvent("ea_s_22", "ea_s_22", 1.3, light2_off)
-	CreateTimeEvent("ea_s_l_2move", "ea_l_2move", 0, light2_move)
-	light2_flag = true
-	return true
-end
-
-function light2_move()
-	light2_bright = light2_bright - 0.02
-	light2_range = light2_range - 0.06
-	light2.range = light2_range
-	light2.color = fcolor():set(0.8,0.5,0,light2_bright)
-	local dir = device().cam_dir
-	local pos = device().cam_pos
-	pos = pos:add(dir:mul(0.1))
-	pos.y = pos.y - 0.7
-	light2:set_position(pos)
-	light2:set_direction(dir)
-	light2:update()
-	if light2_flag then
-		return false
-	else 
-		return true
-	end
-end
-
-function light2_off()
-	light2.enabled = false
-	light2:update()
-	light2_flag = false
+function light_off()
+	light.enabled = false
+	light:update()
+	light_flag = false
 	return true
 end

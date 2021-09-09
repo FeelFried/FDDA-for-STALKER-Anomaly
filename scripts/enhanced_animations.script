@@ -232,11 +232,7 @@ function blood_fx()
 	if used_monster:id() == 65535  then return true end
 	local fx_pos = used_monster:bone_position(bone_list[math.random(1,5)])
 	fx_pos.y = fx_pos.y + 0.1
-	local dir2 = device().cam_pos
-	local blood_trace = used_monster:bone_position(bone_list[math.random(1,5)])
-	blood_trace.x = 0
-	blood_trace.y = -1
-	blood_trace.z = 0
+	local blood_trace = vector():set(0,-1,0)
 	wallmarks_manager():place_skeleton(used_monster, "bloody_marks", fx_pos, blood_trace, 0.2,-1)
 	wallmarks_manager():place(blood_trace, fx_pos, 15, 0.3, "bloody_marks", used_monster,-1)
 	local hit_fx = particles_object("hit_fx\\hit_flesh_01")
