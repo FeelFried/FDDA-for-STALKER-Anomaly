@@ -6,7 +6,7 @@ local smoke = false
 local ltx = ini_file("items\\items\\anims_cigga_smoke.ltx")
 local function create_smoke()
 	if not smoke then
-		smoke = particles_object("damage_fx\\smoke")
+		smoke = particles_object("damage_fx\\cig_smoke")
 		local dir2 = device().cam_dir
 		smoke:set_direction(dir2)
 		smoke:play_at_pos(db.actor:bone_position("jaw_1"))
@@ -21,7 +21,6 @@ local function move_smoke()
 		pos.y = pos.y - 0.35 + 0.3*dir2.y
 		pos.x = pos.x + 0.3*dir2.x
 		pos.z = pos.z + 0.3*dir2.z
-		dir2.y = -dir2.y
 		smoke:set_direction(dir2)
 		smoke:move_to(pos, dir2)
 		return false
