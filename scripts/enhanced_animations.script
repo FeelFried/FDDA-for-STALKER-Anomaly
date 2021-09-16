@@ -117,6 +117,11 @@ function start_anim(anim_section_hud)
 	UnregisterScriptCallback("actor_on_update", actor_on_update)
 	fov_anim_manager.change_fov(0.45)
 	game.play_hud_motion(2, anim_section_hud, "anm_ea_show", false, 1)
+	local hud_anm = ini_eff:r_string_ex(used_item, "hud_anm")
+	if hud_anm then
+		game.play_hud_anm(hud_anm, 0, 1, 1, false)
+	end
+	hud_anm = nil
 end
 
 function anim_manager_item(anim_section_hud)
