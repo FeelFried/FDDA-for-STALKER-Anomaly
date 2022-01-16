@@ -299,6 +299,7 @@ function stop_my_item_anim()
 	mask_hud_switcher()
 	if used_item == "backpack_open" then
 		ea_invent_flag = true
+		RemoveTimeEvent("ea_slot_returner", "call_my_slot_back")
 		ui_inventory.start("inventory")
 	end
 	used_item = nil
