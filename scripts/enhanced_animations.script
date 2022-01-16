@@ -71,6 +71,8 @@ function activate()
 	ini_eff = ini_file("items\\items\\animations_settings.ltx")
 	RegisterScriptCallback("monster_on_actor_use_callback",monster_on_actor_use)
 	RegisterScriptCallback("actor_on_first_update",actor_on_first_update)
+	RegisterScriptCallback("ActorMenu_on_before_init_mode",backpack_m_open)
+	RegisterScriptCallback("GUI_on_hide",backpack_m_close)
 end
 -- Addon control >--
 
@@ -91,6 +93,41 @@ function use_item(obj)
 	hide_hud_inventory()
 	used_item = item
 	anim_section = ini_eff:r_string_ex(item, "anm")
+	mask_hud_switcher()
+	anim_prepare()
+end
+
+function backpack_m_open(name)
+	if used_item then return end
+	if not db.actor or not db.actor:alive() then
+		return
+	end
+	if name == "inventory" then
+		backpack_open()
+	end
+end
+
+function backpack_m_close(name)
+	if used_item then return end
+	if not db.actor or not db.actor:alive() then
+		return
+	end
+	if name == "UIInventory" then
+		backpack_close()
+	end
+end
+
+function backpack_open()
+	hide_hud_inventory()
+	used_item = "backpack_open"
+	anim_section = ini_eff:r_string_ex(used_item, "anm")
+	mask_hud_switcher()
+	anim_prepare()
+end
+
+function backpack_close()
+	used_item = "backpack_close"
+	anim_section = ini_eff:r_string_ex(used_item, "anm")
 	mask_hud_switcher()
 	anim_prepare()
 end
@@ -251,7 +288,9 @@ end
 
 --eating fake item to stop default items sound and delayed item using
 function eat_my_obj()
-	db.actor:eat(obj_m)
+	if obj_m then
+		db.actor:eat(obj_m)
+	end
 	db.actor:eat(db.actor:object("items_anm_dummy"))
 	return true
 end
@@ -259,6 +298,9 @@ end
 function stop_my_item_anim()
 	ea_restore_actor()
 	mask_hud_switcher()
+	if used_item = "backpack_open" then
+		ui_inventory.start("inventory")
+	end
 	used_item = nil
 	obj_m = nil
 	return true
