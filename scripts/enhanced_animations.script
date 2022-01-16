@@ -118,7 +118,6 @@ function backpack_m_close(name)
 end
 
 function backpack_open()
-	hide_hud_inventory()
 	used_item = "backpack_open"
 	anim_section = ini_eff:r_string_ex(used_item, "anm")
 	mask_hud_switcher()
@@ -298,12 +297,21 @@ end
 function stop_my_item_anim()
 	ea_restore_actor()
 	mask_hud_switcher()
-	if used_item = "backpack_open" then
+	if used_item == "backpack_open" then
+		ea_invent_flag = true
 		ui_inventory.start("inventory")
 	end
 	used_item = nil
 	obj_m = nil
 	return true
+end
+
+
+local originalUIinvenory_start =ui_inventory.start
+function ui_inventory.start(mode, obj)
+	if mode == "inventory" and ea_invent_flag == nil then return end
+	if ea_invent_flag then enhanced_animations.ea_invent_flag = nil end
+	originalUIinvenory_start(mode, obj)
 end
 
 function stop_my_monster_anim()
