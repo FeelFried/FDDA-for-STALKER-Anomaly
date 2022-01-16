@@ -301,6 +301,7 @@ function stop_my_item_anim()
 		ea_invent_flag = true
 		RemoveTimeEvent("ea_slot_returner", "call_my_slot_back")
 		ui_inventory.start("inventory")
+		game.only_allow_movekeys(false)
 	end
 	used_item = nil
 	obj_m = nil
