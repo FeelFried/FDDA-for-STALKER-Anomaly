@@ -37,6 +37,7 @@ end
 
 function EA_anim_stop(used_item)
 	if used_item == "backpack_open" then
+		game.play_hud_motion(2, "item_ea_backpack_open_hud", "anm_ea_idle", false, 1)
 		level.enable_input()
 		ea_invent_flag = true
 		RemoveTimeEvent("ea_slot_returner", "call_my_slot_back")
