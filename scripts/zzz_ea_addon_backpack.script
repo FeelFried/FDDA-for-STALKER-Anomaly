@@ -1,0 +1,58 @@
+
+local ini_eff = {}
+ini_eff = ini_file("items\\items\\animations_settings.ltx")
+
+function backpack_m_open(name)
+	if enhanced_animations.used_item then return end
+	if not db.actor or not db.actor:alive() then
+		return
+	end
+	if name == "inventory" then
+		backpack_open()
+	end
+end
+
+function backpack_m_close(name)
+	if enhanced_animations.used_item then return end
+	if not db.actor or not db.actor:alive() then
+		return
+	end
+	if name == "UIInventory" then
+		backpack_close()
+	end
+end
+
+function backpack_open()
+	enhanced_animations.used_item = "backpack_open"
+	enhanced_animations.anim_section = ini_eff:r_string_ex(enhanced_animations.used_item, "anm")
+	enhanced_animations.anim_prepare()
+end
+
+function backpack_close()
+	enhanced_animations.used_item = "backpack_close"
+	enhanced_animations.anim_section = ini_eff:r_string_ex(enhanced_animations.used_item, "anm")
+	enhanced_animations.anim_prepare()
+end
+
+function EA_anim_stop(used_item)
+	
+	if used_item == "backpack_open" then
+		enhanced_animations.ea_invent_flag = true
+		RemoveTimeEvent("ea_slot_returner", "call_my_slot_back")
+		ui_inventory.start("inventory")
+		game.only_allow_movekeys(false)
+	end
+end
+
+local originalUIinvenory_start =ui_inventory.start
+function ui_inventory.start(mode, obj)
+	if mode == "inventory" and enhanced_animations.ea_invent_flag == nil then return end
+	if enhanced_animations.ea_invent_flag then enhanced_animations.ea_invent_flag = nil end
+	originalUIinvenory_start(mode, obj)
+end
+
+function on_game_start()
+	RegisterScriptCallback("ActorMenu_on_before_init_mode",backpack_m_open)
+	RegisterScriptCallback("GUI_on_hide",backpack_m_close)
+	RegisterScriptCallback("GUI_on_show",EA_anim_stop)
+end

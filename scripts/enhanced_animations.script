@@ -30,8 +30,8 @@ local ini_eff = {}
 enable_animations = true
 mutant_loot_mod = true
 ini_eff = ini_file("items\\items\\animations_settings.ltx")
-local active_slot,anim_section,anim_exist_tm,wpn,item_usage_snd,monster_usage_snd,item,anim_use_time,obj_m,used_monster = nil
-used_item,ea_flag,fake_monster,det_active = nil
+local active_slot,anim_exist_tm,wpn,item_usage_snd,monster_usage_snd,item,anim_use_time,obj_m,used_monster = nil
+used_item,ea_flag,fake_monster,det_active,ea_invent_flag,anim_section = nil
 
 function on_game_start()
 	RegisterScriptCallback("on_game_load",on_game_load)
@@ -71,8 +71,6 @@ function activate()
 	ini_eff = ini_file("items\\items\\animations_settings.ltx")
 	RegisterScriptCallback("monster_on_actor_use_callback",monster_on_actor_use)
 	RegisterScriptCallback("actor_on_first_update",actor_on_first_update)
-	RegisterScriptCallback("ActorMenu_on_before_init_mode",backpack_m_open)
-	RegisterScriptCallback("GUI_on_hide",backpack_m_close)
 end
 -- Addon control >--
 
@@ -93,40 +91,6 @@ function use_item(obj)
 	used_item = item
 	hide_hud_inventory()
 	anim_section = ini_eff:r_string_ex(item, "anm")
-	mask_hud_switcher()
-	anim_prepare()
-end
-
-function backpack_m_open(name)
-	if used_item then return end
-	if not db.actor or not db.actor:alive() then
-		return
-	end
-	if name == "inventory" then
-		backpack_open()
-	end
-end
-
-function backpack_m_close(name)
-	if used_item then return end
-	if not db.actor or not db.actor:alive() then
-		return
-	end
-	if name == "UIInventory" then
-		backpack_close()
-	end
-end
-
-function backpack_open()
-	used_item = "backpack_open"
-	anim_section = ini_eff:r_string_ex(used_item, "anm")
-	mask_hud_switcher()
-	anim_prepare()
-end
-
-function backpack_close()
-	used_item = "backpack_close"
-	anim_section = ini_eff:r_string_ex(used_item, "anm")
 	mask_hud_switcher()
 	anim_prepare()
 end
@@ -295,25 +259,12 @@ function eat_my_obj()
 end
 
 function stop_my_item_anim()
+	SendScriptCallback("GUI_on_show",used_item)
 	ea_restore_actor()
 	mask_hud_switcher()
-	if used_item == "backpack_open" then
-		ea_invent_flag = true
-		RemoveTimeEvent("ea_slot_returner", "call_my_slot_back")
-		ui_inventory.start("inventory")
-		game.only_allow_movekeys(false)
-	end
 	used_item = nil
 	obj_m = nil
 	return true
-end
-
-
-local originalUIinvenory_start =ui_inventory.start
-function ui_inventory.start(mode, obj)
-	if mode == "inventory" and ea_invent_flag == nil then return end
-	if ea_invent_flag then enhanced_animations.ea_invent_flag = nil end
-	originalUIinvenory_start(mode, obj)
 end
 
 function stop_my_monster_anim()
