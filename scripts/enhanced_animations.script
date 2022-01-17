@@ -90,8 +90,8 @@ end
 function use_item(obj)
 	item = obj:section()
 	obj_m = obj
-	hide_hud_inventory()
 	used_item = item
+	hide_hud_inventory()
 	anim_section = ini_eff:r_string_ex(item, "anm")
 	mask_hud_switcher()
 	anim_prepare()
