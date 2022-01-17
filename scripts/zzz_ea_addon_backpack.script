@@ -1,7 +1,7 @@
 
 local ini_eff = {}
 local fov_prev
-ini_eff = ini_file("items\\items\\animations_settings.ltx")
+ini_eff = ini_file("items\\items\\ea_addon_backpack.ltx")
 
 function backpack_m_open(name)
 	if enhanced_animations.used_item then return end
