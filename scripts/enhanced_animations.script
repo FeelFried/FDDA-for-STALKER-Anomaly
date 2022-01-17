@@ -31,7 +31,7 @@ enable_animations = true
 mutant_loot_mod = true
 ini_eff = ini_file("items\\items\\animations_settings.ltx")
 local active_slot,anim_exist_tm,wpn,item_usage_snd,monster_usage_snd,item,anim_use_time,obj_m,used_monster = nil
-used_item,ea_flag,fake_monster,det_active,ea_invent_flag,anim_section = nil
+used_item,ea_flag,fake_monster,det_active,anim_section = nil
 
 function on_game_start()
 	RegisterScriptCallback("on_game_load",on_game_load)

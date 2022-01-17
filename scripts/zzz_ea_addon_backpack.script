@@ -23,6 +23,7 @@ function backpack_m_close(name)
 end
 
 function backpack_open()
+	level.disable_input()
 	enhanced_animations.used_item = "backpack_open"
 	enhanced_animations.anim_section = ini_eff:r_string_ex(enhanced_animations.used_item, "anm")
 	enhanced_animations.anim_prepare()
@@ -35,9 +36,9 @@ function backpack_close()
 end
 
 function EA_anim_stop(used_item)
-	
 	if used_item == "backpack_open" then
-		enhanced_animations.ea_invent_flag = true
+		level.enable_input()
+		ea_invent_flag = true
 		RemoveTimeEvent("ea_slot_returner", "call_my_slot_back")
 		ui_inventory.start("inventory")
 		game.only_allow_movekeys(false)
@@ -46,8 +47,8 @@ end
 
 local originalUIinvenory_start =ui_inventory.start
 function ui_inventory.start(mode, obj)
-	if mode == "inventory" and enhanced_animations.ea_invent_flag == nil then return end
-	if enhanced_animations.ea_invent_flag then enhanced_animations.ea_invent_flag = nil end
+	if mode == "inventory" and ea_invent_flag == nil then return end
+	if ea_invent_flag then ea_invent_flag = nil end
 	originalUIinvenory_start(mode, obj)
 end
 
