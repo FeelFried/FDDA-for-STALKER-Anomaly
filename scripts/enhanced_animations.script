@@ -259,7 +259,7 @@ function eat_my_obj()
 end
 
 function stop_my_item_anim()
-	SendScriptCallback("GUI_on_show",used_item)
+	ea_callbacks.EA_SendScriptCallback("ea_on_item_anim_stop",used_item)
 	ea_restore_actor()
 	mask_hud_switcher()
 	used_item = nil

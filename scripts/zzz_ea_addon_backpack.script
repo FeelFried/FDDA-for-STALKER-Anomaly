@@ -63,5 +63,5 @@ end
 function on_game_start()
 	RegisterScriptCallback("ActorMenu_on_before_init_mode",backpack_m_open)
 	RegisterScriptCallback("GUI_on_hide",backpack_m_close)
-	RegisterScriptCallback("GUI_on_show",EA_anim_stop)
+	ea_callbacks.EA_RegisterScriptCallback("ea_on_item_anim_stop",EA_anim_stop)
 end
