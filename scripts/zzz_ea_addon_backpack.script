@@ -1,5 +1,6 @@
 
 local ini_eff = {}
+local fov_prev
 ini_eff = ini_file("items\\items\\animations_settings.ltx")
 
 function backpack_m_open(name)
@@ -13,6 +14,10 @@ function backpack_m_open(name)
 end
 
 function backpack_m_close(name)
+	if fov_prev then
+		exec_console_cmd("hud_fov " .. fov_prev)
+		fov_prev = nil
+	end
 	if enhanced_animations.used_item then return end
 	if not db.actor or not db.actor:alive() then
 		return
@@ -37,6 +42,8 @@ end
 
 function EA_anim_stop(used_item)
 	if used_item == "backpack_open" then
+		fov_prev = axr_main.config:r_value("temp", "fov_value", 2)
+		fov_anim_manager.change_fov(0.45)
 		game.play_hud_motion(2, "item_ea_backpack_open_hud", "anm_ea_idle", false, 1)
 		level.enable_input()
 		ea_invent_flag = true
