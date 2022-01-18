@@ -1,4 +1,3 @@
-
 local ini_eff = {}
 local fov_prev,active_slot,item_after_backpack,backpack_open_flag
 ini_eff = ini_file("items\\items\\ea_addon_backpack.ltx")
@@ -51,7 +50,6 @@ end
 function backpack_open()
 	active_slot = db.actor:active_slot()
 	det_active = db.actor:active_detector() or nil
-	printf(active_slot)
 	level.disable_input()
 	--recalc_actor_campos()
 	enhanced_animations.used_item = "backpack_open"
@@ -99,7 +97,6 @@ function ea_on_item_use(used_item,tm)
 end
 
 function call_my_slot_back()
-	printf(active_slot and active_slot or "no slot".." called")
 	if det_active and db.actor:item_in_slot(9) then
 		db.actor:item_in_slot(9):switch_state(1)
 	end
