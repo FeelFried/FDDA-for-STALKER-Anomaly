@@ -32,6 +32,7 @@ end
 
 function backpack_open()
 	active_slot = db.actor:active_slot()
+	det_active = db.actor:active_detector() or nil
 	printf(active_slot)
 	level.disable_input()
 	recalc_actor_campos()
@@ -81,6 +82,10 @@ end
 
 function call_my_slot_back()
 	printf(active_slot.." called")
+	if det_active then
+		det_active:switch_state(1)
+		det_active = nil
+	end
 	db.actor:activate_slot(active_slot or 0)
 	active_slot = nil
 	item_after_backpack = nil
