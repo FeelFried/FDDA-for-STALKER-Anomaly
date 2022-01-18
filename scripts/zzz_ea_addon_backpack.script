@@ -1,3 +1,9 @@
+--[[
+FDDA backpack addon script
+Author: Feel_Fried
+Anims author: Blindside
+18.01.2022
+--]]
 local ini_eff = {}
 local fov_prev,active_slot,item_after_backpack,backpack_open_flag
 local anim_enabled = true
