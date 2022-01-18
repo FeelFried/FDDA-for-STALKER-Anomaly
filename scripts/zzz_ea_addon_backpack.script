@@ -82,10 +82,10 @@ end
 
 function call_my_slot_back()
 	printf(active_slot.." called")
-	if det_active then
-		det_active:switch_state(1)
-		det_active = nil
+	if det_active and db.actor:item_in_slot(9) then
+		db.actor:item_in_slot(9):switch_state(1)
 	end
+	det_active = nil
 	db.actor:activate_slot(active_slot or 0)
 	active_slot = nil
 	item_after_backpack = nil
