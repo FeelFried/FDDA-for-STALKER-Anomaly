@@ -32,10 +32,21 @@ end
 
 function backpack_open()
 	active_slot = db.actor:active_slot()
+	printf(active_slot)
 	level.disable_input()
+	recalc_actor_campos()
 	enhanced_animations.used_item = "backpack_open"
 	enhanced_animations.anim_section = ini_eff:r_string_ex(enhanced_animations.used_item, "anm")
 	enhanced_animations.anim_prepare()
+end
+
+function recalc_actor_campos()
+	local dir2 = device().cam_dir
+	local pos = device().cam_pos
+	pos.y = pos.y - 0.5
+	pos.x = pos.x + dir2.x
+	pos.z = pos.z + dir2.z
+	db.actor:actor_look_at_point(pos)
 end
 
 function backpack_close()
@@ -63,15 +74,16 @@ function ea_on_item_use(used_item,tm)
 		return
 	end
 	if item_after_backpack then
-		printf("item_after_backpack")
 		CreateTimeEvent("ea_b_slot_returner", "b_call_my_slot_back", (tm + 0.3), call_my_slot_back)
 		item_after_backpack = nil
 	end
 end
 
 function call_my_slot_back()
+	printf(active_slot.." called")
 	db.actor:activate_slot(active_slot or 0)
 	active_slot = nil
+	item_after_backpack = nil
 	return true
 end
 
