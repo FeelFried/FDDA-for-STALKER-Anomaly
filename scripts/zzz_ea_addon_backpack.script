@@ -18,19 +18,22 @@ function backpack_m_close(name)
 	if name == "UIInventory" and active_slot then
 		item_after_backpack = true
 	end
+	
 	if backpack_open_flag ==  nil then return end
+
 	if fov_prev then
 		exec_console_cmd("hud_fov " .. fov_prev)
 		fov_prev = nil
 	end
+
 	if enhanced_animations.used_item then
 		backpack_open_flag = nil
 		return
 	 end
+
 	if not db.actor or not db.actor:alive() then
 		return
 	end
-
 
 	if name == "UIInventory" then
 		backpack_open_flag = nil
