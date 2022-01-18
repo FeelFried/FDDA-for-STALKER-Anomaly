@@ -1,6 +1,6 @@
 
 local ini_eff = {}
-local fov_prev,active_slot,item_after_backpack
+local fov_prev,active_slot,item_after_backpack,backpack_open_flag
 ini_eff = ini_file("items\\items\\ea_addon_backpack.ltx")
 
 function backpack_m_open(name)
@@ -9,11 +9,13 @@ function backpack_m_open(name)
 		return
 	end
 	if name == "inventory" then
+		backpack_open_flag = true
 		backpack_open()
 	end
 end
 
 function backpack_m_close(name)
+	if backpack_open_flag ==  nil then return end
 	if fov_prev then
 		exec_console_cmd("hud_fov " .. fov_prev)
 		fov_prev = nil
@@ -26,6 +28,7 @@ function backpack_m_close(name)
 		return
 	end
 	if name == "UIInventory" then
+		backpack_open_flag = nil
 		backpack_close()
 	end
 end
