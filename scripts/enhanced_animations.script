@@ -138,6 +138,7 @@ function anim_manager_item(anim_section_hud)
 	end
 	alife_create_item("items_anm_dummy",db.actor)
 	CreateTimeEvent("ea_anim_stoper", "stop_my_item_anim", anim_exist_tm, stop_my_item_anim)
+	ea_callbacks.EA_SendScriptCallback("ea_on_item_use",used_item,anim_exist_tm)
 end
 
 function anim_manager_monster()

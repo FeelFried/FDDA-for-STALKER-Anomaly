@@ -1,6 +1,6 @@
 
 local ini_eff = {}
-local fov_prev
+local fov_prev,active_slot
 ini_eff = ini_file("items\\items\\ea_addon_backpack.ltx")
 
 function backpack_m_open(name)
@@ -28,6 +28,7 @@ function backpack_m_close(name)
 end
 
 function backpack_open()
+	active_slot = db.actor:active_slot()
 	level.disable_input()
 	enhanced_animations.used_item = "backpack_open"
 	enhanced_animations.anim_section = ini_eff:r_string_ex(enhanced_animations.used_item, "anm")
@@ -53,6 +54,23 @@ function EA_anim_stop(used_item)
 	end
 end
 
+function ea_on_item_use(used_item,tm)
+	printf("callback on close 1")
+	if used_item == "backpack_close" then
+		printf("callback on close 2")
+		CreateTimeEvent("ea_b_slot_returner", "b_call_my_slot_back", (tm + 0.4), call_my_slot_back)
+	end
+end
+
+function call_my_slot_back()
+	printf(active_slot)
+	printf("call slots back")
+	db.actor:activate_slot(active_slot or 0)
+	active_slot = nil
+	return true
+end
+
+
 local originalUIinvenory_start =ui_inventory.start
 function ui_inventory.start(mode, obj)
 	if mode == "inventory" and ea_invent_flag == nil then return end
@@ -64,4 +82,5 @@ function on_game_start()
 	RegisterScriptCallback("ActorMenu_on_before_init_mode",backpack_m_open)
 	RegisterScriptCallback("GUI_on_hide",backpack_m_close)
 	ea_callbacks.EA_RegisterScriptCallback("ea_on_item_anim_stop",EA_anim_stop)
+	ea_callbacks.EA_RegisterScriptCallback("ea_on_item_use",ea_on_item_use)
 end
