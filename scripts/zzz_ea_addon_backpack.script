@@ -20,12 +20,16 @@ function backpack_m_close(name)
 		exec_console_cmd("hud_fov " .. fov_prev)
 		fov_prev = nil
 	end
-	if name == "UIInventory" and active_slot then
-		item_after_backpack = true
-	end
-	if enhanced_animations.used_item then return end
+	if enhanced_animations.used_item then
+		backpack_open_flag = nil
+		return
+	 end
 	if not db.actor or not db.actor:alive() then
 		return
+	end
+
+	if name == "UIInventory" and active_slot then
+		item_after_backpack = true
 	end
 	if name == "UIInventory" then
 		backpack_open_flag = nil
@@ -38,7 +42,7 @@ function backpack_open()
 	det_active = db.actor:active_detector() or nil
 	printf(active_slot)
 	level.disable_input()
-	recalc_actor_campos()
+	--recalc_actor_campos()
 	enhanced_animations.used_item = "backpack_open"
 	enhanced_animations.anim_section = ini_eff:r_string_ex(enhanced_animations.used_item, "anm")
 	enhanced_animations.anim_prepare()
