@@ -59,12 +59,12 @@ end
 
 function ea_on_item_use(used_item,tm)
 	if used_item == "backpack_close" then
-		CreateTimeEvent("ea_b_slot_returner", "b_call_my_slot_back", (tm + 0.4), call_my_slot_back)
+		CreateTimeEvent("ea_b_slot_returner", "b_call_my_slot_back", (tm + 0.55), call_my_slot_back)
 		return
 	end
 	if item_after_backpack then
 		printf("item_after_backpack")
-		CreateTimeEvent("ea_b_slot_returner", "b_call_my_slot_back", (tm + 0.4), call_my_slot_back)
+		CreateTimeEvent("ea_b_slot_returner", "b_call_my_slot_back", (tm + 0.3), call_my_slot_back)
 		item_after_backpack = nil
 	end
 end
