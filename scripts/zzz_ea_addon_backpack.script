@@ -81,7 +81,7 @@ function ea_on_item_use(used_item,tm)
 end
 
 function call_my_slot_back()
-	printf(active_slot.." called")
+	printf(active_slot and active_slot or "no slot".." called")
 	if det_active and db.actor:item_in_slot(9) then
 		db.actor:item_in_slot(9):switch_state(1)
 	end
