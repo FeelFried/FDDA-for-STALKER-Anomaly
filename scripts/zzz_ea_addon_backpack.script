@@ -8,6 +8,12 @@ local ini_eff = {}
 local fov_prev,active_slot,item_after_backpack,backpack_open_flag,crouch_value
 local anim_enabled = true
 ini_eff = ini_file("items\\items\\ea_addon_backpack.ltx")
+local skip_anims = {
+	["outfit"] = true,
+	["helm"] = true,
+	["disassamble_cloth_fast"] = true,
+	["disassamble_metal_fast"] = true,
+}
 
 function backpack_m_open(name)
 	if enhanced_animations.used_item then return end
@@ -25,7 +31,7 @@ function backpack_m_close(name)
 	if name == "UIInventory" and active_slot then
 		item_after_backpack = true
 	end
-
+	game.stop_hud_motion()
 	if backpack_open_flag ==  nil then return end
 
 	if fov_prev then
@@ -45,15 +51,25 @@ function backpack_m_close(name)
 	end
 
 	if name == "UIInventory" then
+		printf("inventory close")
 		backpack_open_flag = nil
 		if item_use_flag then
+			printf("item was used before closing backpack")
 			game.stop_hud_motion()
 			call_my_slot_back()
 			item_use_flag = nil
 			return
 		end
+		printf("called backpack close anim")
 		backpack_close()
 	end
+end
+
+local originalPIF = actor_effects.play_item_fx
+function actor_effects.play_item_fx(item)
+	originalPIF(item)
+	if skip_anims[item] and backpack_open_flag then item_use_flag = true end
+	printf(item)
 end
 
 function backpack_open()
