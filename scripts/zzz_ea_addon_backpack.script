@@ -15,6 +15,11 @@ local skip_anims = {
 	["disassamble_metal_fast"] = true,
 }
 
+local bool_to_int = {
+	[true] = 1,
+	[false] = 0,
+}
+
 function backpack_m_open(name)
 	if enhanced_animations.used_item then return end
 	if not db.actor or not db.actor:alive() then
@@ -35,6 +40,7 @@ function backpack_m_close(name)
 	if backpack_open_flag ==  nil then return end
 
 	if fov_prev then
+		printf(crouch_value or "fuuuuuuuck")
 		get_console():execute("g_crouch_toggle "..crouch_value or get_console_cmd(2, "g_crouch_toggle"))
 		level.press_action(bind_to_dik(key_bindings.kCROUCH))
 		exec_console_cmd("hud_fov " .. fov_prev)
@@ -73,7 +79,7 @@ function actor_effects.play_item_fx(item)
 end
 
 function backpack_open()
-	crouch_value = get_console_cmd(2, "g_crouch_toggle")
+	crouch_value = bool_to_int[get_console_cmd(1, "g_crouch_toggle")]
 	get_console():execute("g_crouch_toggle 1")
 	level.press_action(bind_to_dik(key_bindings.kCROUCH))
 	active_slot = db.actor:active_slot()
