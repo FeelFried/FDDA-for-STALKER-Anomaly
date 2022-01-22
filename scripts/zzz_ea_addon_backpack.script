@@ -7,6 +7,7 @@ Anims author: Blindside
 local ini_eff = {}
 local fov_prev,active_slot,item_after_backpack,backpack_open_flag,crouch_value,crouching
 local anim_enabled = true
+local crouch_toggle = true
 ini_eff = ini_file("items\\items\\ea_addon_backpack.ltx")
 local skip_anims = {
 	["outfit"] = true,
@@ -33,8 +34,10 @@ function backpack_m_open(name)
 end
 
 function a_crouch()
-	level.press_action(bind_to_dik(key_bindings.kCROUCH))
-	level.release_action(bind_to_dik(key_bindings.kCROUCH))
+	if crouch_toggle then
+		level.press_action(bind_to_dik(key_bindings.kCROUCH))
+		level.release_action(bind_to_dik(key_bindings.kCROUCH))
+	end
 end
 
 function backpack_m_close(name)
@@ -190,6 +193,7 @@ end
 function loadsettings()
 	if ui_mcm then
 		anim_enabled = ui_mcm.get("EA_settings/enable_backpack_addon")
+		crouch_toggle = ui_mcm.get("EA_settings/enable_crouch_toggle_backpack_addon")
 	end
 	if anim_enabled then
 		activate()

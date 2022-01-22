@@ -10,6 +10,10 @@
 		<text>Включить анимации рюкзака</text>
 	</string>
 	
+	<string id="ui_mcm_EA_settings_enable_crouch_toggle_backpack_addon">
+		<text>Включить анимацию приседания для рюкзака</text>
+	</string>
+	
 	<string id="ui_mcm_EA_settings_mutant_loot">
 		<text>Включить анимации свежевания</text>
 	</string>	
