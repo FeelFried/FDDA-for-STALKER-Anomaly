@@ -91,6 +91,11 @@ function actor_effects.play_item_fx(item)
 end
 
 function backpack_open()
+	if IsMoveState("mcClimb") then
+		actor_menu.set_msg(1, "Your hands are busy right now",3)
+		backpack_open_flag = nil
+		return
+	end
 	crouch_value = get_console_cmd(1, "g_crouch_toggle")
 	get_console():execute("g_crouch_toggle 1")
 	crouching = IsMoveState('mcCrouch')

@@ -200,6 +200,11 @@ local originalAOIBU = itms_manager.actor_on_item_before_use
 function itms_manager.actor_on_item_before_use(obj,flags)
 	originalAOIBU(obj,flags)
 	local item = obj:section()
+	if IsMoveState("mcClimb") then
+		actor_menu.set_msg(1, "Your hands are busy right now",3)
+		flags.ret_value = false
+		return
+	end
 	if ini_eff:r_string_ex(item, "snd") and enable_animations and flags.ret_value then
 		use_item(obj)
 		flags.ret_value = false
