@@ -35,3 +35,7 @@
 		<text>Default - 0.12, recommended value to fix \n
 		 magazines addon bug - 0.3-0.5</text>
 	</string>
+	
+	<string id="st_EA_ladder_item_not_allowed">
+      <text>Your hands are busy right now</text>
+    </string>

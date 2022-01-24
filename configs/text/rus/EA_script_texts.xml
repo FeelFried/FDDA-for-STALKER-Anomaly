@@ -36,5 +36,9 @@
 		для тех у кого анимация триггерится \n 
 		на магазины - 0.3-0.5</text>
 	</string>	
+	
+	<string id="st_EA_ladder_item_not_allowed">
+      <text>Ваши руки сейчас заняты</text>
+    </string>
 
 	

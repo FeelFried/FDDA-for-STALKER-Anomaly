@@ -92,7 +92,7 @@ end
 
 function backpack_open()
 	if IsMoveState("mcClimb") then
-		actor_menu.set_msg(1, "Your hands are busy right now",3)
+		actor_menu.set_msg(1, game.translate_string("st_EA_ladder_item_not_allowed"),3)
 		backpack_open_flag = nil
 		return
 	end
