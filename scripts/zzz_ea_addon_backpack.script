@@ -14,6 +14,14 @@ local skip_anims = {
 	["helm"] = true,
 	["disassemble_cloth_fast"] = true,
 	["disassemble_metal_fast"] = true,
+	["lead_box_dummy"] = true,
+	["container_tool_lead_box_dummy"] = true,
+	["af_aac_dummy"] = true,
+	["af_aam_dummy"] = true,
+	["af_iam_dummy"] = true,
+	["container_tool_af_aac_dummy"] = true,
+	["container_tool_af_aam_dummy"] = true,
+	["container_tool_af_iam_dummy"] = true,
 }
 
 local bool_to_int = {
