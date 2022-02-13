@@ -4,12 +4,21 @@ function on_game_start()
 end
 
 function actor_on_first_update()
-	local ini_eff = ini_file("items\\items\\ea_snd_prefetch.ltx")
-	local lines = ini_eff:line_count("sounds_list")
+	local ini_eff_sounds = ini_file("items\\items\\ea_snd_prefetch.ltx")
+	local lines = ini_eff_sounds:line_count("ea_sounds_list")
+	local result, variable, value, current_line = nil
 	for current_line = 0, lines - 1 do
-		result, variable, value = ini_eff:r_line("sounds_list", current_line, "", "")
-		printf(value.." prefetched")
+		result, variable, value = ini_eff_sounds:r_line("ea_sounds_list", current_line, "", "")
+		printf(value.."soud prefetched")
 		level.prefetch_sound(value)
 	end
-	--level.prefetch_sound()
+	local ini_eff_anims = ini_file("items\\items\\ea_anm_prefetch.ltx")
+	local lines = ini_eff_anims:line_count("ea_anims_list")
+	for current_line = 0, lines - 1 do
+		result, variable, value = ini_eff_anims:r_line("ea_anims_list", current_line, "", "")
+		game.play_hud_motion(2, value, "anm_ea_show", false, 1)
+		printf(value.." anim cached")
+		game.stop_hud_motion()
+	end
+	result, variable, value, ini_eff_anims, lines, current_line, ini_eff_sounds = nil
 end
