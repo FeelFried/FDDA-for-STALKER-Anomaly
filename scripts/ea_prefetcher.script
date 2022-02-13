@@ -8,7 +8,7 @@ function actor_on_first_update()
 	local lines = ini_eff:line_count("sounds_list")
 	for current_line = 0, lines - 1 do
 		result, variable, value = ini_eff:r_line("sounds_list", current_line, "", "")
-		printf(value.." prefetced")
+		printf(value.." prefetched")
 		level.prefetch_sound(value)
 	end
 	--level.prefetch_sound()
