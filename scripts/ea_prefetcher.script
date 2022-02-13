@@ -1,0 +1,15 @@
+
+function on_game_start()
+	RegisterScriptCallback("actor_on_first_update",actor_on_first_update)
+end
+
+function actor_on_first_update()
+	local ini_eff = ini_file("items\\items\\ea_snd_prefetch.ltx")
+	local lines = ini_eff:line_count("sounds_list")
+	for current_line = 0, lines - 1 do
+		result, variable, value = ini_eff:r_line("sounds_list", current_line, "", "")
+		printf(value.." prefetced")
+		level.prefetch_sound(value)
+	end
+	--level.prefetch_sound()
+end
