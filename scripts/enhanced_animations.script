@@ -162,9 +162,9 @@ local fdda_error_snd = sound_object(ini_eff:r_string_ex("fdda_error_snd", "snd")
 function actor_on_update()
 	failure_timer = failure_timer + 1
 	if ea_debug then printf("update = "..failure_timer) end
-	if (db.actor:active_slot() ~= 0 or db.actor:active_detector()) and (failure_timer < 90) then
+	if (db.actor:active_slot() ~= 0 or db.actor:active_detector()) and (failure_timer < (1530/device().time_delta)) then
 		return
-	elseif (failure_timer >= 90) and ea_debug then
+	elseif ea_debug and (failure_timer >= (1530/device().time_delta)) then
 		fdda_error_snd:play(db.actor, 0, sound_object.s2d)
 		printf("hide weapons for anim failed")
 		printf(used_item  or (used_monster and used_monster:section())  or "anim find ERROR")
