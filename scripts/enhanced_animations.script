@@ -164,7 +164,7 @@ function actor_on_update()
 	if ea_debug then printf("update = "..failure_timer) end
 	if (db.actor:active_slot() ~= 0 or db.actor:active_detector()) and (failure_timer < 90) then
 		return
-	elseif (failure_timer > 90) and ea_debug then
+	elseif (failure_timer >= 90) and ea_debug then
 		fdda_error_snd:play(db.actor, 0, sound_object.s2d)
 		printf("hide weapons for anim failed")
 		printf(used_item  or (used_monster and used_monster:section())  or "anim find ERROR")
