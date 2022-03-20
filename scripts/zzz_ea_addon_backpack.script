@@ -7,6 +7,7 @@ Anims author: Blindside
 local ini_eff = {}
 local fov_prev,active_slot,item_after_backpack,backpack_open_flag,crouch_value,crouching
 local anim_enabled = true
+local ea_debug = false
 local crouch_toggle = true
 ini_eff = ini_file("items\\items\\ea_addon_backpack.ltx")
 local skip_anims = {
@@ -74,16 +75,22 @@ function backpack_m_close(name)
 	end
 
 	if name == "UIInventory" then
-		printf("inventory close")
+		if ea_debug then
+			printf("inventory close")
+		end
 		backpack_open_flag = nil
 		if item_use_flag then
-			printf("item was used before closing backpack")
+			if ea_debug then
+				printf("item was used before closing backpack")
+			end
 			game.stop_hud_motion()
 			call_my_slot_back()
 			item_use_flag = nil
 			return
 		end
-		printf("called backpack close anim")
+		if ea_debug then
+			printf("called backpack close anim")
+		end
 		backpack_close()
 	end
 end
@@ -92,10 +99,14 @@ local originalPIF = actor_effects.play_item_fx
 function actor_effects.play_item_fx(item)
 	originalPIF(item)
 	if skip_anims[item] and backpack_open_flag then
-		 item_use_flag = true
-		 printf("item_skiped")
-	 end
-	printf(item)
+		item_use_flag = true
+		if ea_debug then
+			printf("item_skiped")
+	 	end
+	end
+	if ea_debug then
+		printf(item)
+	end
 end
 
 function backpack_open()
@@ -107,7 +118,9 @@ function backpack_open()
 	crouch_value = get_console_cmd(1, "g_crouch_toggle")
 	get_console():execute("g_crouch_toggle 1")
 	crouching = IsMoveState('mcCrouch')
-	printf("crouching = "..bool_to_int[crouching])
+	if ea_debug then
+		printf("crouching = "..bool_to_int[crouching])
+	end
 	if (crouch_value and not crouching) or not crouch_value  then
 		a_crouch()
 	end
@@ -207,6 +220,7 @@ function loadsettings()
 	if ui_mcm then
 		anim_enabled = ui_mcm.get("EA_settings/enable_backpack_addon")
 		crouch_toggle = ui_mcm.get("EA_settings/enable_crouch_toggle_backpack_addon")
+		ea_debug = ui_mcm.get("EA_settings/ea_debug")
 	end
 	if anim_enabled then
 		activate()
