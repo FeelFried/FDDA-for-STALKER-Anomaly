@@ -157,14 +157,15 @@ function anim_manager_monster()
 	CreateTimeEvent("ea_blood_fx4", "blood_fx4", (2.2), blood_fx)
 	CreateTimeEvent("ea_anim_stoper", "stop_my_monster_anim", anim_exist_tm, stop_my_monster_anim)
 end
+
 local failure_timer = 0
 local fdda_error_snd = sound_object(ini_eff:r_string_ex("fdda_error_snd", "snd"))
 function actor_on_update()
-	failure_timer = failure_timer + 1
+	failure_timer = failure_timer + (device().time_delta/17)
 	if ea_debug then printf("update = "..failure_timer) end
-	if (db.actor:active_slot() ~= 0 or db.actor:active_detector()) and (failure_timer < (1530/device().time_delta)) then
+	if (db.actor:active_slot() ~= 0 or db.actor:active_detector()) and (failure_timer < 100) then
 		return
-	elseif ea_debug and (failure_timer >= (1530/device().time_delta)) then
+	elseif ea_debug and (failure_timer >= 100) then
 		fdda_error_snd:play(db.actor, 0, sound_object.s2d)
 		printf("hide weapons for anim failed")
 		printf(used_item  or (used_monster and used_monster:section())  or "anim find ERROR")
