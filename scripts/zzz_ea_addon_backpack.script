@@ -5,7 +5,7 @@ Anims author: Blindside
 18.01.2022
 --]]
 local ini_eff = {}
-local fov_prev,active_slot,item_after_backpack,backpack_open_flag,crouch_value,crouching
+local fov_prev,active_slot,item_after_backpack,backpack_open_flag,crouch_value,crouching,ea_force_inventory_close
 local anim_enabled = true
 local ea_debug = false
 local crouch_toggle = true
@@ -50,11 +50,18 @@ function a_crouch()
 end
 
 function backpack_m_close(name)
+	if ea_force_inventory_close then
+		if ea_debug then
+			printf("force found")
+		end
+		return
+	end
+
 	if name == "UIInventory" and active_slot then
 		item_after_backpack = true
 	end
-	game.stop_hud_motion()
-	if backpack_open_flag ==  nil then return end
+
+	if backpack_open_flag == nil then return end
 
 	if fov_prev then
 		get_console():execute("g_crouch_toggle "..bool_to_int[crouch_value] or get_console_cmd(2, "g_crouch_toggle"))
@@ -68,7 +75,7 @@ function backpack_m_close(name)
 	if enhanced_animations.used_item then
 		backpack_open_flag = nil
 		return
-	 end
+	end
 
 	if not db.actor or not db.actor:alive() then
 		return
@@ -127,19 +134,9 @@ function backpack_open()
 	active_slot = db.actor:active_slot()
 	det_active = db.actor:active_detector() or nil
 	level.disable_input()
-	--recalc_actor_campos()
 	enhanced_animations.used_item = "backpack_open"
 	enhanced_animations.anim_section = ini_eff:r_string_ex(enhanced_animations.used_item, "anm")
 	enhanced_animations.anim_prepare()
-end
-
-function recalc_actor_campos()
-	local dir2 = device().cam_dir
-	local pos = device().cam_pos
-	pos.y = pos.y - 0.5
-	pos.x = pos.x + dir2.x
-	pos.z = pos.z + dir2.z
-	db.actor:actor_look_at_point(pos)
 end
 
 function backpack_close()
@@ -186,9 +183,16 @@ end
 
 local originalUIinvenory_start =ui_inventory.start
 function ui_inventory.start(mode, obj)
-	if mode == "inventory" and ea_invent_flag == nil and anim_enabled then return end
-	if ea_invent_flag then ea_invent_flag = nil end
 	originalUIinvenory_start(mode, obj)
+	if mode == "inventory" and ea_invent_flag == nil and anim_enabled then
+		ea_force_inventory_close = true
+		ui_inventory.hide_hud_inventory()
+		return
+	end
+	if ea_invent_flag then
+		ea_invent_flag = nil
+		ea_force_inventory_close = nil
+	end
 end
 
 function actor_on_item_use(item)
@@ -196,11 +200,12 @@ function actor_on_item_use(item)
 end
 
 function activate()
-	RegisterScriptCallback("ActorMenu_on_before_init_mode",backpack_m_open)
-	RegisterScriptCallback("GUI_on_hide",backpack_m_close)
-	RegisterScriptCallback("actor_on_item_use",actor_on_item_use)
-	ea_callbacks.EA_RegisterScriptCallback("ea_on_item_anim_stop",EA_anim_stop)
-	ea_callbacks.EA_RegisterScriptCallback("ea_on_item_use",ea_on_item_use)
+		RegisterScriptCallback("ActorMenu_on_before_init_mode",backpack_m_open)
+		RegisterScriptCallback("GUI_on_hide",backpack_m_close)
+		RegisterScriptCallback("actor_on_item_use",actor_on_item_use)
+		ea_callbacks.EA_RegisterScriptCallback("ea_on_item_anim_stop",EA_anim_stop)
+		ea_callbacks.EA_RegisterScriptCallback("ea_on_item_use",ea_on_item_use)
+		printf("TEST PRINT BITCH")
 end
 
 function deactivate()
