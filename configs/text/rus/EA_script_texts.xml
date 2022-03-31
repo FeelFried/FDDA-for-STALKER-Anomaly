@@ -31,6 +31,10 @@
 		<text>Дистанция для анимации поднимания предметов</text>
 	</string>	
 	
+	<string id="ui_mcm_EA_settings_ea_debug">
+		<text>EA debug</text>
+	</string>	
+	
 	<string id="ui_mcm_EA_settings_take_dist_desc">
 		<text>0.12 по умолчанию, рекомендуемое значение\n 
 		для тех у кого анимация триггерится \n 
