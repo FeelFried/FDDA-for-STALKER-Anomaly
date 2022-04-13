@@ -118,7 +118,9 @@ end
 function start_anim(anim_section_hud)
 	UnregisterScriptCallback("actor_on_update", actor_on_update)
 	fov_anim_manager.change_fov(0.45)
-	game.play_hud_motion(2, anim_section_hud, "anm_ea_show", false, 1)
+	local speed = ini_eff:r_float_ex(used_item, "speed") or 1
+	if ea_debug then printf("speed is = "..speed) end
+	game.play_hud_motion(2, anim_section_hud, "anm_ea_show", false, speed)
 	local hud_anm = used_item and ini_eff:r_string_ex(used_item, "hud_anm")
 	if hud_anm then
 		game.play_hud_anm(hud_anm, 0, 1, 1, false)
@@ -256,7 +258,7 @@ local bone_list  = {
 	[5] = "bip01_head",
 }
 function blood_fx()
-	if used_monster:id() == 65535  then return true end
+	if not used_monster or used_monster:id() == 65535  then return true end
 	local fx_pos = used_monster:bone_position(bone_list[math.random(1,5)])
 	fx_pos.y = fx_pos.y + 0.1
 	local blood_trace = vector():set(0,-1,0)
