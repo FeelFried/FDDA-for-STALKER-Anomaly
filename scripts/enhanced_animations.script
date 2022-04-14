@@ -118,7 +118,7 @@ end
 function start_anim(anim_section_hud)
 	UnregisterScriptCallback("actor_on_update", actor_on_update)
 	fov_anim_manager.change_fov(0.45)
-	local speed = ini_eff:r_float_ex(used_item, "speed") or 1
+	local speed = ini_eff:r_float_ex(used_item or "nothing", "speed",1)
 	if ea_debug then printf("speed is = "..speed) end
 	game.play_hud_motion(2, anim_section_hud, "anm_ea_show", false, speed)
 	local hud_anm = used_item and ini_eff:r_string_ex(used_item, "hud_anm")
