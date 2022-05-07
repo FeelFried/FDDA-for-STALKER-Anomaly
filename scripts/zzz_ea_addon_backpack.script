@@ -161,7 +161,7 @@ function EA_anim_stop(used_item)
 end
 
 function ea_on_item_use(used_item,tm)
-	if used_item == "backpack_close" then
+	if used_item:sub(1,14) == "backpack_close" then
 		CreateTimeEvent("ea_b_slot_returner", "b_call_my_slot_back", (tm + 0.55), call_my_slot_back)
 		return
 	end
