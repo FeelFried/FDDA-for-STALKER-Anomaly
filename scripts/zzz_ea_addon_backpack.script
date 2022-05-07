@@ -91,7 +91,6 @@ function backpack_m_close(name)
 				printf("item was used before closing backpack")
 			end
 			game.stop_hud_motion()
-			db.actor:hide_weapon()
 			call_my_slot_back()
 			item_use_flag = nil
 			return
@@ -153,7 +152,6 @@ function EA_anim_stop(used_item)
 		fov_anim_manager.change_fov(0.45)
 		idle = "item_ea_backpack_open_" .. backpack_faction  .. "_" .. "hud"
 		game.play_hud_motion(2, idle, "anm_ea_idle", false, 1)
-		db.actor:restore_weapon()
 		level.enable_input()
 		ea_invent_flag = true
 		RemoveTimeEvent("ea_slot_returner", "call_my_slot_back")
@@ -163,9 +161,12 @@ function EA_anim_stop(used_item)
 end
 
 function ea_on_item_use(used_item,tm)
+	if used_item == "backpack_close" then
+		CreateTimeEvent("ea_b_slot_returner", "b_call_my_slot_back", (tm + 0.55), call_my_slot_back)
+		return
+	end
 	if item_after_backpack then
 		CreateTimeEvent("ea_b_slot_returner", "b_call_my_slot_back", (tm + 0.3), call_my_slot_back)
-		db.actor:hide_weapon()
 		item_after_backpack = nil
 	end
 end
