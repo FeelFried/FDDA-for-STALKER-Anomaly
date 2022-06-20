@@ -50,6 +50,7 @@ function a_crouch()
 end
 
 function backpack_m_close(name)
+	if name ~="UIInventory" then return end
 	if ea_force_inventory_close then
 		if ea_debug then
 			printf("force found")
@@ -57,7 +58,7 @@ function backpack_m_close(name)
 		return
 	end
 
-	if name == "UIInventory" and active_slot then
+	if active_slot then
 		item_after_backpack = true
 	end
 
@@ -81,25 +82,23 @@ function backpack_m_close(name)
 		return
 	end
 
-	if name == "UIInventory" then
-		if ea_debug then
-			printf("inventory close")
-		end
-		backpack_open_flag = nil
-		if item_use_flag then
-			if ea_debug then
-				printf("item was used before closing backpack")
-			end
-			game.stop_hud_motion()
-			call_my_slot_back()
-			item_use_flag = nil
-			return
-		end
-		if ea_debug then
-			printf("called backpack close anim")
-		end
-		backpack_close()
+	if ea_debug then
+		printf("inventory close")
 	end
+	backpack_open_flag = nil
+	if item_use_flag then
+		if ea_debug then
+			printf("item was used before closing backpack")
+		end
+		game.stop_hud_motion()
+		call_my_slot_back()
+		item_use_flag = nil
+		return
+	end
+	if ea_debug then
+		printf("called backpack close anim")
+	end
+	backpack_close()
 end
 
 local originalPIF = actor_effects.play_item_fx
