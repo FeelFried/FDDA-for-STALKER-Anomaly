@@ -63,7 +63,7 @@ function backpack_m_close(name)
 	end
 
 	if backpack_open_flag == nil then return end
-
+	db.actor:hide_weapon()
 	if fov_prev then
 		get_console():execute("g_crouch_toggle "..bool_to_int[crouch_value] or get_console_cmd(2, "g_crouch_toggle"))
 		exec_console_cmd("hud_fov " .. fov_prev)
@@ -147,6 +147,7 @@ end
 
 function EA_anim_stop(used_item)
 	if used_item:sub(1,13) == "backpack_open" then
+		db.actor:restore_weapon()
 		fov_prev = axr_main.config:r_value("temp", "fov_value", 2)
 		fov_anim_manager.change_fov(0.45)
 		idle = "item_ea_backpack_open_" .. backpack_faction  .. "_" .. "hud"
