@@ -7,7 +7,7 @@ Anims author: Blindside
 local ini_eff = {}
 local fov_prev,active_slot,item_after_backpack,backpack_open_flag,crouch_value,crouching,ea_force_inventory_close
 local anim_enabled = true
-local ea_debug = false
+local ea_debug = true
 local crouch_toggle = true
 ini_eff = ini_file("items\\items\\ea_addon_backpack.ltx")
 local skip_anims = {
@@ -113,6 +113,30 @@ function actor_effects.play_item_fx(item)
 	if ea_debug then
 		printf(item)
 	end
+end
+
+local originalUIV = ui_pda_npc_tab.use_view
+function ui_pda_npc_tab.use_view(obj)
+	local p = obj:parent()
+	if not (p and p:id() == AC_ID) then
+		return
+	end
+	active_slot = nil
+	item_use_flag = nil
+	backpack_open_flag = nil
+	item_after_backpack = nil
+	db.actor:hide_weapon()
+	if fov_prev then
+		get_console():execute("g_crouch_toggle "..bool_to_int[crouch_value] or get_console_cmd(2, "g_crouch_toggle"))
+		exec_console_cmd("hud_fov " .. fov_prev)
+		fov_prev = nil
+		if (crouch_value and not crouching) or not crouch_value  then
+			a_crouch()
+		end
+	end
+	game.stop_hud_motion()
+	ea_force_inventory_close = true
+	originalUIV(obj)
 end
 
 function backpack_open()
