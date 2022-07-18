@@ -7,7 +7,7 @@ Anims author: Blindside
 local ini_eff = {}
 local fov_prev,active_slot,item_after_backpack,backpack_open_flag,crouch_value,crouching,ea_force_inventory_close
 local anim_enabled = true
-local ea_debug = true
+local ea_debug = false
 local crouch_toggle = true
 ini_eff = ini_file("items\\items\\ea_addon_backpack.ltx")
 local skip_anims = {
