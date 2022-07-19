@@ -13,6 +13,7 @@ end
 
 function actor_on_first_update()
 	RegisterScriptCallback("actor_on_item_take",actor_on_item_take)
+	RegisterScriptCallback("actor_on_item_before_pickup",actor_on_item_before_pickup)
 	loadsettings()
 end
 
@@ -28,19 +29,19 @@ function loadsettings()
 	end
 end
 
-function actor_on_item_take(item)
-	local itemv = item:position()
-	local actorv = db.actor:position()
-	local dist = actorv:distance_to(itemv)
+function actor_on_item_before_pickup(item,flags)
+	flags.ret_value = false
 	--item pickup animation
-	local checkrun = level.actor_moving_state()
-	local check = bool_to_number[not enhanced_animations.used_item] + bool_to_number[not anim_used] + bool_to_number[not enhanced_animations.fake_monster] + bool_to_number[enable_animations] + ((string.sub(item:section(),1,4) == 'anim') and 0 or 1) + ((checkrun >= 2000) and 0 or 1)
-	if ( dist > default_dist ) and (check == 6) and enable_take then
+	local check = bool_to_number[not enhanced_animations.used_item] + bool_to_number[not anim_used] + bool_to_number[enable_animations]
+	if (check == 3) and enable_take then
 		game.play_hud_motion(db.actor:active_slot()==0 and 2 or 1, "item_ea_take_hud", "anm_ea_take", true, 1.4)
 		anim_used = true
-		CreateTimeEvent("anim_delay", "anim_delay", 0.5, anim_delay)
+		CreateTimeEvent("anim_delay", "anim_delay", 0.5, anim_delay,item)
 	end
-	checkrun ,check ,itemv ,actorv ,dist = nil
+	check = nil
+end
+
+function actor_on_item_take(item)
 	--mutant loot bag animation
 	if enhanced_animations.fake_monster then
 		fov_anim_manager.change_fov(0.45)
@@ -59,8 +60,10 @@ function actor_on_item_take(item)
 	end
 end
 
-function anim_delay()
+function anim_delay(obj)
 	anim_used = false
+    db.actor:take_item(obj)
+	printf(obj:section() .. " taken with id " .. obj:id())
 	return true
 end
 
@@ -91,8 +94,10 @@ end
 
 function return_slots()
 	fov_anim_manager.restore_fov()
-	db.actor:activate_slot(1)
+	local slot = enhanced_animations.active_slot
+	db.actor:activate_slot(slot or 1)
 	local device = enhanced_animations.det_active
 	if device then device:switch_state(1) end
 	device = nil
+	slot = nil
 end
