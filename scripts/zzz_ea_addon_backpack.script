@@ -117,6 +117,10 @@ end
 
 local originalUIV = ui_pda_npc_tab.use_view
 function ui_pda_npc_tab.use_view(obj)
+	if not anim_enabled then
+		originalUIV(obj)
+		return
+	end
 	local p = obj:parent()
 	if not (p and p:id() == AC_ID) then
 		return

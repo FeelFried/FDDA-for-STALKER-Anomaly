@@ -34,9 +34,9 @@ function actor_on_item_before_pickup(item,flags)
 	--item pickup animation
 	local check = bool_to_number[not enhanced_animations.used_item] + bool_to_number[not anim_used] + bool_to_number[enable_animations]
 	if (check == 3) and enable_take then
-		game.play_hud_motion(db.actor:active_slot()==0 and 2 or 1, "item_ea_take_hud", "anm_ea_take", true, 1.4)
+		game.play_hud_motion(db.actor:active_slot()==0 and 2 or 1, "item_ea_take_hud", "anm_ea_take", true, 1)
 		anim_used = true
-		CreateTimeEvent("anim_delay", "anim_delay", 0.5, anim_delay,item)
+		CreateTimeEvent("anim_delay", "anim_delay", 1, anim_delay,item)
 	end
 	check = nil
 end
