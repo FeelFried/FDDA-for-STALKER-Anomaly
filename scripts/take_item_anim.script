@@ -3,7 +3,6 @@ item pickup animation script
 Author: Feel_Fried
 --]]
 local skin_anim, harv_usage_snd,enable_take
-local bool_to_number={ [true]=1, [false]=0 }
 local ltx = ini_file("items\\items\\anims_loot_list.ltx")
 
 function on_game_start()
@@ -14,7 +13,6 @@ end
 function actor_on_first_update()
 	RegisterScriptCallback("actor_on_item_take",actor_on_item_take)
 	RegisterScriptCallback("actor_on_item_before_pickup",actor_on_item_before_pickup)
-	RegisterScriptCallback("actor_on_hud_animation_mark",actor_on_hud_animation_mark)
 	loadsettings()
 end
 
@@ -30,24 +28,29 @@ function loadsettings()
 	end
 end
 
-function actor_on_hud_animation_mark(id,mark)
-	printf("id = "..id.." mark = "..mark)
-end
-
+local anim_plays = nil
 local anm_name = "camera_effects\\weapon\\two_handed_weapon_effect.anm"
 function actor_on_item_before_pickup(item,flags)
+	if not enable_take then return end
 	printf("attmpt to pickup "..item:id()) --1 - 10 single press, 50+ - long press
 	flags.ret_value = false
-	game.play_hud_motion(db.actor:active_slot()==0 and 2 or 1, "item_ea_take_hud", "anm_ea_take", true, 1.4)
-	game.play_hud_anm(anm_name, 0, 1.4, 1, false)
-	CreateTimeEvent("ea_item_take","short",0.65,anim_delay,item)
+	if not anim_plays and not enhanced_animations.used_item then
+		game.play_hud_motion(db.actor:active_slot()==0 and 2 or 1, "item_ea_take_hud", "anm_ea_take", true, 1.4)
+		game.play_hud_anm(anm_name, 0, 1.4, 1, false)
+		CreateTimeEvent("ea_item_take","take_delay",0.65,take_delay,item)
+		CreateTimeEvent("ea_item_take","anim_delay",1.33,anim_delay)
+		anim_plays = true
+	end
 end
 
-function anim_delay(obj)
-    db.actor:take_item(obj)
-	take_item = nil
-	pickups_ticks = 0
-	--printf(obj:section() .. " taken with id " .. obj:id())
+function anim_delay()
+	anim_plays = nil
+	return true
+end
+
+function take_delay(obj)
+	db.actor:take_item(obj)
+	printf(obj:section() .. " taken with id " .. obj:id())
 	return true
 end
 
