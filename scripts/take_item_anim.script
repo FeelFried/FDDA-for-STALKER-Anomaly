@@ -19,20 +19,18 @@ end
 function loadsettings()
 	if ui_mcm then
 		enable_animations = ui_mcm.get("EA_settings/enable_animations")
-		default_dist = ui_mcm.get("EA_settings/take_dist")
 		enable_take = ui_mcm.get("EA_settings/take_item_anim")
 	else
 		enable_animations = ui_options.get("video/player/animations")
-		default_dist = 0.12
 		enable_take = true
 	end
 end
 
+
 local anim_plays = nil
 local anm_name = "camera_effects\\weapon\\two_handed_weapon_effect.anm"
 function actor_on_item_before_pickup(item,flags)
-	if not enable_take then return end
-	printf("attmpt to pickup "..item:id()) --1 - 10 single press, 50+ - long press
+	if (not enable_take) or (not enable_animations) then return end --1 - 10 single press, 50+ - long press
 	flags.ret_value = false
 	if not anim_plays and not enhanced_animations.used_item then
 		game.play_hud_motion(db.actor:active_slot()==0 and 2 or 1, "item_ea_take_hud", "anm_ea_take", true, 1.4)
@@ -48,9 +46,20 @@ function anim_delay()
 	return true
 end
 
-function take_delay(obj)
-	db.actor:take_item(obj)
-	printf(obj:section() .. " taken with id " .. obj:id())
+function take_delay(obj_o)
+	local actor = db.actor
+	actor:take_item(obj_o)
+	local pos = device().cam_pos
+	local dir = device().cam_dir
+	pos = pos:add(dir:mul(1.5))
+	level.iterate_nearest(pos,1.5,function(obj)
+		if obj:cast_InventoryItem() and (pos:distance_to(obj:position()) <= 0.75) then
+			actor:take_item(obj)
+			printf(obj:section() .. " taken with id " .. obj:id())
+		end
+	end)
+	pos,dir,actor = nil
+	printf(obj_o:section() .. " taken with id " .. obj_o:id())
 	return true
 end
 
