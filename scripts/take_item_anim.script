@@ -24,6 +24,7 @@ function loadsettings()
 		enable_animations = ui_options.get("video/player/animations")
 		enable_take = true
 	end
+	enable_multipickup = ui_options.get("control/general/pickup_mode")
 end
 
 
@@ -49,9 +50,11 @@ end
 function take_delay(obj_o)
 	local actor = db.actor
 	actor:take_item(obj_o)
-	multipickup(1.5,0.75,actor)
-	multipickup(1,0.5,actor)
-	multipickup(0.5,0.25,actor)
+	if enable_multipickup then
+		multipickup(1.5,0.75,actor)
+		multipickup(1,0.5,actor)
+		multipickup(0.5,0.25,actor)
+	end
 	printf(obj_o:section() .. " taken with id " .. obj_o:id())
 	actor = nil
 	return true
