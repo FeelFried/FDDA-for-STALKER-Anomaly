@@ -23,6 +23,7 @@ local skip_anims = {
 	["container_tool_af_aac_dummy"] = true,
 	["container_tool_af_aam_dummy"] = true,
 	["container_tool_af_iam_dummy"] = true,
+	["package_content"] = true,
 }
 
 local bool_to_int = {
