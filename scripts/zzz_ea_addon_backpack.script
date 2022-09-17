@@ -2,7 +2,7 @@
 FDDA backpack addon script
 Author: Feel_Fried
 Anims author: Blindside
-18.01.2022
+20.08.2022
 --]]
 local ini_eff = {}
 local fov_prev,active_slot,item_after_backpack,backpack_open_flag,crouch_value,crouching,ea_force_inventory_close

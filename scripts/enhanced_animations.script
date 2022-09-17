@@ -35,6 +35,7 @@ local active_slot,anim_exist_tm,wpn,item_usage_snd,monster_usage_snd,item,anim_u
 used_item,ea_flag,fake_monster,det_active,anim_section = nil
 
 function on_game_start()
+	assert(GAME_VERSION=="1.5.2","\nFDDA WRONG GAME VERSION ERROR! \nTHIS ADDON IS CREATED FOR ANOMALY 1.5.2\nYOUR GAME VERSION IS".." >>"..GAME_VERSION.."<<\nPLEASE READ THE FDDA DESCRIPTION ON MODDB THERE IS A LINK FOR ANOMALY 1.5.1 THERE\nhttps://www.moddb.com/mods/stalker-anomaly/addons/food-drug-and-drinks-animations-reuploaded")
 	RegisterScriptCallback("on_game_load",on_game_load)
 	RegisterScriptCallback("on_option_change", loadsettings)
 	if not ui_mcm then
