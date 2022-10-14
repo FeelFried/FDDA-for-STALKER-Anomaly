@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="windows-1251"?>
+<EA_window>
+    <Static1 x="-50" y="0" width="500" height="300" align="c"  stretch="4">
+		<texture r="190" g="190" b="190" a="255">ui\FDDA\ea_error_window.dds</texture>
+        <text y="-50" font="graffiti19" r="255" g="255" b="255" align="c" vert_align="c" complex_mode="1">Fuck you, you are using \n wrong AMOMAWY VERSION!</text>
+    </Static1>
+    <btn_enter x="0" y="232" width="117" height="29">
+        <texture>ui_button_ordinary</texture>
+        <text font="letterica16" x="0" y="0" align="c" vert_align="c" r="255" g="255" b="255">Ok, crash me</text>
+    </btn_enter>
+    <btn_cancel x="300" y="232" width="117" height="29">
+        <texture>ui_button_ordinary</texture>
+        <text font="letterica16" x="0" y="0" align="c" vert_align="c" r="255" g="255" b="255">Ok, I don't care</text>
+    </btn_cancel>
+</EA_window>

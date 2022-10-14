@@ -45,4 +45,18 @@
       <text>бЮЬХ ПСЙХ ЯЕИВЮЯ ГЮМЪРШ</text>
     </string>
 
+	<string id="st_EA_game_ver_error_1">
+      <text>FDDA ньхайю - меопюбхкэмюъ бепяхъ хцпш! \nщрнр юдднм янгдюм дкъ ANOMALY 1.5.2\nбюью бепяхъ хцпш\n --</text>
+    </string>
 	
+	<string id="st_EA_game_ver_error_2">
+      <text>--\nонфюксиярю опнврхре нохяюмхе юдднмю мю MODDB\n рюл еярэ яяшкйю мю бепяхч дкъ ANOMALY 1.5.1 </text>
+    </string>
+	
+	<string id="st_EA_game_ver_error_button_ok">
+      <text>ъ ОНМЪК,ЙПЮЬМХ ЛЕМЪ</text>
+    </string>
+	
+	<string id="st_EA_game_ver_error_button_cancel">
+      <text>лМЕ ОКЕБЮРЭ</text>
+    </string>

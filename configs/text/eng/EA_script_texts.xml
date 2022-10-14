@@ -43,3 +43,22 @@
 	<string id="st_EA_ladder_item_not_allowed">
       <text>Your hands are busy right now</text>
     </string>
+	
+	<string id="st_EA_game_ver_error_1">
+      <text>FDDA WRONG GAME VERSION ERROR! \nTHIS ADDON IS CREATED FOR ANOMALY 1.5.2\nYOUR GAME VERSION IS\n --</text>
+    </string>
+	
+	<string id="st_EA_game_ver_error_2">
+      <text>--\nPLEASE READ THE FDDA DESCRIPTION ON MODDB\n THERE IS A LINK FOR ANOMALY 1.5.1 THERE </text>
+    </string>
+	
+	<string id="st_EA_game_ver_error_button_ok">
+      <text>Ok, crash me</text>
+    </string>
+	
+	<string id="st_EA_game_ver_error_button_cancel">
+      <text>Ok, I don't care</text>
+    </string>
+	
+	
+

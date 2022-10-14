@@ -33,11 +33,10 @@ local ea_debug = false
 ini_eff = ini_file("items\\items\\animations_settings.ltx")
 local active_slot,anim_exist_tm,wpn,item_usage_snd,monster_usage_snd,item,anim_use_time,obj_m,used_monster = nil
 used_item,ea_flag,fake_monster,det_active,anim_section = nil
-
+local Game_ver_window = ea_error.EA_window()
 function on_game_start()
-	assert(GAME_VERSION=="1.5.2","\nFDDA WRONG GAME VERSION ERROR! \nTHIS ADDON IS CREATED FOR ANOMALY 1.5.2\nYOUR GAME VERSION IS".." >>"..GAME_VERSION.."<<\nPLEASE READ THE FDDA DESCRIPTION ON MODDB THERE IS A LINK FOR ANOMALY 1.5.1 THERE\nhttps://www.moddb.com/mods/stalker-anomaly/addons/food-drug-and-drinks-animations-reuploaded")
-	RegisterScriptCallback("on_game_load",on_game_load)
 	RegisterScriptCallback("on_option_change", loadsettings)
+	RegisterScriptCallback("on_key_press", check_for_game_ver)
 	if not ui_mcm then
 		RegisterScriptCallback("on_key_release", on_key_release)
 	end
@@ -333,6 +332,19 @@ end
 function hide_det()
 	det_active = db.actor:active_detector() or nil
 	if det_active then det_active:switch_state(2) end
+end
+
+function check_for_game_ver(key)
+	printf("FUUUUUUUUUUUUUUCK")
+	if GAME_VERSION ~= "1.5.2" and key == 17 then
+		Game_ver_window:ShowDialog(false)
+	else
+		stop_game_ver_check()
+	end
+end
+
+function stop_game_ver_check()
+	UnregisterScriptCallback("on_key_press", check_for_game_ver)
 end
 
 function actor_on_first_update()
