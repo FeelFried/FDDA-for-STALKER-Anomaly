@@ -35,6 +35,7 @@ local active_slot,anim_exist_tm,wpn,item_usage_snd,monster_usage_snd,item,anim_u
 used_item,ea_flag,fake_monster,det_active,anim_section = nil
 local Game_ver_window = ea_error.EA_window()
 function on_game_start()
+	RegisterScriptCallback("on_game_load",on_game_load)
 	RegisterScriptCallback("on_option_change", loadsettings)
 	RegisterScriptCallback("on_key_press", check_for_game_ver)
 	if not ui_mcm then
