@@ -335,7 +335,6 @@ function hide_det()
 end
 
 function check_for_game_ver(key)
-	printf("FUUUUUUUUUUUUUUCK")
 	if GAME_VERSION ~= "1.5.2" and key == 17 then
 		Game_ver_window:ShowDialog(false)
 	else
