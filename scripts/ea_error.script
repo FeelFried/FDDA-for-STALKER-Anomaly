@@ -1,5 +1,10 @@
 class "EA_window" (CUIScriptWnd)
+
 local gt = game.translate_string
+ea_error_text = gt("st_EA_game_ver_error_1").." "..GAME_VERSION.." "..gt("st_EA_game_ver_error_2")
+ea_button_ok_text = gt("st_EA_game_ver_error_button_ok")
+ea_button_cancel_text = gt("st_EA_game_ver_error_button_cancel")
+
 function EA_window:__init() super()
 	self:InitControls()
 	self:InitCallBacks()
@@ -14,14 +19,14 @@ function EA_window:InitControls()
 	local xml = CScriptXmlInit()
 	xml:ParseFile("EA_window.xml")
 	self.Static1 = xml:InitStatic("Static1", self)
-	self.Static1:TextControl():SetText(gt("st_EA_game_ver_error_1").." "..GAME_VERSION.." "..gt("st_EA_game_ver_error_2"))
+	self.Static1:TextControl():SetText(ea_error_text)
 	self.btn_enter = xml:Init3tButton("btn_enter", self)
 	self:Register(self.btn_enter, "btn_enter")
 	self.btn_cancel = xml:Init3tButton("btn_cancel", self)
 	self:Register(self.btn_cancel, "btn_cancel")
-	
-	self.btn_enter:TextControl():SetText(gt("st_EA_game_ver_error_button_ok"))
-	self.btn_cancel:TextControl():SetText(gt("st_EA_game_ver_error_button_cancel"))
+
+	self.btn_enter:TextControl():SetText(ea_button_ok_text)
+	self.btn_cancel:TextControl():SetText(ea_button_cancel_text)
 end
 
 
@@ -33,15 +38,11 @@ function EA_window:InitCallBacks()
 end
 
 function EA_window:OnButton_CANCEL_clicked()
-	enhanced_animations.stop_game_ver_check()
+	ea_callbacks.EA_SendScriptCallback("ea_error_ONcancel")
 	self:HideDialog()
 end
 
 function EA_window:OnButton_OK_clicked()
-	a = a + 5
+	ea_callbacks.EA_SendScriptCallback("ea_error_ONOk")
 	self:HideDialog()
 end
-
-
-
-

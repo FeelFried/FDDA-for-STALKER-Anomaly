@@ -231,11 +231,11 @@ function actor_on_item_use(item)
 end
 
 function activate()
-		RegisterScriptCallback("ActorMenu_on_before_init_mode",backpack_m_open)
-		RegisterScriptCallback("GUI_on_hide",backpack_m_close)
-		RegisterScriptCallback("actor_on_item_use",actor_on_item_use)
-		ea_callbacks.EA_RegisterScriptCallback("ea_on_item_anim_stop",EA_anim_stop)
-		ea_callbacks.EA_RegisterScriptCallback("ea_on_item_use",ea_on_item_use)
+	RegisterScriptCallback("ActorMenu_on_before_init_mode",backpack_m_open)
+	RegisterScriptCallback("GUI_on_hide",backpack_m_close)
+	RegisterScriptCallback("actor_on_item_use",actor_on_item_use)
+	ea_callbacks.EA_RegisterScriptCallback("ea_on_item_anim_stop",EA_anim_stop)
+	ea_callbacks.EA_RegisterScriptCallback("ea_on_item_use",ea_on_item_use)
 end
 
 function deactivate()

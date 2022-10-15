@@ -33,7 +33,7 @@ local ea_debug = false
 ini_eff = ini_file("items\\items\\animations_settings.ltx")
 local active_slot,anim_exist_tm,wpn,item_usage_snd,monster_usage_snd,item,anim_use_time,obj_m,used_monster = nil
 used_item,ea_flag,fake_monster,det_active,anim_section = nil
-local Game_ver_window = ea_error.EA_window()
+
 function on_game_start()
 	RegisterScriptCallback("on_game_load",on_game_load)
 	RegisterScriptCallback("on_option_change", loadsettings)
@@ -335,18 +335,6 @@ function hide_det()
 	if det_active then det_active:switch_state(2) end
 end
 
-function check_for_game_ver(key)
-	if GAME_VERSION ~= "1.5.2" and key == 17 then
-		Game_ver_window:ShowDialog(false)
-	else
-		stop_game_ver_check()
-	end
-end
-
-function stop_game_ver_check()
-	UnregisterScriptCallback("on_key_press", check_for_game_ver)
-end
-
 function actor_on_first_update()
 	if db.actor:object("items_anm_dummy") then alife_release(db.actor:object("items_anm_dummy")) end
 	loadsettings()
@@ -364,3 +352,30 @@ function skip_functor(item)
 	return mutant_loot_mod and ini_eff:r_bool_ex("skip_mutant", item)
 end
 -- Additional animations and effects >--
+
+--Errors handler >--
+local Game_ver_window = ea_error.EA_window()
+function check_for_game_ver(key)
+	if GAME_VERSION ~= "1.5.2" and key == 17 then
+		ea_callbacks.EA_RegisterScriptCallback("ea_error_ONcancel",ea_error_ONcancel)
+		ea_callbacks.EA_RegisterScriptCallback("ea_error_ONOk",ea_error_ONOk)
+		Game_ver_window:ShowDialog(false)
+	else
+		stop_game_ver_check()
+	end
+end
+
+function stop_game_ver_check()
+	UnregisterScriptCallback("on_key_press", check_for_game_ver)
+end
+
+function ea_error_ONcancel()
+	ea_callbacks.EA_UnregisterScriptCallback("ea_error_ONcancel",ea_error_ONcancel)
+	ea_callbacks.EA_UnregisterScriptCallback("ea_error_ONOk",ea_error_ONOk)
+	stop_game_ver_check()
+end
+
+function ea_error_ONOk()
+	ea_dummy_var = ea_dummy_var + 5
+end
+--Errors handler <--
