@@ -355,8 +355,8 @@ end
 
 --Errors handler >--
 local Game_ver_window = ea_error.EA_window()
-function check_for_game_ver(key)
-	if GAME_VERSION ~= "1.5.2" and key == 17 then
+function check_for_game_ver()
+	if GAME_VERSION ~= "1.5.2" then
 		ea_callbacks.EA_RegisterScriptCallback("ea_error_ONcancel",ea_error_ONcancel)
 		ea_callbacks.EA_RegisterScriptCallback("ea_error_ONOk",ea_error_ONOk)
 		Game_ver_window:ShowDialog(false)
